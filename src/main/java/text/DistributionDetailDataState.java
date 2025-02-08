@@ -69,7 +69,7 @@ public class DistributionDetailDataState implements State {
 
     private static void copyBase(final List<String> fromRow, final List<String> toRow) {
         toRow.set(COLUMN_SECURITY_DESCRIPTION, fromRow.get(COLUMN_SECURITY_DESCRIPTION));
-        toRow.set(COLUMN_CUSIP, fromRow.get(COLUMN_CUSIP));
+        toRow.set(COLUMN_CUSIP, '\'' + fromRow.get(COLUMN_CUSIP));
         toRow.set(COLUMN_SYMBOL, fromRow.get(COLUMN_SYMBOL));
         toRow.set(COLUMN_STATE, fromRow.get(COLUMN_STATE));
     }
@@ -79,7 +79,7 @@ public class DistributionDetailDataState implements State {
         if (matcher.find()) {
             final String[] fields = patternWhitespace.split(matcher.group());
             row.set(COLUMN_SECURITY_DESCRIPTION, String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim())));
-            row.set(COLUMN_CUSIP, fields[0]);
+            row.set(COLUMN_CUSIP, '\'' + fields[0]);
             row.set(COLUMN_SYMBOL, fields[1]);
             row.set(COLUMN_STATE, fields[2]);
             return;
@@ -88,14 +88,14 @@ public class DistributionDetailDataState implements State {
         if (matcher.find()) {
             final String[] fields = patternWhitespace.split(matcher.group());
             row.set(COLUMN_SECURITY_DESCRIPTION, String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim())));
-            row.set(COLUMN_CUSIP, fields[0]);
+            row.set(COLUMN_CUSIP, '\'' + fields[0]);
             row.set(COLUMN_SYMBOL, fields[1]);
             return;
         }
         matcher = patternEndWithCusip.matcher(text);
         if (matcher.find()) {
             row.set(COLUMN_SECURITY_DESCRIPTION, String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim())));
-            row.set(COLUMN_CUSIP, matcher.group());
+            row.set(COLUMN_CUSIP, '\'' + matcher.group());
             return;
         }
     }

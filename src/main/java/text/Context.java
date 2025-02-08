@@ -102,7 +102,7 @@ public class Context {
     }
 
     public String getSecurityDescriptionForNote(final String note) {
-        final String noteFormula = "'" + note;
+        final String noteFormula = '\'' + note;
         final List<List<String>> rows = distributionDetailRows();
         String securityDescription = "";
         for (List<String> row : rows) {
