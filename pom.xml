@@ -26,7 +26,7 @@
                             <addBuildEnvironmentEntries>true</addBuildEnvironmentEntries>
                             <addClasspath>true</addClasspath>
                             <classpathLayoutType>repository</classpathLayoutType>
-                            <classpathPrefix>${settings.localRepository}/</classpathPrefix>
+                            <classpathPrefix>${classpath.prefix}</classpathPrefix>
                         </manifest>
                         <manifestEntries>
                             <Class-Path>${libreoffice.classes}</Class-Path>
@@ -75,6 +75,7 @@
                 </os>
             </activation>
             <properties>
+                <classpath.prefix>${settings.localRepository}/</classpath.prefix>
                 <libreoffice.classes>/usr/lib64/libreoffice/program/classes/libreoffice.jar</libreoffice.classes>
             </properties>
         </profile>
@@ -86,7 +87,8 @@
                 </os>
             </activation>
             <properties>
-                <libreoffice.classes>/C:/Program%20Files/LibreOffice/program/classes/libreoffice.jar</libreoffice.classes>
+                <classpath.prefix>/${settings.localRepository}/</classpath.prefix>
+                <libreoffice.classes>/C:/PROGRA~1/LibreOffice/program/classes/libreoffice.jar</libreoffice.classes>
             </properties>
         </profile>
     </profiles>
