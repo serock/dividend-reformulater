@@ -10,8 +10,8 @@ public class DistributionDetailDataState implements State {
 
     private static final Pattern patternDateAmount = Pattern.compile("[0-9]{2}/[0-9]{2}/[0-9]{2}\\s+[-0-9,]+\\.[0-9]{2}");
     private static final Pattern patternStartWithNoteDateAmount = Pattern.compile("^Note:\\s+[0-9]{2}\\s+[0-9]{2}/[0-9]{2}/[0-9]{2}\\s+[-0-9,]+\\.[0-9]{2}");
-    private static final Pattern patternEndWithCusipSymbolState = Pattern.compile("[A-Z0-9]{7,9}\\s+[A-Z]{1,5}\\s+[A-Z]{2}$");
-    private static final Pattern patternEndWithCusipSymbol = Pattern.compile("[A-Z0-9]{7,9}\\s+[A-Z]{1,5}$");
+    private static final Pattern patternEndWithCusipSymbolState = Pattern.compile("[A-Z0-9]{7,9}\\s+[A-Z/]{1,5}\\s+[A-Z]{2}$");
+    private static final Pattern patternEndWithCusipSymbol = Pattern.compile("[A-Z0-9]{7,9}\\s+[A-Z/]{1,5}$");
     private static final Pattern patternEndWithCusip = Pattern.compile("[A-Z0-9]{7,9}$");
     private static final Pattern patternEndWithNote = Pattern.compile("[0-9]{2}$");
     private static final Pattern patternWhitespace = Pattern.compile("\\s+");
