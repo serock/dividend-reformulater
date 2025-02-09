@@ -42,6 +42,8 @@ public class OrdinaryDividendsSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().insertPivotTable("ordinary-dividends", cellAddress);
 
         sheetHelper().updateSheet(ordinaryDividendsSheet);
+        SpreadsheetDocumentHelper.setActiveSheet(document(), ordinaryDividendsSheet);
+        SpreadsheetDocumentHelper.freezeRowsOfActiveSheet(document(), 2);
     }
 
     private CellRangeAddress getSourceRange() throws WrappedTargetException, NoSuchElementException {
