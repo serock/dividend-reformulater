@@ -18,6 +18,7 @@ public class Form1099DivSheetBuilder extends SheetBuilder {
         final XSpreadsheet form1099DivSheet = SpreadsheetDocumentHelper.addSheet(document(), "form-1099-div");
         sheetHelper().setColumnProperties(createColumnProperties());
         sheetHelper().updateSheet(form1099DivSheet);
+        SpreadsheetDocumentHelper.setActiveSheet(document(), form1099DivSheet);
     }
 
     private List<SortedMap<String, Object>> createColumnProperties() {
