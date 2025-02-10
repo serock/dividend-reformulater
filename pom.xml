@@ -29,7 +29,7 @@
                             <classpathPrefix>${classpath.prefix}</classpathPrefix>
                         </manifest>
                         <manifestEntries>
-                            <Class-Path>${libreoffice.classes}</Class-Path>
+                            <Class-Path>${libreoffice.home}/program/classes/libreoffice.jar</Class-Path>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -63,7 +63,7 @@
             <groupId>org.libreoffice</groupId>
             <artifactId>libreoffice</artifactId>
             <scope>system</scope>
-            <systemPath>${libreoffice.classes}</systemPath>
+            <systemPath>${libreoffice.home}/program/classes/libreoffice.jar</systemPath>
         </dependency>
     </dependencies>
     <profiles>
@@ -76,7 +76,7 @@
             </activation>
             <properties>
                 <classpath.prefix>${settings.localRepository}/</classpath.prefix>
-                <libreoffice.classes>/usr/lib64/libreoffice/program/classes/libreoffice.jar</libreoffice.classes>
+                <libreoffice.home>/usr/lib64/libreoffice</libreoffice.home>
             </properties>
         </profile>
         <profile>
@@ -88,7 +88,7 @@
             </activation>
             <properties>
                 <classpath.prefix>/${settings.localRepository}/</classpath.prefix>
-                <libreoffice.classes>/C:/PROGRA~1/LibreOffice/program/classes/libreoffice.jar</libreoffice.classes>
+                <libreoffice.home>/C:/PROGRA~1/LibreOffice</libreoffice.home>
             </properties>
         </profile>
     </profiles>

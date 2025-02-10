@@ -83,16 +83,16 @@ If the build failed with messages like
 
 then Maven is not finding the `libreoffice.jar` file.
 
-The `pom.xml` file instructs Maven to use the `libreoffice.classes` property to locate the `libreoffice.jar` file.
-The `pom.xml` file sets the `libreoffice.classes` property to
-`/usr/lib64/libreoffice/program/classes/libreoffice.jar` on Linux and to
-`/C:/PROGRA~1/LibreOffice/program/classes/libreoffice.jar` on Windows.
-Note that the path to the `libreoffice.jar` file must not have any spaces.
+The `pom.xml` file instructs Maven to use the `libreoffice.home` property to locate the `libreoffice.jar` file.
+The value of the `libreoffice.home` property is the absolute path to the LibreOffice installation.
+The `pom.xml` file sets the `libreoffice.home` property to `/usr/lib64/libreoffice` on Linux and to
+`/C:/PROGRA~1/LibreOffice` on Windows.
+Note that the value of the `libreoffice.home` property must not have any spaces.
 
-To fix the build, locate the `libreoffice.jar` file on your system and override the `libreoffice.classes` property by changing the Maven command to:
+To fix the build, locate the LibreOffice installation on your system and override the `libreoffice.home` property by changing the Maven command to:
 
 ```
-mvn -Dlibreoffice.classes=<absolute-path-to-libreoffice-jar> compile jar:jar
+mvn -Dlibreoffice.home=<absolute-path-to-libreoffice> compile jar:jar
 ```
 
 [^1]: Technically, Git is not really needed because you can [download a ZIP](https://github.com/serock/dividend-reformulater/archive/refs/heads/main.zip) of the source code.
