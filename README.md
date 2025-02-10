@@ -14,13 +14,24 @@ The consolidated 1099 PDFs that may be compatible with the app have pages with a
 header and, optionally, pages with a **Mutual Fund and UIT Supplemental Information** header.
 Multiple brokerage firms use this format.
 
+Currently, the app can handle a consolidated 1099 PDF that has a Form 1099-DIV with non-zero data in only the following boxes:
+
+* 1a - Total ordinary dividends
+* 1b - Qualified dividends
+* 2a - Total capital gain distributions
+* 2b - Unrecaptured Section 1250 gain
+* 3 - Nondividend distributions
+* 5 - Section 199A dividends
+* 7 - Foreign tax paid
+* 12 - Exempt-interest dividends
+
 The `dividend-reformulater` app has been tested on 64-bit Linux and 64-bit Windows.
 The app has not been tested with LibreOffice as Flatpak, Snap, AppImage, etc.
 
 ## Installation Instructions
 The following software needs to be installed in order to build `dividend-reformulater`:
 
-* [Git](https://git-scm.com/downloads)[^1]
+* [Git](https://git-scm.com/downloads) [^1]
 * A build of OpenJDK 17 or higher, such as [Amazon Corretto 17](https://aws.amazon.com/corretto/)
 * [LibreOffice](https://www.libreoffice.org/download/download-libreoffice/) (24.8.x recommended)
 * [Apache Maven](https://maven.apache.org/)
