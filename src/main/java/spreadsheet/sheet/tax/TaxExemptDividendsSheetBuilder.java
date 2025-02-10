@@ -3,6 +3,7 @@ package spreadsheet.sheet.tax;
 
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.sheet.FilterConnection;
 import com.sun.star.sheet.FilterOperator;
 import com.sun.star.sheet.TableFilterField;
 import com.sun.star.sheet.XCellAddressable;
@@ -49,8 +50,9 @@ public class TaxExemptDividendsSheetBuilder extends PivotTableSheetBuilder {
     }
 
     private static TableFilterField[] createFilterFields() {
-        final TableFilterField[] filterFields = new TableFilterField[1];
+        final TableFilterField[] filterFields = new TableFilterField[2];
         setTaxExemptDividendFilter(filterFields);
+        setTaxExemptDividendAMTFilter(filterFields);
         return filterFields;
     }
 
@@ -60,5 +62,14 @@ public class TaxExemptDividendsSheetBuilder extends PivotTableSheetBuilder {
         filterFields[0].IsNumeric = false;
         filterFields[0].StringValue = "Tax-exempt dividend";
         filterFields[0].Operator = FilterOperator.EQUAL;
+    }
+
+    private static void setTaxExemptDividendAMTFilter(final TableFilterField[] filterFields) {
+        filterFields[1] = new TableFilterField();
+        filterFields[1].Connection = FilterConnection.OR;
+        filterFields[1].Field = DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE;
+        filterFields[1].IsNumeric = false;
+        filterFields[1].StringValue = "Tax-exempt dividend AMT";
+        filterFields[1].Operator = FilterOperator.EQUAL;
     }
 }
