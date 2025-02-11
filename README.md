@@ -47,7 +47,7 @@ git clone https://github.com/serock/dividend-reformulater.git
 Use Maven to build and package the app:
 
 ```Shell
-cd dividend-reformulator
+cd dividend-reformulater
 mvn compile jar:jar
 ```
 
