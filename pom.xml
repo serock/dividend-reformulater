@@ -17,6 +17,20 @@
     <build>
         <plugins>
             <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludeArtifactIds>libreoffice</excludeArtifactIds>
+                </configuration>
+            </plugin>
+            <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.4.2</version>
                 <configuration>
@@ -25,13 +39,20 @@
                             <mainClass>app.DividendReformulater</mainClass>
                             <addBuildEnvironmentEntries>true</addBuildEnvironmentEntries>
                             <addClasspath>true</addClasspath>
-                            <classpathLayoutType>repository</classpathLayoutType>
-                            <classpathPrefix>${classpath.prefix}</classpathPrefix>
+                            <classpathPrefix>dependency/</classpathPrefix>
                         </manifest>
                         <manifestEntries>
                             <Class-Path>${libreoffice.home}/program/classes/libreoffice.jar</Class-Path>
                         </manifestEntries>
                     </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/assembly/bin.xml</descriptor>
+                    </descriptors>
                 </configuration>
             </plugin>
         </plugins>
@@ -40,28 +61,16 @@
         <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <dependencyManagement>
-        <dependencies>
-             <dependency>
-                <groupId>org.apache.pdfbox</groupId>
-                <artifactId>pdfbox</artifactId>
-                <version>3.0.4</version>
-            </dependency>
-            <dependency>
-                <groupId>org.libreoffice</groupId>
-                <artifactId>libreoffice</artifactId>
-                <version>24.8.4</version>
-            </dependency>
-       </dependencies>
-    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
+            <version>3.0.4</version>
         </dependency>
         <dependency>
             <groupId>org.libreoffice</groupId>
             <artifactId>libreoffice</artifactId>
+            <version>24.8.4</version>
             <scope>system</scope>
             <systemPath>${libreoffice.home}/program/classes/libreoffice.jar</systemPath>
         </dependency>
@@ -75,7 +84,8 @@
                 </os>
             </activation>
             <properties>
-                <classpath.prefix>${settings.localRepository}/</classpath.prefix>
+                <assembly.format>tar.gz</assembly.format>
+                <assembly.lineEnding>keep</assembly.lineEnding>
                 <libreoffice.home>/usr/lib64/libreoffice</libreoffice.home>
             </properties>
         </profile>
@@ -87,7 +97,8 @@
                 </os>
             </activation>
             <properties>
-                <classpath.prefix>/${settings.localRepository}/</classpath.prefix>
+                <assembly.format>zip</assembly.format>
+                <assembly.lineEnding>windows</assembly.lineEnding>
                 <libreoffice.home>/C:/PROGRA~1/LibreOffice</libreoffice.home>
             </properties>
         </profile>
