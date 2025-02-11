@@ -77,16 +77,35 @@
     </dependencies>
     <profiles>
         <profile>
-            <id>unix</id>
+            <id>unix64</id>
             <activation>
                 <os>
                     <family>unix</family>
                 </os>
+                <file>
+                    <exists>/usr/lib64/libreoffice/program/soffice</exists>
+                </file>
             </activation>
             <properties>
                 <assembly.format>tar.gz</assembly.format>
                 <assembly.lineEnding>keep</assembly.lineEnding>
                 <libreoffice.home>/usr/lib64/libreoffice</libreoffice.home>
+            </properties>
+        </profile>
+        <profile>
+            <id>unix</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                </os>
+                <file>
+                    <exists>/usr/lib/libreoffice/program/soffice</exists>
+                </file>
+            </activation>
+            <properties>
+                <assembly.format>tar.gz</assembly.format>
+                <assembly.lineEnding>keep</assembly.lineEnding>
+                <libreoffice.home>/usr/lib/libreoffice</libreoffice.home>
             </properties>
         </profile>
         <profile>
