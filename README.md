@@ -48,7 +48,7 @@ Use Maven to build and package the app:
 
 ```Shell
 cd dividend-reformulater
-mvn compile jar:jar
+mvn package
 ```
 
 If the build was successful, Maven displays the following message:
@@ -102,7 +102,7 @@ Note that the value of the `libreoffice.home` property must not have any spaces.
 
 To fix the build, locate the LibreOffice installation on your system and override the `libreoffice.home` property by changing the Maven command to:
 
-```
+```Shell
 mvn -Dlibreoffice.home=<absolute-path-to-libreoffice> compile jar:jar
 ```
 
