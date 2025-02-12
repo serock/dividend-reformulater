@@ -42,7 +42,7 @@
                             <classpathPrefix>dependency/</classpathPrefix>
                         </manifest>
                         <manifestEntries>
-                            <Class-Path>${libreoffice.home}/program/classes/libreoffice.jar</Class-Path>
+                            <Class-Path>${libreoffice.home.url}/program/classes/libreoffice.jar</Class-Path>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -51,7 +51,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptors>
-                        <descriptor>src/assembly/bin.xml</descriptor>
+                        <descriptor>src/assembly/assembly.xml</descriptor>
                     </descriptors>
                 </configuration>
             </plugin>
@@ -72,40 +72,52 @@
             <artifactId>libreoffice</artifactId>
             <version>24.8.4</version>
             <scope>system</scope>
-            <systemPath>${libreoffice.home}/program/classes/libreoffice.jar</systemPath>
+            <systemPath>${libreoffice.home.path}/program/classes/libreoffice.jar</systemPath>
         </dependency>
     </dependencies>
     <profiles>
         <profile>
-            <id>unix64</id>
+            <id>linux-all</id>
             <activation>
                 <os>
-                    <family>unix</family>
+                    <name>Linux</name>
                 </os>
-                <file>
-                    <exists>/usr/lib64/libreoffice/program/soffice</exists>
-                </file>
             </activation>
             <properties>
                 <assembly.format>tar.gz</assembly.format>
                 <assembly.lineEnding>keep</assembly.lineEnding>
-                <libreoffice.home>/usr/lib64/libreoffice</libreoffice.home>
             </properties>
         </profile>
         <profile>
-            <id>unix</id>
+            <id>debian</id>
             <activation>
                 <os>
-                    <family>unix</family>
+                    <name>Linux</name>
                 </os>
                 <file>
                     <exists>/usr/lib/libreoffice/program/soffice</exists>
                 </file>
             </activation>
             <properties>
-                <assembly.format>tar.gz</assembly.format>
-                <assembly.lineEnding>keep</assembly.lineEnding>
-                <libreoffice.home>/usr/lib/libreoffice</libreoffice.home>
+                <assembly.id>debian</assembly.id>
+                <libreoffice.home.path>/usr/lib/libreoffice</libreoffice.home.path>
+                <libreoffice.home.url>file:///usr/lib/libreoffice</libreoffice.home.url>
+            </properties>
+        </profile>
+        <profile>
+            <id>linux</id>
+            <activation>
+                <os>
+                    <name>Linux</name>
+                </os>
+                <file>
+                    <exists>/usr/lib64/libreoffice/program/soffice</exists>
+                </file>
+            </activation>
+            <properties>
+                <assembly.id>linux</assembly.id>
+                <libreoffice.home.path>/usr/lib64/libreoffice</libreoffice.home.path>
+                <libreoffice.home.url>file:///usr/lib64/libreoffice</libreoffice.home.url>
             </properties>
         </profile>
         <profile>
@@ -117,8 +129,37 @@
             </activation>
             <properties>
                 <assembly.format>zip</assembly.format>
+                <assembly.id>windows</assembly.id>
                 <assembly.lineEnding>windows</assembly.lineEnding>
-                <libreoffice.home>/C:/PROGRA~1/LibreOffice</libreoffice.home>
+                <libreoffice.home.path>C:/Program Files/LibreOffice</libreoffice.home.path>
+                <libreoffice.home.url>file:///C:/Program%20Files/LibreOffice</libreoffice.home.url>
+            </properties>
+        </profile>
+        <profile>
+            <id>for-debian</id>
+            <properties>
+                <assembly.format>tar.gz</assembly.format>
+                <assembly.id>debian</assembly.id>
+                <assembly.lineEnding>keep</assembly.lineEnding>
+                <libreoffice.home.url>file:///usr/lib/libreoffice</libreoffice.home.url>
+            </properties>
+        </profile>
+         <profile>
+            <id>for-linux</id>
+            <properties>
+                <assembly.format>tar.gz</assembly.format>
+                <assembly.id>linux</assembly.id>
+                <assembly.lineEnding>keep</assembly.lineEnding>
+                <libreoffice.home.url>file:///usr/lib64/libreoffice</libreoffice.home.url>
+            </properties>
+        </profile>
+        <profile>
+            <id>for-windows</id>
+             <properties>
+                <assembly.format>zip</assembly.format>
+                <assembly.id>windows</assembly.id>
+                <assembly.lineEnding>windows</assembly.lineEnding>
+                <libreoffice.home.url>file:///C:/Program%20Files/LibreOffice</libreoffice.home.url>
             </properties>
         </profile>
     </profiles>
