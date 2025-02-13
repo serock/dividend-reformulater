@@ -45,6 +45,7 @@
                             <Class-Path>${libreoffice.jar.url}</Class-Path>
                         </manifestEntries>
                     </archive>
+                    <forceCreation>true</forceCreation>
                 </configuration>
             </plugin>
             <plugin>
@@ -85,7 +86,8 @@
             </activation>
             <properties>
                 <assembly.format>tar.gz</assembly.format>
-                <assembly.lineEnding>keep</assembly.lineEnding>
+                <assembly.id>linux</assembly.id>
+                <assembly.lineEnding>unix</assembly.lineEnding>
             </properties>
         </profile>
         <profile>
@@ -95,7 +97,7 @@
                     <name>Linux</name>
                 </os>
                 <file>
-                    <exists>/usr/lib/libreoffice/program/soffice</exists>
+                    <exists>/usr/lib/libreoffice/</exists>
                 </file>
             </activation>
             <properties>
@@ -111,13 +113,27 @@
                     <name>Linux</name>
                 </os>
                 <file>
-                    <exists>/usr/lib64/libreoffice/program/soffice</exists>
+                    <exists>/usr/lib64/libreoffice/</exists>
                 </file>
             </activation>
             <properties>
-                <assembly.id>linux</assembly.id>
                 <libreoffice.jar.path>/usr/lib64/libreoffice/program/classes/libreoffice.jar</libreoffice.jar.path>
                 <libreoffice.jar.url>file:///usr/lib64/libreoffice/program/classes/libreoffice.jar</libreoffice.jar.url>
+            </properties>
+        </profile>
+        <profile>
+            <id>macos</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <properties>
+                <assembly.format>tar.gz</assembly.format>
+                <assembly.id>macos</assembly.id>
+                <assembly.lineEnding>unix</assembly.lineEnding>
+                <libreoffice.jar.path>/Applications/LibreOffice.app/Contents/Resources/java/libreoffice.jar</libreoffice.jar.path>
+                <libreoffice.jar.url>file:///Applications/LibreOffice.app/Contents/Resources/java/libreoffice.jar</libreoffice.jar.url>
             </properties>
         </profile>
         <profile>
@@ -140,7 +156,7 @@
             <properties>
                 <assembly.format>tar.gz</assembly.format>
                 <assembly.id>debian</assembly.id>
-                <assembly.lineEnding>keep</assembly.lineEnding>
+                <assembly.lineEnding>unix</assembly.lineEnding>
                 <libreoffice.jar.url>file:///usr/lib/libreoffice/program/classes/libreoffice.jar</libreoffice.jar.url>
             </properties>
         </profile>
@@ -149,8 +165,17 @@
             <properties>
                 <assembly.format>tar.gz</assembly.format>
                 <assembly.id>linux</assembly.id>
-                <assembly.lineEnding>keep</assembly.lineEnding>
+                <assembly.lineEnding>unix</assembly.lineEnding>
                 <libreoffice.jar.url>file:///usr/lib64/libreoffice/program/classes/libreoffice.jar</libreoffice.jar.url>
+            </properties>
+        </profile>
+         <profile>
+            <id>for-macos</id>
+            <properties>
+                <assembly.format>tar.gz</assembly.format>
+                <assembly.id>macos</assembly.id>
+                <assembly.lineEnding>unix</assembly.lineEnding>
+                <libreoffice.jar.url>file:///Applications/LibreOffice.app/Contents/Resources/java/libreoffice.jar</libreoffice.jar.url>
             </properties>
         </profile>
         <profile>
