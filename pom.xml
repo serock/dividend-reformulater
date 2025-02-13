@@ -42,7 +42,7 @@
                             <classpathPrefix>dependency/</classpathPrefix>
                         </manifest>
                         <manifestEntries>
-                            <Class-Path>${libreoffice.home.url}/program/classes/libreoffice.jar</Class-Path>
+                            <Class-Path>${libreoffice.jar.url}</Class-Path>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -72,7 +72,7 @@
             <artifactId>libreoffice</artifactId>
             <version>24.8.4</version>
             <scope>system</scope>
-            <systemPath>${libreoffice.home.path}/program/classes/libreoffice.jar</systemPath>
+            <systemPath>${libreoffice.jar.path}</systemPath>
         </dependency>
     </dependencies>
     <profiles>
@@ -100,8 +100,8 @@
             </activation>
             <properties>
                 <assembly.id>debian</assembly.id>
-                <libreoffice.home.path>/usr/lib/libreoffice</libreoffice.home.path>
-                <libreoffice.home.url>file:///usr/lib/libreoffice</libreoffice.home.url>
+                <libreoffice.jar.path>/usr/lib/libreoffice/program/classes/libreoffice.jar</libreoffice.jar.path>
+                <libreoffice.jar.url>file:///usr/lib/libreoffice/program/classes/libreoffice.jar</libreoffice.jar.url>
             </properties>
         </profile>
         <profile>
@@ -116,8 +116,8 @@
             </activation>
             <properties>
                 <assembly.id>linux</assembly.id>
-                <libreoffice.home.path>/usr/lib64/libreoffice</libreoffice.home.path>
-                <libreoffice.home.url>file:///usr/lib64/libreoffice</libreoffice.home.url>
+                <libreoffice.jar.path>/usr/lib64/libreoffice/program/classes/libreoffice.jar</libreoffice.jar.path>
+                <libreoffice.jar.url>file:///usr/lib64/libreoffice/program/classes/libreoffice.jar</libreoffice.jar.url>
             </properties>
         </profile>
         <profile>
@@ -131,8 +131,8 @@
                 <assembly.format>zip</assembly.format>
                 <assembly.id>windows</assembly.id>
                 <assembly.lineEnding>windows</assembly.lineEnding>
-                <libreoffice.home.path>C:/Program Files/LibreOffice</libreoffice.home.path>
-                <libreoffice.home.url>file:///C:/Program%20Files/LibreOffice</libreoffice.home.url>
+                <libreoffice.jar.path>C:/Program Files/LibreOffice/program/classes/libreoffice.jar</libreoffice.jar.path>
+                <libreoffice.jar.url>file:///C:/Program%20Files/LibreOffice/program/classes/libreoffice.jar</libreoffice.jar.url>
             </properties>
         </profile>
         <profile>
@@ -141,7 +141,7 @@
                 <assembly.format>tar.gz</assembly.format>
                 <assembly.id>debian</assembly.id>
                 <assembly.lineEnding>keep</assembly.lineEnding>
-                <libreoffice.home.url>file:///usr/lib/libreoffice</libreoffice.home.url>
+                <libreoffice.jar.url>file:///usr/lib/libreoffice/program/classes/libreoffice.jar</libreoffice.jar.url>
             </properties>
         </profile>
          <profile>
@@ -150,7 +150,7 @@
                 <assembly.format>tar.gz</assembly.format>
                 <assembly.id>linux</assembly.id>
                 <assembly.lineEnding>keep</assembly.lineEnding>
-                <libreoffice.home.url>file:///usr/lib64/libreoffice</libreoffice.home.url>
+                <libreoffice.jar.url>file:///usr/lib64/libreoffice/program/classes/libreoffice.jar</libreoffice.jar.url>
             </properties>
         </profile>
         <profile>
@@ -159,7 +159,7 @@
                 <assembly.format>zip</assembly.format>
                 <assembly.id>windows</assembly.id>
                 <assembly.lineEnding>windows</assembly.lineEnding>
-                <libreoffice.home.url>file:///C:/Program%20Files/LibreOffice</libreoffice.home.url>
+                <libreoffice.jar.url>file:///C:/Program%20Files/LibreOffice/program/classes/libreoffice.jar</libreoffice.jar.url>
             </properties>
         </profile>
     </profiles>
