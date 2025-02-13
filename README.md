@@ -84,6 +84,8 @@ Note that the app does not save the spreadsheet. It is up to the user to decide 
 
 ## Troubleshooting
 
+### Build Errors
+
 If the build failed with messages like
 
 ```
@@ -94,16 +96,44 @@ If the build failed with messages like
 
 then Maven is not finding the `libreoffice.jar` file.
 
-The `pom.xml` file instructs Maven to use the `libreoffice.home` property to locate the `libreoffice.jar` file.
-The value of the `libreoffice.home` property is the absolute path to the LibreOffice installation.
-The `pom.xml` file sets the `libreoffice.home` property to `/usr/lib64/libreoffice` on Linux and to
-`/C:/PROGRA~1/LibreOffice` on Windows.
-Note that the value of the `libreoffice.home` property must not have any spaces.
+The `pom.xml` file instructs Maven to use the `libreoffice.jar.path` property to locate the `libreoffice.jar` file.
+The value of the `libreoffice.jar.path` property should be the absolute path of the `libreoffice.jar` file.
+The `pom.xml` file sets the `libreoffice.jar.path` property on Linux to either
+`/usr/lib/libreoffice/program/classes/libreoffice.jar` or
+`/usr/lib64/libreoffice/program/classes/libreoffice.jar`
+and on Windows to `C:/Program Files/LibreOffice/program/classes/libreoffice.jar`.
 
-To fix the build, locate the LibreOffice installation on your system and override the `libreoffice.home` property by changing the Maven command to:
+To fix the build error, locate the LibreOffice installation on your system and override the `libreoffice.jar.path` property
+by changing the Maven command to:
 
 ```Shell
-mvn -Dlibreoffice.home=<absolute-path-to-libreoffice> compile jar:jar
+mvn -Dlibreoffice.jar.path=<absolute-path-to-libreoffice.jar> clean package
+```
+
+### Runtime Errors
+
+When trying to run the app, if the app fails with a message like
+
+```
+java.lang.ClassNotFoundException: com.sun.star.comp.helper.Bootstrap
+```
+
+then Java is not finding the `libreoffice.jar` file.
+
+The `pom.xml` file uses the `libreoffice.jar.url` property to configure the Java class path with the location of the
+`libreoffice.jar` file.
+The value of the `libreoffice.jar.url` property should be the absolute `file:` URL of the `libreoffice.jar` file.
+The `pom.xml` file sets the `libreoffice.jar.url` property on Linux to either
+`file:///usr/lib/libreoffice/program/classes/libreoffice.jar` or
+`file:///usr/lib64/libreoffice/program/classes/libreoffice.jar`
+and on Windows to `file:///C:/Program%20Files/LibreOffice/program/classes/libreoffice.jar`.
+Note that the value of the `libreoffice.jar.url` property must not have any spaces.
+
+To fix the runtime error, locate the LibreOffice installation on your system and override the `libreoffice.jar.url`
+property by changing the Maven command to:
+
+```Shell
+mvn -Dlibreoffice.jar.url=<absolute-file-url-to-libreoffice.jar> clean package
 ```
 
 [^1]: Technically, Git is not really needed because you can [download a ZIP](https://github.com/serock/dividend-reformulater/archive/refs/heads/main.zip) of the source code.
