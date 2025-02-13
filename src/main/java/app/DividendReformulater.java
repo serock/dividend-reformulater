@@ -29,6 +29,7 @@ public class DividendReformulater implements Consumer<String>, Runnable {
     private File taxPDFFile;
 
     public static void main(final String[] args) {
+        checkClassPath();
         if (args.length == 1) {
             final DividendReformulater app = new DividendReformulater();
             app.taxPDFFile = new File(args[0]);
@@ -37,6 +38,15 @@ public class DividendReformulater implements Consumer<String>, Runnable {
             showUsage();
         }
         System.exit(0);
+    }
+
+    private static void checkClassPath() {
+        try {
+            Class.forName("com.sun.star.comp.helper.Bootstrap");
+        } catch (final ClassNotFoundException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
     }
 
     @Override
