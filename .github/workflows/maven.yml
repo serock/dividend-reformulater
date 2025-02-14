@@ -6,6 +6,8 @@ jobs:
     name: Maven build
     runs-on: ubuntu-latest
     steps:
+    - name: Check out source code
+      uses: actions/checkout@v4
     - name: Set up OpenJDK
       uses: actions/setup-java@v4
       with:
@@ -16,8 +18,6 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install liblibreoffice-java
-    - name: Check out source code
-      uses: actions/checkout@v4
     - name: Build and package JAR for Debian
       run: mvn --batch-mode package
     - name: Create assembly for Debian
