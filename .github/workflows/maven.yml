@@ -1,0 +1,44 @@
+name: Maven assemblies
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    name: Maven build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up OpenJDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'corretto'
+        java-version: '17'
+        cache: maven
+    - name: Set up LibreOffice UNO runtime environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install liblibreoffice-java
+    - name: Check out source code
+      uses: actions/checkout@v4
+    - name: Build and package JAR for Debian
+      run: mvn --batch-mode package
+    - name: Create assembly for Debian
+      run: mvn --batch-mode assembly:single
+    - name: Package JAR for Linux
+      run: mvn --batch-mode --activate-profiles for-linux package
+    - name: Create assembly for Linux
+      run: mvn --batch-mode --activate-profiles for-linux assembly:single
+    - name: Package JAR for MacOS
+      run: mvn --batch-mode --activate-profiles for-macos package
+    - name: Create assembly for MacOS
+      run: mvn --batch-mode --activate-profiles for-macos assembly:single
+    - name: Package JAR for Windows
+      run: mvn --batch-mode --activate-profiles for-windows package
+    - name: Create assembly for Windows
+      run: mvn --batch-mode --activate-profiles for-windows assembly:single
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+        with:
+          name: assemblies
+          path: |
+            target/*.tar.gz
+            target/*.zip
+          compression-level: 0
