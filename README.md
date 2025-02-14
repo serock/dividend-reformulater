@@ -3,7 +3,7 @@ Create a LibreOffice Calc spreadsheet using dividend data from a consolidated 10
 
 ## Overview
 The `dividend-reformulater` app might be useful to those investors who have a brokerage account and file federal and state income taxes in the United States.
-The app reformulates the dividend data in a consolidated 1099 PDF into multiple tables and pivot tables in a LibreOffice Calc spreadsheet.
+The app reformulates the dividend data from a consolidated 1099 PDF into a LibreOffice Calc spreadsheet with multiple sheets and pivot tables.
 The main goals of the app are to make it easier to:
 
 1. calculate the amount of dividend income from U.S. government securities,
@@ -25,7 +25,7 @@ Currently, the app can handle a consolidated 1099 PDF that has a Form 1099-DIV w
 * 7 - Foreign tax paid
 * 12 - Exempt-interest dividends
 
-The `dividend-reformulater` app has been tested on 64-bit Linux and 64-bit Windows.
+The `dividend-reformulater` app has been tested on 64-bit Linux and 64-bit Windows systems.
 The app has not been tested with LibreOffice as Flatpak, Snap, AppImage, etc.
 
 ## Installation Instructions
@@ -51,19 +51,20 @@ If the app was packaged properly for the system, the app displays the following 
 Usage: java -jar dividend-reformulater.jar <consolidated-1099.pdf>
 ```
 
-However,if the app fails with a message like
+However, if the app fails with a message like
 
 ```
 java.lang.ClassNotFoundException: com.sun.star.comp.helper.Bootstrap
 ```
 
 verify that the LibreOffice installation has a `libreoffice.jar` file.
-If the file exists, then the app needs to be repackaged with the correct absolute `file` URL of the `libreoffice.jar` file.
+If the file exists, then either the wrong distributable archive was installed or the app needs to be repackaged with the
+correct absolute `file` URL of the `libreoffice.jar` file.
 See the **Troubleshooting** section on the [How to Build the App](/../../wiki/How-to-Build-the-App) page in the Wiki.
 
 ## Running the App
 When a consolidated 1099 PDF is passed to the app, the app will launch LibreOffice Calc and populate multiple sheets.
-When the app has finished, the `form-1099-div` sheet should be visible.
+When the app has finished running, the `form-1099-div` sheet should be visible.
 The `form-1099-div` sheet is there as a sanity check;
 the user should verify that the values on the sheet match the values on the Form 1099-DIV in the consolidated 1099 PDF.
 
