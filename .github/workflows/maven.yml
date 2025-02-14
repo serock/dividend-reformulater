@@ -36,9 +36,9 @@ jobs:
       run: mvn --batch-mode --activate-profiles for-windows assembly:single
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
-        with:
-          name: assemblies
-          path: |
-            target/*.tar.gz
-            target/*.zip
-          compression-level: 0
+      with:
+        name: assemblies
+        path: |
+          target/*.tar.gz
+          target/*.zip
+        compression-level: 0
