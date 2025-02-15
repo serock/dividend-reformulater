@@ -22,7 +22,7 @@ import text.Context;
 
 public class DividendReformulater implements Consumer<String>, Runnable {
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = Boolean.parseBoolean(System.getProperty("app.debug", "false"));
 
     private final Context context = new Context();
 
