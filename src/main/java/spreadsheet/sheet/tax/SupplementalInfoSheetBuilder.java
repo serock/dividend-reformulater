@@ -8,6 +8,7 @@ import java.util.TreeMap;
 
 import com.sun.star.awt.FontWeight;
 import com.sun.star.sheet.XSpreadsheet;
+import com.sun.star.table.TableSortField;
 
 import spreadsheet.SpreadsheetDocumentHelper;
 import spreadsheet.sheet.SheetBuilder;
@@ -29,6 +30,7 @@ public class SupplementalInfoSheetBuilder extends SheetBuilder {
         final List<SortedMap<String, Object>> columnProperties = createColumnProperties();
         sheetHelper().setHeaderProperties(headerProperties);
         sheetHelper().setColumnProperties(columnProperties);
+        sheetHelper().setSortFields(createSortFields());
         sheetHelper().updateSheet(supplementalInfoSheet);
     }
 
@@ -70,5 +72,16 @@ public class SupplementalInfoSheetBuilder extends SheetBuilder {
         addPercentageColumnProperties(columnProperties);
         addAmountColumnProperties(columnProperties);
         return columnProperties;
+    }
+
+    private static TableSortField[] createSortFields() {
+        TableSortField[] sortFields = new TableSortField[2];
+        sortFields[0] = new TableSortField();
+        sortFields[0].Field = FIELD_SECURITY_DESCRIPTION;
+        sortFields[0].IsAscending = true;
+        sortFields[1] = new TableSortField();
+        sortFields[1].Field = FIELD_SOURCE;
+        sortFields[1].IsAscending = true;
+        return sortFields;
     }
 }
