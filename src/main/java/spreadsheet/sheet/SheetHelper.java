@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.SortedMap;
 
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XMultiPropertySet;
@@ -18,10 +19,12 @@ import com.sun.star.sheet.XCellRangeFormula;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XUsedAreaCursor;
 import com.sun.star.table.CellRangeAddress;
+import com.sun.star.table.TableSortField;
 import com.sun.star.table.XCellRange;
 import com.sun.star.table.XColumnRowRange;
 import com.sun.star.table.XTableColumns;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.XSortable;
 
 public class SheetHelper {
 
@@ -31,6 +34,7 @@ public class SheetHelper {
     private SortedMap<String, Object> headerProperties = Collections.emptySortedMap();
     private String[][] sheetFormulas;
     private String sheetName;
+    private TableSortField[] sortFields;
 
     public void setHeaderProperties(final SortedMap<String, Object> properties) {
         this.headerProperties = properties;
@@ -48,11 +52,12 @@ public class SheetHelper {
         this.sheetName = name;
     }
 
-    public static XTableColumns getUsedColumns(final XSpreadsheet sheet) {
-        final XUsedAreaCursor usedAreaCursor = UnoRuntime.queryInterface(XUsedAreaCursor.class, sheet.createCursor());
-        usedAreaCursor.gotoStartOfUsedArea(false);
-        usedAreaCursor.gotoEndOfUsedArea(true);
-        return UnoRuntime.queryInterface(XColumnRowRange.class, usedAreaCursor).getColumns();
+    public void setSortFields(final TableSortField[] fields) {
+        this.sortFields = fields;
+    }
+
+    private static XTableColumns getUsedColumns(final XSpreadsheet sheet) {
+       return UnoRuntime.queryInterface(XColumnRowRange.class, getUsedAreaCursor(sheet)).getColumns();
     }
 
     private void setSheetName(final XSpreadsheet sheet) {
@@ -80,12 +85,8 @@ public class SheetHelper {
         }
     }
 
-    public static void setNumberFormatOfColumn(final XSpreadsheet sheet, final int column, final Integer format) throws IndexOutOfBoundsException, WrappedTargetException, IllegalArgumentException, UnknownPropertyException, PropertyVetoException {
-        final XTableColumns columns = UnoRuntime.queryInterface(XColumnRowRange.class, sheet).getColumns();
-        UnoRuntime.queryInterface(XPropertySet.class, columns.getByIndex(column)).setPropertyValue("NumberFormat", format);
-    }
-
-    public void setOptimalWidth(final XTableColumns columns) throws IllegalArgumentException, UnknownPropertyException, PropertyVetoException, WrappedTargetException, IndexOutOfBoundsException {
+    private void setOptimalWidth(final XSpreadsheet sheet) throws IllegalArgumentException, UnknownPropertyException, PropertyVetoException, WrappedTargetException, IndexOutOfBoundsException {
+        final XTableColumns columns = getUsedColumns(sheet);
         final int count = columns.getCount();
         if (columnProperties().isEmpty()) {
             for (int index = 0; index < count; index++) {
@@ -101,10 +102,34 @@ public class SheetHelper {
     }
 
     public static CellRangeAddress getCellRangeAddressOfUsedArea(final XSpreadsheet sheet) {
+        return UnoRuntime.queryInterface(XCellRangeAddressable.class, getUsedAreaCursor(sheet)).getRangeAddress();
+    }
+
+    private static XUsedAreaCursor getUsedAreaCursor(final XSpreadsheet sheet) {
         final XUsedAreaCursor usedAreaCursor = UnoRuntime.queryInterface(XUsedAreaCursor.class, sheet.createCursor());
         usedAreaCursor.gotoStartOfUsedArea(false);
         usedAreaCursor.gotoEndOfUsedArea(true);
-        return UnoRuntime.queryInterface(XCellRangeAddressable.class, usedAreaCursor).getRangeAddress();
+        return usedAreaCursor;
+    }
+
+    private void sort(final XSpreadsheet sheet) {
+        XSortable sortable = UnoRuntime.queryInterface(XSortable.class, getUsedAreaCursor(sheet));
+        PropertyValue[] sortDescriptor = sortable.createSortDescriptor();
+        if (!headerProperties().isEmpty()) {
+            for (PropertyValue propertyValue : sortDescriptor) {
+                if ("ContainsHeader".equals(propertyValue.Name)) {
+                    propertyValue.Value = Boolean.TRUE;
+                    break;
+                }
+             }
+        }
+        for (PropertyValue propertyValue : sortDescriptor) {
+            if ("SortFields".equals(propertyValue.Name)) {
+                propertyValue.Value = sortFields();
+                break;
+            }
+        }
+        sortable.sort(sortDescriptor);
     }
 
     public void updateSheet(final XSpreadsheet sheet) throws com.sun.star.uno.Exception {
@@ -120,11 +145,10 @@ public class SheetHelper {
         if (sheetFormulas() != null) {
             setFormulas(sheet);
         }
-        setOptimalWidth(getUsedColumns(sheet));
-    }
-
-    public static void setFormula(final XSpreadsheet sheet, final String cellName, final String formula) throws IndexOutOfBoundsException {
-        sheet.getCellRangeByName(cellName).getCellByPosition(0, 0).setFormula(formula);
+        setOptimalWidth(sheet);
+        if (sortFields() != null) {
+            sort(sheet);
+        }
     }
 
     private void setFormulas(final XSpreadsheet sheet) throws IndexOutOfBoundsException {
@@ -146,5 +170,9 @@ public class SheetHelper {
 
     private String sheetName() {
         return this.sheetName;
+    }
+
+    private TableSortField[] sortFields() {
+        return this.sortFields;
     }
 }

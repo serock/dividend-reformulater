@@ -9,6 +9,7 @@ import java.util.TreeMap;
 import com.sun.star.awt.FontWeight;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.sheet.XSpreadsheet;
+import com.sun.star.table.TableSortField;
 
 import spreadsheet.SpreadsheetDocumentHelper;
 import spreadsheet.sheet.SheetBuilder;
@@ -31,6 +32,7 @@ public class DividendDetailSheetBuilder extends SheetBuilder {
         sheetHelper().setHeaderProperties(headerProperties);
         sheetHelper().setColumnProperties(columnProperties);
         final XSpreadsheet dividendDetailSheet = SpreadsheetDocumentHelper.getSheet(document(), 0);
+        sheetHelper().setSortFields(createSortFields());
         sheetHelper().updateSheet(dividendDetailSheet);
         SpreadsheetDocumentHelper.freezeRowsOfActiveSheet(document(), 1);
     }
@@ -105,5 +107,16 @@ public class DividendDetailSheetBuilder extends SheetBuilder {
         addTransactionTypeColumnProperties(columnProperties);
         addNotesColumnProperties(columnProperties);
         return columnProperties;
+    }
+
+    private static TableSortField[] createSortFields() {
+        TableSortField[] sortFields = new TableSortField[2];
+        sortFields[0] = new TableSortField();
+        sortFields[0].Field = 0;
+        sortFields[0].IsAscending = true;
+        sortFields[1] = new TableSortField();
+        sortFields[1].Field = 4;
+        sortFields[1].IsAscending = true;
+        return sortFields;
     }
 }
