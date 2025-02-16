@@ -17,6 +17,7 @@ import spreadsheet.sheet.SheetBuilder;
 public class DividendDetailSheetBuilder extends SheetBuilder {
 
     static final int FIELD_SECURITY_DESCRIPTION = 0;
+    static final int FIELD_DATE = 4;
     static final int FIELD_AMOUNT = 5;
     static final int FIELD_TRANSACTION_TYPE = 6;
 
@@ -26,12 +27,12 @@ public class DividendDetailSheetBuilder extends SheetBuilder {
 
     @Override
     public void build() throws IllegalArgumentException, com.sun.star.uno.Exception {
+        final XSpreadsheet dividendDetailSheet = SpreadsheetDocumentHelper.getSheet(document(), 0);
         final SortedMap<String, Object> headerProperties = createHeaderProperties();
         final List<SortedMap<String, Object>> columnProperties = createColumnProperties();
         sheetHelper().setSheetName("dividend-detail");
         sheetHelper().setHeaderProperties(headerProperties);
         sheetHelper().setColumnProperties(columnProperties);
-        final XSpreadsheet dividendDetailSheet = SpreadsheetDocumentHelper.getSheet(document(), 0);
         sheetHelper().setSortFields(createSortFields());
         sheetHelper().updateSheet(dividendDetailSheet);
         SpreadsheetDocumentHelper.freezeRowsOfActiveSheet(document(), 1);
@@ -112,10 +113,10 @@ public class DividendDetailSheetBuilder extends SheetBuilder {
     private static TableSortField[] createSortFields() {
         TableSortField[] sortFields = new TableSortField[2];
         sortFields[0] = new TableSortField();
-        sortFields[0].Field = 0;
+        sortFields[0].Field = FIELD_SECURITY_DESCRIPTION;
         sortFields[0].IsAscending = true;
         sortFields[1] = new TableSortField();
-        sortFields[1].Field = 4;
+        sortFields[1].Field = FIELD_DATE;
         sortFields[1].IsAscending = true;
         return sortFields;
     }
