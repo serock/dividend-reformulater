@@ -5,12 +5,9 @@ import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sheet.FilterOperator;
 import com.sun.star.sheet.TableFilterField;
-import com.sun.star.sheet.XCellAddressable;
-import com.sun.star.sheet.XDataPilotTablesSupplier;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.table.CellAddress;
 import com.sun.star.table.CellRangeAddress;
-import com.sun.star.uno.UnoRuntime;
 
 import spreadsheet.SpreadsheetDocumentHelper;
 import spreadsheet.sheet.PivotTableSheetBuilder;
@@ -27,9 +24,9 @@ public class NondividendDistributionsSheetBuilder extends PivotTableSheetBuilder
     @Override
     public void build() throws com.sun.star.uno.Exception {
         final XSpreadsheet nondividendDistributionsSheet = SpreadsheetDocumentHelper.addSheet(document(), "nondividend-distributions");
-        final CellAddress cellAddress = UnoRuntime.queryInterface(XCellAddressable.class, nondividendDistributionsSheet.getCellByPosition(0, 0)).getCellAddress();
+        final CellAddress cellAddress = SheetHelper.getCellAddress(nondividendDistributionsSheet, 0, 0);
 
-        pivotTableHelper().setTablesSupplier(UnoRuntime.queryInterface(XDataPilotTablesSupplier.class, nondividendDistributionsSheet));
+        pivotTableHelper().setTablesSupplier(nondividendDistributionsSheet);
         pivotTableHelper().setSourceRange(getSourceRange());
         pivotTableHelper().setRowOrientation(DividendDetailSheetBuilder.FIELD_SECURITY_DESCRIPTION);
         pivotTableHelper().setColumnOrientation(DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE);

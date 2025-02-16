@@ -7,12 +7,9 @@ import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sheet.FilterConnection;
 import com.sun.star.sheet.FilterOperator;
 import com.sun.star.sheet.TableFilterField;
-import com.sun.star.sheet.XCellAddressable;
-import com.sun.star.sheet.XDataPilotTablesSupplier;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.table.CellAddress;
 import com.sun.star.table.CellRangeAddress;
-import com.sun.star.uno.UnoRuntime;
 
 import spreadsheet.SpreadsheetDocumentHelper;
 import spreadsheet.sheet.PivotTableSheetBuilder;
@@ -29,9 +26,9 @@ public class OrdinaryDividendsSheetBuilder extends PivotTableSheetBuilder {
     @Override
     public void build() throws IllegalArgumentException, com.sun.star.uno.Exception {
         final XSpreadsheet ordinaryDividendsSheet = SpreadsheetDocumentHelper.addSheet(document(), "ordinary-dividends");
-        final CellAddress cellAddress = UnoRuntime.queryInterface(XCellAddressable.class, ordinaryDividendsSheet.getCellByPosition(0, 0)).getCellAddress();
+        final CellAddress cellAddress = SheetHelper.getCellAddress(ordinaryDividendsSheet, 0, 0);
 
-        pivotTableHelper().setTablesSupplier(UnoRuntime.queryInterface(XDataPilotTablesSupplier.class, ordinaryDividendsSheet));
+        pivotTableHelper().setTablesSupplier(ordinaryDividendsSheet);
         pivotTableHelper().setSourceRange(getSourceRange());
         pivotTableHelper().setRowOrientation(DividendDetailSheetBuilder.FIELD_SECURITY_DESCRIPTION);
         pivotTableHelper().setColumnOrientation(DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE);

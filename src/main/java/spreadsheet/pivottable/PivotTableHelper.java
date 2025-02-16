@@ -16,6 +16,7 @@ import com.sun.star.sheet.XDataPilotTable;
 import com.sun.star.sheet.XDataPilotTables;
 import com.sun.star.sheet.XDataPilotTablesSupplier;
 import com.sun.star.sheet.XSheetFilterDescriptor;
+import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.table.CellAddress;
 import com.sun.star.table.CellRangeAddress;
 import com.sun.star.uno.UnoRuntime;
@@ -30,8 +31,8 @@ public class PivotTableHelper {
         super();
     }
 
-    public void setTablesSupplier(final XDataPilotTablesSupplier supplier) {
-        this.dataPilotTablesSupplier = supplier;
+    public void setTablesSupplier(final XSpreadsheet sheet) {
+        this.dataPilotTablesSupplier = UnoRuntime.queryInterface(XDataPilotTablesSupplier.class, sheet);
         this.dataPilotTables = this.dataPilotTablesSupplier.getDataPilotTables();
         this.dataPilotDescriptor = dataPilotTables().createDataPilotDescriptor();
     }
