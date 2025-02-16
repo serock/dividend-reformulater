@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 package spreadsheet.sheet.tax;
 
+import java.util.Collections;
+import java.util.Set;
+
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sheet.FilterConnection;
@@ -16,7 +19,7 @@ import spreadsheet.sheet.SheetHelper;
 
 public class ForeignTaxPaidSheetBuilder extends PivotTableSheetBuilder {
 
-    private static final TableFilterField[] tableFilterFields = createFilterFields();
+    private Set<String> transactionTypes = Collections.emptySet();
 
     public ForeignTaxPaidSheetBuilder() {
         super();
@@ -34,11 +37,35 @@ public class ForeignTaxPaidSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().setColumnOrientation(DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE);
         pivotTableHelper().setDataOrientation(DividendDetailSheetBuilder.FIELD_AMOUNT);
         pivotTableHelper().setSumFunction(DividendDetailSheetBuilder.FIELD_AMOUNT);
-        pivotTableHelper().setFilterFields(tableFilterFields);
+        pivotTableHelper().setFilterFields(createFilterFields());
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("foreign-tax-paid", cellAddress);
 
         sheetHelper().updateSheet(foreignTaxPaidSheet);
+    }
+
+    public void setTransactionTypes(final Set<String> types) {
+        this.transactionTypes = types;
+    }
+
+    private TableFilterField[] createFilterFields() {
+        final int size = transactionTypes().size();
+        final String[] types = transactionTypes().toArray(new String[size]);
+        final TableFilterField[] filterFields = new TableFilterField[size];
+        filterFields[0] = new TableFilterField();
+        filterFields[0].Field = DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE;
+        filterFields[0].IsNumeric = false;
+        filterFields[0].StringValue = types[0];
+        filterFields[0].Operator = FilterOperator.EQUAL;
+        for (int i = 1; i < size; i++) {
+            filterFields[i] = new TableFilterField();
+            filterFields[i].Connection = FilterConnection.OR;
+            filterFields[i].Field = DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE;
+            filterFields[i].IsNumeric = false;
+            filterFields[i].StringValue = types[i];
+            filterFields[i].Operator = FilterOperator.EQUAL;
+        }
+        return filterFields;
     }
 
     private CellRangeAddress getSourceRange() throws WrappedTargetException, NoSuchElementException {
@@ -46,27 +73,7 @@ public class ForeignTaxPaidSheetBuilder extends PivotTableSheetBuilder {
         return SheetHelper.getCellRangeAddressOfUsedArea(dividendDetailSheet);
     }
 
-    private static TableFilterField[] createFilterFields() {
-        final TableFilterField[] filterFields = new TableFilterField[2];
-        setFirstForeignTaxAdjustmentFilter(filterFields);
-        setLastForeignTaxWithheldFilter(filterFields);
-        return filterFields;
-    }
-
-    private static void setFirstForeignTaxAdjustmentFilter(final TableFilterField[] filterFields) {
-        filterFields[0] = new TableFilterField();
-        filterFields[0].Field = DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE;
-        filterFields[0].IsNumeric = false;
-        filterFields[0].StringValue = "Adj- Foreign tax withheld-AA";
-        filterFields[0].Operator = FilterOperator.GREATER;
-    }
-
-    private static void setLastForeignTaxWithheldFilter(TableFilterField[] filterFields) {
-        filterFields[1] = new TableFilterField();
-        filterFields[1].Connection = FilterConnection.AND;
-        filterFields[1].Field = DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE;
-        filterFields[1].IsNumeric = false;
-        filterFields[1].StringValue = "Foreign tax withheld-ZZ";
-        filterFields[1].Operator = FilterOperator.LESS;
+    private Set<String> transactionTypes() {
+        return this.transactionTypes;
     }
 }

@@ -2,7 +2,9 @@
 package text;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Context {
 
@@ -67,6 +69,18 @@ public class Context {
         return supplementalInfoRows().get(supplementalInfoRows().size() - 1);
     }
 
+    public Set<String> getForeignTaxTransactionTypes() {
+        final Set<String> transactionTypes = new HashSet<>();
+        String transactionType;
+        for (List<String> row : distributionDetailRows()) {
+            transactionType = row.get(COLUMN_TRANSACTION_TYPE);
+            if (transactionType.contains("Foreign tax")) {
+                transactionTypes.add(transactionType);
+            }
+        }
+        return transactionTypes;
+    }
+
     public String[][] getForm1099DivFormulas() {
         final List<String[]> formulas = new ArrayList<>();
         formulas.add(new String[] { "'1a-", "Total ordinary dividends (includes lines 1b, 5, 2e)", "=GETPIVOTDATA(\"Amount\"; $'ordinary-dividends'.$A$1)" });
@@ -84,7 +98,9 @@ public class Context {
         if (hasSection199aDividend()) {
             formulas.add(new String[] { "'5-", "Section 199A dividends", "=GETPIVOTDATA(\"Amount\"; $'ordinary-dividends'.$A$1; \"Transaction type\"; \"Section 199A dividend\")" });
         }
-        formulas.add(new String[] { "'7-", "Foreign tax paid", "=ABS(GETPIVOTDATA(\"Amount\"; $'foreign-tax-paid'.$A$1))" });
+        if (hasForeignTaxPaid()) {
+            formulas.add(new String[] { "'7-", "Foreign tax paid", "=ABS(GETPIVOTDATA(\"Amount\"; $'foreign-tax-paid'.$A$1))" });
+        }
         if (hasTaxExemptDividends()) {
             formulas.add(new String[] { "'12-", "Exempt-interest dividends (includes line 13)", "=GETPIVOTDATA(\"Amount\"; $'tax-exempt-dividends'.$A$1)" });
         }
@@ -129,6 +145,16 @@ public class Context {
             formulas[rowIndex++] = row.toArray(EMPTY_STRING_ARRAY);
         }
         return formulas;
+    }
+
+    public boolean hasForeignTaxPaid() {
+        final List<List<String>> rows = distributionDetailRows();
+        for (List<String> row : rows) {
+            if (row.get(COLUMN_TRANSACTION_TYPE).startsWith("Foreign tax")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean hasLongTermCapitalGain() {

@@ -82,9 +82,10 @@ public class DividendReformulater implements Consumer<String>, Runnable {
         builder.build();
     }
 
-    private static void buildForeignTaxPaidSheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
+    private void buildForeignTaxPaidSheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
         final ForeignTaxPaidSheetBuilder builder = new ForeignTaxPaidSheetBuilder();
         builder.setDocument(document);
+        builder.setTransactionTypes(context().getForeignTaxTransactionTypes());
         builder.build();
     }
 
@@ -125,7 +126,9 @@ public class DividendReformulater implements Consumer<String>, Runnable {
                 if (context().hasTaxExemptDividends()) {
                     buildTaxExemptDividendsSheet(document);
                 }
-                buildForeignTaxPaidSheet(document);
+                if (context().hasForeignTaxPaid()) {
+                    buildForeignTaxPaidSheet(document);
+                }
                 if (context().hasSupplementalInfo()) {
                     buildSupplementalInfoSheet(document);
                     buildSupplementalSummarySheet(document);
