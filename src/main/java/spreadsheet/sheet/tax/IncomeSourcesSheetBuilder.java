@@ -11,15 +11,15 @@ import spreadsheet.SpreadsheetDocumentHelper;
 import spreadsheet.sheet.PivotTableSheetBuilder;
 import spreadsheet.sheet.SheetHelper;
 
-public class SupplementalSummarySheetBuilder extends PivotTableSheetBuilder {
+public class IncomeSourcesSheetBuilder extends PivotTableSheetBuilder {
 
-    public SupplementalSummarySheetBuilder() {
+    public IncomeSourcesSheetBuilder() {
         super();
     }
 
     @Override
     public void build() throws com.sun.star.uno.Exception {
-        final XSpreadsheet supplementalSummarySheet = SpreadsheetDocumentHelper.addSheet(document(), "supplemental-summary");
+        final XSpreadsheet supplementalSummarySheet = SpreadsheetDocumentHelper.addSheet(document(), "income-sources");
         final CellAddress cellAddress = SheetHelper.getCellAddress(supplementalSummarySheet, 0, 0);
 
         pivotTableHelper().setTablesSupplier(supplementalSummarySheet);
