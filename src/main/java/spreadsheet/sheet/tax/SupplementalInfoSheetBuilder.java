@@ -32,6 +32,8 @@ public class SupplementalInfoSheetBuilder extends SheetBuilder {
         sheetHelper().setColumnProperties(columnProperties);
         sheetHelper().setSortFields(createSortFields());
         sheetHelper().updateSheet(supplementalInfoSheet);
+        SpreadsheetDocumentHelper.setActiveSheet(document(), supplementalInfoSheet);
+        SpreadsheetDocumentHelper.freezeRowsOfActiveSheet(document(), 1);
     }
 
     private void addSecurityDescriptionColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
