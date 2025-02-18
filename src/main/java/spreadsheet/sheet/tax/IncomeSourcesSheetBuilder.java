@@ -10,6 +10,7 @@ import com.sun.star.table.CellRangeAddress;
 import spreadsheet.SpreadsheetDocumentHelper;
 import spreadsheet.sheet.PivotTableSheetBuilder;
 import spreadsheet.sheet.SheetHelper;
+import text.SupplementalInfoState;
 
 public class IncomeSourcesSheetBuilder extends PivotTableSheetBuilder {
 
@@ -24,10 +25,10 @@ public class IncomeSourcesSheetBuilder extends PivotTableSheetBuilder {
 
         pivotTableHelper().setTablesSupplier(supplementalSummarySheet);
         pivotTableHelper().setSourceRange(getSourceRange());
-        pivotTableHelper().setRowOrientation(SupplementalInfoSheetBuilder.FIELD_SECURITY_DESCRIPTION);
-        pivotTableHelper().setColumnOrientation(SupplementalInfoSheetBuilder.FIELD_SOURCE);
-        pivotTableHelper().setDataOrientation(SupplementalInfoSheetBuilder.FIELD_AMOUNT);
-        pivotTableHelper().setSumFunction(SupplementalInfoSheetBuilder.FIELD_AMOUNT);
+        pivotTableHelper().setRowOrientation(SupplementalInfoState.FIELD_SECURITY_DESCRIPTION);
+        pivotTableHelper().setColumnOrientation(SupplementalInfoState.FIELD_SOURCE);
+        pivotTableHelper().setDataOrientation(SupplementalInfoState.FIELD_AMOUNT);
+        pivotTableHelper().setSumFunction(SupplementalInfoState.FIELD_AMOUNT);
         pivotTableHelper().showTotalsColumn(false);
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("supplemental-summary", cellAddress);

@@ -2,6 +2,7 @@
 package text;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,11 +50,14 @@ public class Context {
 
     public void addSupplementalInfoHeaderRowIfNeeded() {
         if (supplementalInfoRows().isEmpty()) {
-            final List<String> row = new ArrayList<>(3);
-            row.add("Security description");
-            row.add("Source");
-            row.add("Percentage");
-            supplementalInfoRows().add(row);
+            final String[] headers = new String[] {
+                    "Security description",
+                    "Source",
+                    "State",
+                    "Percentage",
+                    "Amount"
+            };
+            supplementalInfoRows().add(Arrays.asList(headers));
         }
     }
 
@@ -108,13 +112,7 @@ public class Context {
     }
 
     public String[][] getDividendDetailFormulas() {
-        final List<List<String>> rows = distributionDetailRows();
-        final String[][] formulas = new String[rows.size()][];
-        int rowIndex = 0;
-        for (List<String> row : rows) {
-            formulas[rowIndex++] = row.toArray(EMPTY_STRING_ARRAY);
-        }
-        return formulas;
+        return getFormulas(distributionDetailRows());
     }
 
     public String getSecurityDescriptionForNote(final String note) {
@@ -131,20 +129,11 @@ public class Context {
     }
 
     public String[][] getSupplementalInfoFormulas() {
-        final List<List<String>> rows = supplementalInfoRows();
-        final String[][] formulas = new String[rows.size()][];
-        int rowIndex = 0;
-        int rowNum;
-        for (List<String> row : rows) {
-            if (rowIndex == 0) {
-                row.add("Amount");
-            } else {
-                rowNum = rowIndex + 1;
-                row.add("=GETPIVOTDATA(\"Amount\"; $'ordinary-dividends'.$A$1; $A$1; A" + Integer.toString(rowNum) + ")*C" + Integer.toString(rowNum));
-            }
-            formulas[rowIndex++] = row.toArray(EMPTY_STRING_ARRAY);
-        }
-        return formulas;
+        return getFormulas(supplementalInfoRows());
+    }
+
+    public int getSupplementalInfoSize() {
+        return supplementalInfoRows().size();
     }
 
     public boolean hasForeignTaxPaid() {
@@ -215,15 +204,24 @@ public class Context {
         supplementalInfoRows().remove(supplementalInfoRows().size() - 1);
     }
 
-    public List<List<String>> distributionDetailRows() {
+    public State state() {
+        return this.state;
+    }
+
+    private static String[][] getFormulas(final List<List<String>> rows) {
+        final String[][] formulas = new String[rows.size()][];
+        int rowIndex = 0;
+        for (List<String> row : rows) {
+            formulas[rowIndex++] = row.toArray(EMPTY_STRING_ARRAY);
+        }
+        return formulas;
+    }
+
+    private List<List<String>> distributionDetailRows() {
         return this.distributionDetailRows;
     }
 
-    public List<List<String>> supplementalInfoRows() {
+    private List<List<String>> supplementalInfoRows() {
         return this.supplementalInfoRows;
-    }
-
-    public State state() {
-        return this.state;
     }
 }

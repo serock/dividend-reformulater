@@ -12,12 +12,9 @@ import com.sun.star.table.TableSortField;
 
 import spreadsheet.SpreadsheetDocumentHelper;
 import spreadsheet.sheet.SheetBuilder;
+import text.SupplementalInfoState;
 
 public class SupplementalInfoSheetBuilder extends SheetBuilder {
-
-    static final int FIELD_SECURITY_DESCRIPTION = 0;
-    static final int FIELD_SOURCE = 1;
-    static final int FIELD_AMOUNT = 3;
 
     public SupplementalInfoSheetBuilder() {
         super();
@@ -48,6 +45,12 @@ public class SupplementalInfoSheetBuilder extends SheetBuilder {
         columnProperties.add(columnPropertiesItem);
     }
 
+    private void addStateColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
+        final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
+        columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getTextFormat(document()));
+        columnProperties.add(columnPropertiesItem);
+    }
+
     private void addPercentageColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
         final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
         columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getPercentNumberFormat(document()));
@@ -71,6 +74,7 @@ public class SupplementalInfoSheetBuilder extends SheetBuilder {
         final List<SortedMap<String, Object>> columnProperties = new ArrayList<>(4);
         addSecurityDescriptionColumnProperties(columnProperties);
         addSourceColumnProperties(columnProperties);
+        addStateColumnProperties(columnProperties);
         addPercentageColumnProperties(columnProperties);
         addAmountColumnProperties(columnProperties);
         return columnProperties;
@@ -79,10 +83,10 @@ public class SupplementalInfoSheetBuilder extends SheetBuilder {
     private static TableSortField[] createSortFields() {
         TableSortField[] sortFields = new TableSortField[2];
         sortFields[0] = new TableSortField();
-        sortFields[0].Field = FIELD_SECURITY_DESCRIPTION;
+        sortFields[0].Field = SupplementalInfoState.FIELD_SECURITY_DESCRIPTION;
         sortFields[0].IsAscending = true;
         sortFields[1] = new TableSortField();
-        sortFields[1].Field = FIELD_SOURCE;
+        sortFields[1].Field = SupplementalInfoState.FIELD_SOURCE;
         sortFields[1].IsAscending = true;
         return sortFields;
     }
