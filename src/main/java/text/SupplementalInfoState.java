@@ -51,7 +51,7 @@ public class SupplementalInfoState implements State {
         if (matcher.find()) {
             final int end = matcher.end();
             final List<String> lastRow = context.getLastSupplementalInfoRow();
-            if (lastRow.get(Constants.SI_FIELD_SOURCE).equals("")) {
+            if (lastRow.get(Constants.SI_FIELD_SOURCE).isEmpty()) {
                 lastRow.set(Constants.SI_FIELD_SOURCE, "Fed Source Total");
                 matcher = patternPercent.matcher(text);
                 final String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";
@@ -71,7 +71,7 @@ public class SupplementalInfoState implements State {
         if (matcher.find()) {
             int end = matcher.end();
             List<String> lastRow = context.getLastSupplementalInfoRow();
-            if (lastRow.get(Constants.SI_FIELD_SOURCE).equals("")) {
+            if (lastRow.get(Constants.SI_FIELD_SOURCE).isEmpty()) {
                 lastRow.set(Constants.SI_FIELD_SOURCE, "Fgn Source Inc Tot");
                 matcher = patternPercent.matcher(text);
                 String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";

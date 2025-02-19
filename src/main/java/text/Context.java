@@ -11,12 +11,14 @@ public class Context {
     private static final String[] EMPTY_STRING_ARRAY = new String[] {};
 
     private final List<List<String>> distributionDetailRows;
+    private final List<List<String>> form1099DivRows;
     private final List<List<String>> supplementalInfoRows;
 
     private State state;
 
     public Context() {
         this.distributionDetailRows = new ArrayList<>();
+        this.form1099DivRows = new ArrayList<>();
         this.supplementalInfoRows = new ArrayList<>();
         this.state = new SearchState();
     }
@@ -27,6 +29,10 @@ public class Context {
 
     public void addDistributionDetailRow(final List<String> row) {
         distributionDetailRows().add(row);
+    }
+
+    public void addForm1099DivRow(final List<String> row) {
+        form1099DivRows().add(row);
     }
 
     public void addSupplementalInfoRow(final List<String> row) {
@@ -54,29 +60,7 @@ public class Context {
     }
 
     public String[][] getForm1099DivFormulas() {
-        final List<String[]> formulas = new ArrayList<>();
-        formulas.add(new String[] { "'1a-", "Total ordinary dividends (includes lines 1b, 5, 2e)", "=GETPIVOTDATA(\"Amount\"; $'ordinary-dividends'.$A$1)" });
-        formulas.add(new String[] { "'1b-", "Qualified dividends", "=GETPIVOTDATA(\"Amount\"; $'ordinary-dividends'.$A$1; \"Transaction type\"; \"Qualified dividend\")" });
-        if (hasLongTermCapitalGain()) {
-            formulas.add(new String[] { "'2a-", "Total capital gain distributions (includes lines 2b, 2c, 2d, 2f)",
-                    "=SUMIF($'dividend-detail'.G:G; \"Long-term capital gain\"; $'dividend-detail'.F:F)+SUMIF($'dividend-detail'.G:G; \"Unrecaptured section 1250 gain\"; $'dividend-detail'.F:F)" });
-        }
-        if (hasUnrecapturedSection1250Gain()) {
-            formulas.add(new String[] { "'2b-", "Unrecaptured Section 1250 gain", "=SUMIF($'dividend-detail'.G:G; \"Unrecaptured section 1250 gain\"; $'dividend-detail'.F:F)" });
-        }
-        if (hasNondividendDistribution()) {
-            formulas.add(new String[] { "'3-", "Nondividend distributions", "=GETPIVOTDATA(\"Amount\"; $'nondividend-distributions'.$A$1; \"Transaction type\"; \"Nondividend distribution\")" });
-        }
-        if (hasSection199aDividend()) {
-            formulas.add(new String[] { "'5-", "Section 199A dividends", "=GETPIVOTDATA(\"Amount\"; $'ordinary-dividends'.$A$1; \"Transaction type\"; \"Section 199A dividend\")" });
-        }
-        if (hasForeignTaxPaid()) {
-            formulas.add(new String[] { "'7-", "Foreign tax paid", "=ABS(GETPIVOTDATA(\"Amount\"; $'foreign-tax-paid'.$A$1))" });
-        }
-        if (hasTaxExemptDividend()) {
-            formulas.add(new String[] { "'12-", "Exempt-interest dividends (includes line 13)", "=GETPIVOTDATA(\"Amount\"; $'tax-exempt-dividends'.$A$1)" });
-        }
-        return formulas.toArray(new String[0][]);
+        return getFormulas(form1099DivRows());
     }
 
     public String[][] getDividendDetailFormulas() {
@@ -120,6 +104,10 @@ public class Context {
 
     public boolean hasNoDistributionDetail() {
         return distributionDetailRows().isEmpty();
+    }
+
+    public boolean hasNoForm1099DivBoxes() {
+        return form1099DivRows().isEmpty();
     }
 
     public boolean hasNondividendDistribution() {
@@ -175,6 +163,10 @@ public class Context {
 
     private List<List<String>> distributionDetailRows() {
         return this.distributionDetailRows;
+    }
+
+    private List<List<String>> form1099DivRows() {
+        return this.form1099DivRows;
     }
 
     private List<List<String>> supplementalInfoRows() {

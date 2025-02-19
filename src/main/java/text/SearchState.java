@@ -9,6 +9,8 @@ public class SearchState implements State {
             context.setState(new DistributionDetailHeaderState());
         } else if (text.endsWith("Mutual Fund and UIT Supplemental Information") || text.contains("End Notes")) {
             context.setState(new SupplementalInfoState());
+        } else if (text.startsWith("Instructions for Recipient")) {
+            context.setState(new Form1099DivState());
         }
     }
 }
