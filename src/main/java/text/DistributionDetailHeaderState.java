@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 package text;
 
+import java.util.Arrays;
+
 public class DistributionDetailHeaderState implements State {
 
     @Override
@@ -10,7 +12,19 @@ public class DistributionDetailHeaderState implements State {
             return;
         }
         if (text.equals("Security description CUSIP and/or symbol State Date Amount Transaction type Notes")) {
-            context.addDistributionDetailHeaderRowIfNeeded();
+            if (context.hasNoDistributionDetail()) {
+                final String[] headers = new String[] {
+                        "Security description",
+                        "CUSIP",
+                        "Symbol",
+                        "State",
+                        "Date",
+                        "Amount",
+                        "Transaction type",
+                        "Notes"
+                };
+                context.addDistributionDetailRow(Arrays.asList(headers));
+            }
             context.setState(new DistributionDetailDataState());
         }
     }

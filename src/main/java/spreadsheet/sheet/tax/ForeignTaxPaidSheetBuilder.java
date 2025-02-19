@@ -16,6 +16,7 @@ import com.sun.star.table.CellRangeAddress;
 import spreadsheet.SpreadsheetDocumentHelper;
 import spreadsheet.sheet.PivotTableSheetBuilder;
 import spreadsheet.sheet.SheetHelper;
+import text.Constants;
 
 public class ForeignTaxPaidSheetBuilder extends PivotTableSheetBuilder {
 
@@ -33,10 +34,10 @@ public class ForeignTaxPaidSheetBuilder extends PivotTableSheetBuilder {
 
         pivotTableHelper().setTablesSupplier(foreignTaxPaidSheet);
         pivotTableHelper().setSourceRange(getSourceRange());
-        pivotTableHelper().setRowOrientation(DividendDetailSheetBuilder.FIELD_SECURITY_DESCRIPTION);
-        pivotTableHelper().setColumnOrientation(DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE);
-        pivotTableHelper().setDataOrientation(DividendDetailSheetBuilder.FIELD_AMOUNT);
-        pivotTableHelper().setSumFunction(DividendDetailSheetBuilder.FIELD_AMOUNT);
+        pivotTableHelper().setRowOrientation(Constants.DD_FIELD_SECURITY_DESCRIPTION);
+        pivotTableHelper().setColumnOrientation(Constants.DD_FIELD_TRANSACTION_TYPE);
+        pivotTableHelper().setDataOrientation(Constants.DD_FIELD_AMOUNT);
+        pivotTableHelper().setSumFunction(Constants.DD_FIELD_AMOUNT);
         pivotTableHelper().setFilterFields(createFilterFields());
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("foreign-tax-paid", cellAddress);
@@ -53,14 +54,14 @@ public class ForeignTaxPaidSheetBuilder extends PivotTableSheetBuilder {
         final String[] types = transactionTypes().toArray(new String[size]);
         final TableFilterField[] filterFields = new TableFilterField[size];
         filterFields[0] = new TableFilterField();
-        filterFields[0].Field = DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE;
+        filterFields[0].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
         filterFields[0].IsNumeric = false;
         filterFields[0].StringValue = types[0];
         filterFields[0].Operator = FilterOperator.EQUAL;
         for (int i = 1; i < size; i++) {
             filterFields[i] = new TableFilterField();
             filterFields[i].Connection = FilterConnection.OR;
-            filterFields[i].Field = DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE;
+            filterFields[i].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
             filterFields[i].IsNumeric = false;
             filterFields[i].StringValue = types[i];
             filterFields[i].Operator = FilterOperator.EQUAL;

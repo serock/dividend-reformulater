@@ -12,6 +12,7 @@ import com.sun.star.table.CellRangeAddress;
 import spreadsheet.SpreadsheetDocumentHelper;
 import spreadsheet.sheet.PivotTableSheetBuilder;
 import spreadsheet.sheet.SheetHelper;
+import text.Constants;
 
 public class NondividendDistributionsSheetBuilder extends PivotTableSheetBuilder {
 
@@ -28,10 +29,10 @@ public class NondividendDistributionsSheetBuilder extends PivotTableSheetBuilder
 
         pivotTableHelper().setTablesSupplier(nondividendDistributionsSheet);
         pivotTableHelper().setSourceRange(getSourceRange());
-        pivotTableHelper().setRowOrientation(DividendDetailSheetBuilder.FIELD_SECURITY_DESCRIPTION);
-        pivotTableHelper().setColumnOrientation(DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE);
-        pivotTableHelper().setDataOrientation(DividendDetailSheetBuilder.FIELD_AMOUNT);
-        pivotTableHelper().setSumFunction(DividendDetailSheetBuilder.FIELD_AMOUNT);
+        pivotTableHelper().setRowOrientation(Constants.DD_FIELD_SECURITY_DESCRIPTION);
+        pivotTableHelper().setColumnOrientation(Constants.DD_FIELD_TRANSACTION_TYPE);
+        pivotTableHelper().setDataOrientation(Constants.DD_FIELD_AMOUNT);
+        pivotTableHelper().setSumFunction(Constants.DD_FIELD_AMOUNT);
         pivotTableHelper().setFilterFields(tableFilterFields);
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("nondividend-distributions", cellAddress);
@@ -52,7 +53,7 @@ public class NondividendDistributionsSheetBuilder extends PivotTableSheetBuilder
 
     private static void setNondividendFilter(final TableFilterField[] filterFields) {
         filterFields[0] = new TableFilterField();
-        filterFields[0].Field = DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE;
+        filterFields[0].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
         filterFields[0].IsNumeric = false;
         filterFields[0].StringValue = "Nondividend distribution";
         filterFields[0].Operator = FilterOperator.EQUAL;

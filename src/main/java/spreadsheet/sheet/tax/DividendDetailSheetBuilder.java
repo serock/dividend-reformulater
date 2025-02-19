@@ -13,13 +13,9 @@ import com.sun.star.table.TableSortField;
 
 import spreadsheet.SpreadsheetDocumentHelper;
 import spreadsheet.sheet.SheetBuilder;
+import text.Constants;
 
 public class DividendDetailSheetBuilder extends SheetBuilder {
-
-    static final int FIELD_SECURITY_DESCRIPTION = 0;
-    static final int FIELD_DATE = 4;
-    static final int FIELD_AMOUNT = 5;
-    static final int FIELD_TRANSACTION_TYPE = 6;
 
     public DividendDetailSheetBuilder() {
         super();
@@ -113,10 +109,10 @@ public class DividendDetailSheetBuilder extends SheetBuilder {
     private static TableSortField[] createSortFields() {
         TableSortField[] sortFields = new TableSortField[2];
         sortFields[0] = new TableSortField();
-        sortFields[0].Field = FIELD_SECURITY_DESCRIPTION;
+        sortFields[0].Field = Constants.DD_FIELD_SECURITY_DESCRIPTION;
         sortFields[0].IsAscending = true;
         sortFields[1] = new TableSortField();
-        sortFields[1].Field = FIELD_DATE;
+        sortFields[1].Field = Constants.DD_FIELD_DATE;
         sortFields[1].IsAscending = true;
         return sortFields;
     }

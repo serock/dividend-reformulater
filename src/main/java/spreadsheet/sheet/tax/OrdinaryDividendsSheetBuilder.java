@@ -14,6 +14,7 @@ import com.sun.star.table.CellRangeAddress;
 import spreadsheet.SpreadsheetDocumentHelper;
 import spreadsheet.sheet.PivotTableSheetBuilder;
 import spreadsheet.sheet.SheetHelper;
+import text.Constants;
 
 public class OrdinaryDividendsSheetBuilder extends PivotTableSheetBuilder {
 
@@ -30,10 +31,10 @@ public class OrdinaryDividendsSheetBuilder extends PivotTableSheetBuilder {
 
         pivotTableHelper().setTablesSupplier(ordinaryDividendsSheet);
         pivotTableHelper().setSourceRange(getSourceRange());
-        pivotTableHelper().setRowOrientation(DividendDetailSheetBuilder.FIELD_SECURITY_DESCRIPTION);
-        pivotTableHelper().setColumnOrientation(DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE);
-        pivotTableHelper().setDataOrientation(DividendDetailSheetBuilder.FIELD_AMOUNT);
-        pivotTableHelper().setSumFunction(DividendDetailSheetBuilder.FIELD_AMOUNT);
+        pivotTableHelper().setRowOrientation(Constants.DD_FIELD_SECURITY_DESCRIPTION);
+        pivotTableHelper().setColumnOrientation(Constants.DD_FIELD_TRANSACTION_TYPE);
+        pivotTableHelper().setDataOrientation(Constants.DD_FIELD_AMOUNT);
+        pivotTableHelper().setSumFunction(Constants.DD_FIELD_AMOUNT);
         pivotTableHelper().setFilterFields(tableFilterFields);
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("ordinary-dividends", cellAddress);
@@ -59,7 +60,7 @@ public class OrdinaryDividendsSheetBuilder extends PivotTableSheetBuilder {
 
     private static void setQualifiedDividendFilter(final TableFilterField[] filterFields) {
         filterFields[0] = new TableFilterField();
-        filterFields[0].Field = DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE;
+        filterFields[0].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
         filterFields[0].IsNumeric = false;
         filterFields[0].StringValue = "Qualified dividend";
         filterFields[0].Operator = FilterOperator.EQUAL;
@@ -68,7 +69,7 @@ public class OrdinaryDividendsSheetBuilder extends PivotTableSheetBuilder {
     private static void setNonqualifiedDividendFilter(final TableFilterField[] filterFields) {
         filterFields[1] = new TableFilterField();
         filterFields[1].Connection = FilterConnection.OR;
-        filterFields[1].Field = DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE;
+        filterFields[1].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
         filterFields[1].IsNumeric = false;
         filterFields[1].StringValue = "Nonqualified dividend";
         filterFields[1].Operator = FilterOperator.EQUAL;
@@ -77,7 +78,7 @@ public class OrdinaryDividendsSheetBuilder extends PivotTableSheetBuilder {
     private static void setSection199aDividendFilter(final TableFilterField[] filterFields) {
         filterFields[2] = new TableFilterField();
         filterFields[2].Connection = FilterConnection.OR;
-        filterFields[2].Field = DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE;
+        filterFields[2].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
         filterFields[2].IsNumeric = false;
         filterFields[2].StringValue = "Section 199A dividend";
         filterFields[2].Operator = FilterOperator.EQUAL;
@@ -86,7 +87,7 @@ public class OrdinaryDividendsSheetBuilder extends PivotTableSheetBuilder {
     private static void setShortTermCapitalGainFilter(final TableFilterField[] filterFields) {
         filterFields[3] = new TableFilterField();
         filterFields[3].Connection = FilterConnection.OR;
-        filterFields[3].Field = DividendDetailSheetBuilder.FIELD_TRANSACTION_TYPE;
+        filterFields[3].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
         filterFields[3].IsNumeric = false;
         filterFields[3].StringValue = "Short-term capital gain";
         filterFields[3].Operator = FilterOperator.EQUAL;

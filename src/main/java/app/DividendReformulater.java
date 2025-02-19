@@ -123,7 +123,7 @@ public class DividendReformulater implements Consumer<String>, Runnable {
                 if (context().hasNondividendDistribution()) {
                     buildNondividendDistributionsSheet(document);
                 }
-                if (context().hasTaxExemptDividends()) {
+                if (context().hasTaxExemptDividend()) {
                     buildTaxExemptDividendsSheet(document);
                 }
                 if (context().hasForeignTaxPaid()) {

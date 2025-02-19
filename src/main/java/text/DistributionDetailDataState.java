@@ -16,15 +16,6 @@ public class DistributionDetailDataState implements State {
     private static final Pattern patternEndWithNote = Pattern.compile("[0-9]{2}$");
     private static final Pattern patternWhitespace = Pattern.compile("\\s+");
 
-    private static final int COLUMN_SECURITY_DESCRIPTION = 0;
-    private static final int COLUMN_CUSIP = 1;
-    private static final int COLUMN_SYMBOL = 2;
-    private static final int COLUMN_STATE = 3;
-    private static final int COLUMN_DATE = 4;
-    private static final int COLUMN_AMOUNT = 5;
-    private static final int COLUMN_TRANSACTION_TYPE = 6;
-    private static final int COLUMN_NOTES = 7;
-
     @Override
     public void accept(final Context context, final String text) {
         if (text.startsWith("Page ")) {
@@ -68,59 +59,59 @@ public class DistributionDetailDataState implements State {
     }
 
     private static void copyBase(final List<String> fromRow, final List<String> toRow) {
-        toRow.set(COLUMN_SECURITY_DESCRIPTION, fromRow.get(COLUMN_SECURITY_DESCRIPTION));
-        toRow.set(COLUMN_CUSIP, fromRow.get(COLUMN_CUSIP));
-        toRow.set(COLUMN_SYMBOL, fromRow.get(COLUMN_SYMBOL));
-        toRow.set(COLUMN_STATE, fromRow.get(COLUMN_STATE));
+        toRow.set(Constants.DD_FIELD_SECURITY_DESCRIPTION, fromRow.get(Constants.DD_FIELD_SECURITY_DESCRIPTION));
+        toRow.set(Constants.DD_FIELD_CUSIP, fromRow.get(Constants.DD_FIELD_CUSIP));
+        toRow.set(Constants.DD_FIELD_SYMBOL, fromRow.get(Constants.DD_FIELD_SYMBOL));
+        toRow.set(Constants.DD_FIELD_STATE, fromRow.get(Constants.DD_FIELD_STATE));
     }
 
     private static void extractBase(final String text, final List<String> row) {
         Matcher matcher = patternEndWithCusipSymbolState.matcher(text);
         if (matcher.find()) {
             final String[] fields = patternWhitespace.split(matcher.group());
-            row.set(COLUMN_SECURITY_DESCRIPTION, String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim())));
-            row.set(COLUMN_CUSIP, '\'' + fields[0]);
-            row.set(COLUMN_SYMBOL, fields[1]);
-            row.set(COLUMN_STATE, fields[2]);
+            row.set(Constants.DD_FIELD_SECURITY_DESCRIPTION, String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim())));
+            row.set(Constants.DD_FIELD_CUSIP, '\'' + fields[0]);
+            row.set(Constants.DD_FIELD_SYMBOL, fields[1]);
+            row.set(Constants.DD_FIELD_STATE, fields[2]);
             return;
         }
         matcher = patternEndWithCusipSymbol.matcher(text);
         if (matcher.find()) {
             final String[] fields = patternWhitespace.split(matcher.group());
-            row.set(COLUMN_SECURITY_DESCRIPTION, String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim())));
-            row.set(COLUMN_CUSIP, '\'' + fields[0]);
-            row.set(COLUMN_SYMBOL, fields[1]);
+            row.set(Constants.DD_FIELD_SECURITY_DESCRIPTION, String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim())));
+            row.set(Constants.DD_FIELD_CUSIP, '\'' + fields[0]);
+            row.set(Constants.DD_FIELD_SYMBOL, fields[1]);
             return;
         }
         matcher = patternEndWithCusip.matcher(text);
         if (matcher.find()) {
-            row.set(COLUMN_SECURITY_DESCRIPTION, String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim())));
-            row.set(COLUMN_CUSIP, '\'' + matcher.group());
+            row.set(Constants.DD_FIELD_SECURITY_DESCRIPTION, String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim())));
+            row.set(Constants.DD_FIELD_CUSIP, '\'' + matcher.group());
             return;
         }
     }
 
     private static void extractDateAndAmount(final String text, final List<String> row) {
         final String[] fields = patternWhitespace.split(text);
-        row.set(COLUMN_DATE, fields[0]);
-        row.set(COLUMN_AMOUNT, fields[1]);
+        row.set(Constants.DD_FIELD_DATE, fields[0]);
+        row.set(Constants.DD_FIELD_AMOUNT, fields[1]);
     }
 
     private static void extractTransactionTypeAndNotes(final String text, final List<String> row) {
         final Matcher matcher = patternEndWithNote.matcher(text);
         if (matcher.find()) {
-            row.set(COLUMN_TRANSACTION_TYPE, text.substring(0, matcher.start()).trim());
-            row.set(COLUMN_NOTES, '\'' + text.substring(matcher.start()));
+            row.set(Constants.DD_FIELD_TRANSACTION_TYPE, text.substring(0, matcher.start()).trim());
+            row.set(Constants.DD_FIELD_NOTES, '\'' + text.substring(matcher.start()));
         } else {
-            row.set(COLUMN_TRANSACTION_TYPE, text.trim());
+            row.set(Constants.DD_FIELD_TRANSACTION_TYPE, text.trim());
         }
     }
 
     private static void extractNoteDateAmount(String text, List<String> row) {
         final String[] fields = patternWhitespace.split(text);
-        row.set(COLUMN_NOTES, '\'' + fields[1]);
-        row.set(COLUMN_DATE, fields[2]);
-        row.set(COLUMN_AMOUNT, fields[3]);
+        row.set(Constants.DD_FIELD_NOTES, '\'' + fields[1]);
+        row.set(Constants.DD_FIELD_DATE, fields[2]);
+        row.set(Constants.DD_FIELD_AMOUNT, fields[3]);
     }
 
     private static boolean isContinuation(final String text) {

@@ -2,16 +2,12 @@
 package text;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class Context {
 
-    private static final int COLUMN_SECURITY_DESCRIPTION = 0;
-    private static final int COLUMN_TRANSACTION_TYPE = 6;
-    private static final int COLUMN_NOTE = 7;
     private static final String[] EMPTY_STRING_ARRAY = new String[] {};
 
     private final List<List<String>> distributionDetailRows;
@@ -29,36 +25,8 @@ public class Context {
         this.state = newState;
     }
 
-    public void addDistributionDetailHeaderRowIfNeeded() {
-        if (distributionDetailRows().isEmpty()) {
-            final List<String> row = new ArrayList<>(8);
-            row.add("Security description");
-            row.add("CUSIP");
-            row.add("Symbol");
-            row.add("State");
-            row.add("Date");
-            row.add("Amount");
-            row.add("Transaction type");
-            row.add("Notes");
-            distributionDetailRows().add(row);
-        }
-    }
-
     public void addDistributionDetailRow(final List<String> row) {
         distributionDetailRows().add(row);
-    }
-
-    public void addSupplementalInfoHeaderRowIfNeeded() {
-        if (supplementalInfoRows().isEmpty()) {
-            final String[] headers = new String[] {
-                    "Security description",
-                    "Source",
-                    "State",
-                    "Percentage",
-                    "Amount"
-            };
-            supplementalInfoRows().add(Arrays.asList(headers));
-        }
     }
 
     public void addSupplementalInfoRow(final List<String> row) {
@@ -77,7 +45,7 @@ public class Context {
         final Set<String> transactionTypes = new HashSet<>();
         String transactionType;
         for (List<String> row : distributionDetailRows()) {
-            transactionType = row.get(COLUMN_TRANSACTION_TYPE);
+            transactionType = row.get(Constants.DD_FIELD_TRANSACTION_TYPE);
             if (transactionType.contains("Foreign tax")) {
                 transactionTypes.add(transactionType);
             }
@@ -105,7 +73,7 @@ public class Context {
         if (hasForeignTaxPaid()) {
             formulas.add(new String[] { "'7-", "Foreign tax paid", "=ABS(GETPIVOTDATA(\"Amount\"; $'foreign-tax-paid'.$A$1))" });
         }
-        if (hasTaxExemptDividends()) {
+        if (hasTaxExemptDividend()) {
             formulas.add(new String[] { "'12-", "Exempt-interest dividends (includes line 13)", "=GETPIVOTDATA(\"Amount\"; $'tax-exempt-dividends'.$A$1)" });
         }
         return formulas.toArray(new String[0][]);
@@ -120,8 +88,8 @@ public class Context {
         final List<List<String>> rows = distributionDetailRows();
         String securityDescription = "";
         for (List<String> row : rows) {
-            if (noteFormula.equals(row.get(COLUMN_NOTE))) {
-                securityDescription = row.get(COLUMN_SECURITY_DESCRIPTION);
+            if (noteFormula.equals(row.get(Constants.DD_FIELD_NOTES))) {
+                securityDescription = row.get(Constants.DD_FIELD_SECURITY_DESCRIPTION);
                 break;
             }
         }
@@ -139,7 +107,7 @@ public class Context {
     public boolean hasForeignTaxPaid() {
         final List<List<String>> rows = distributionDetailRows();
         for (List<String> row : rows) {
-            if (row.get(COLUMN_TRANSACTION_TYPE).startsWith("Foreign tax")) {
+            if (row.get(Constants.DD_FIELD_TRANSACTION_TYPE).startsWith("Foreign tax")) {
                 return true;
             }
         }
@@ -147,57 +115,35 @@ public class Context {
     }
 
     public boolean hasLongTermCapitalGain() {
-        final List<List<String>> rows = distributionDetailRows();
-        for (List<String> row : rows) {
-            if (row.get(COLUMN_TRANSACTION_TYPE).equals("Long-term capital gain")) {
-                return true;
-            }
-        }
-        return false;
+        return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Long-term capital gain");
+    }
+
+    public boolean hasNoDistributionDetail() {
+        return distributionDetailRows().isEmpty();
     }
 
     public boolean hasNondividendDistribution() {
-        final List<List<String>> rows = distributionDetailRows();
-        for (List<String> row : rows) {
-            if (row.get(COLUMN_TRANSACTION_TYPE).equals("Nondividend distribution")) {
-                return true;
-            }
-        }
-        return false;
+        return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Nondividend distribution");
+    }
+
+    public boolean hasNoSupplementalInfo() {
+        return supplementalInfoRows().isEmpty();
     }
 
     public boolean hasSection199aDividend() {
-        final List<List<String>> rows = distributionDetailRows();
-        for (List<String> row : rows) {
-            if (row.get(COLUMN_TRANSACTION_TYPE).equals("Section 199A dividend")) {
-                return true;
-            }
-        }
-        return false;
+        return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Section 199A dividend");
     }
 
     public boolean hasSupplementalInfo() {
         return !supplementalInfoRows().isEmpty();
     }
 
-    public boolean hasTaxExemptDividends() {
-        final List<List<String>> rows = distributionDetailRows();
-        for (List<String> row : rows) {
-            if (row.get(COLUMN_TRANSACTION_TYPE).equals("Tax-exempt dividend")) {
-                return true;
-            }
-        }
-        return false;
+    public boolean hasTaxExemptDividend() {
+        return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Tax-exempt dividend");
     }
 
     public boolean hasUnrecapturedSection1250Gain() {
-        final List<List<String>> rows = distributionDetailRows();
-        for (List<String> row : rows) {
-            if (row.get(COLUMN_TRANSACTION_TYPE).equals("Unrecaptured section 1250 gain")) {
-                return true;
-            }
-        }
-        return false;
+        return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Unrecaptured section 1250 gain");
     }
 
     public void removeLastSupplementalInfoRow() {
@@ -215,6 +161,16 @@ public class Context {
             formulas[rowIndex++] = row.toArray(EMPTY_STRING_ARRAY);
         }
         return formulas;
+    }
+
+    private boolean hasMatchingDividendDetail(final int field, final String value) {
+        final List<List<String>> rows = distributionDetailRows();
+        for (List<String> row : rows) {
+            if (row.get(field).equals(value)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private List<List<String>> distributionDetailRows() {

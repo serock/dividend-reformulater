@@ -12,7 +12,7 @@ import com.sun.star.table.TableSortField;
 
 import spreadsheet.SpreadsheetDocumentHelper;
 import spreadsheet.sheet.SheetBuilder;
-import text.SupplementalInfoState;
+import text.Constants;
 
 public class SupplementalInfoSheetBuilder extends SheetBuilder {
 
@@ -83,10 +83,10 @@ public class SupplementalInfoSheetBuilder extends SheetBuilder {
     private static TableSortField[] createSortFields() {
         TableSortField[] sortFields = new TableSortField[2];
         sortFields[0] = new TableSortField();
-        sortFields[0].Field = SupplementalInfoState.FIELD_SECURITY_DESCRIPTION;
+        sortFields[0].Field = Constants.SI_FIELD_SECURITY_DESCRIPTION;
         sortFields[0].IsAscending = true;
         sortFields[1] = new TableSortField();
-        sortFields[1].Field = SupplementalInfoState.FIELD_SOURCE;
+        sortFields[1].Field = Constants.SI_FIELD_SOURCE;
         sortFields[1].IsAscending = true;
         return sortFields;
     }

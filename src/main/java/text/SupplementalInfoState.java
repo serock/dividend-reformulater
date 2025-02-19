@@ -2,13 +2,14 @@
 package text;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SupplementalInfoState implements State {
 
-    private static final Pattern patternEndWithCusipAndSymbol = Pattern.compile("/\\s+[A-Z0-9]{7,9}\\s+/\\s+[A-Z]{1,5}$"); // end with cusip, symbol
+    private static final Pattern patternEndsWithCusipAndSymbol = Pattern.compile("/\\s+[A-Z0-9]{7,9}\\s+/\\s+[A-Z]{1,5}$"); // end with cusip, symbol
     private static final Pattern patternFgnSourceIncAdj = Pattern.compile("Fgn Source Inc Adj");
     private static final Pattern patternFgnSourceIncQual = Pattern.compile("Fgn Source Inc Qual");
     private static final Pattern patternPercent = Pattern.compile("[0-9]+\\.[0-9]{2}%");
@@ -17,12 +18,6 @@ public class SupplementalInfoState implements State {
     private static final Pattern patternUSGOPercentage = Pattern.compile("the U.S government obligation percentage is");
     private static final Pattern patternWhitespace = Pattern.compile("\\s+"); // whitespace
 
-    public static final int FIELD_SECURITY_DESCRIPTION = 0;
-    public static final int FIELD_SOURCE = 1;
-    public static final int FIELD_STATE = 2;
-    public static final int FIELD_PERCENTAGE = 3;
-    public static final int FIELD_AMOUNT = 4;
-
     @Override
     public void accept(final Context context, final String text) {
         if (text.startsWith("Page ")) {
@@ -30,12 +25,21 @@ public class SupplementalInfoState implements State {
             return;
         }
         Matcher matcher;
-        matcher = patternEndWithCusipAndSymbol.matcher(text);
+        matcher = patternEndsWithCusipAndSymbol.matcher(text);
         if (matcher.find()) {
-            context.addSupplementalInfoHeaderRowIfNeeded();
+            if (context.hasNoSupplementalInfo()) {
+                final String[] headers = new String[] {
+                        "Security description",
+                        "Source",
+                        "State",
+                        "Percentage",
+                        "Amount"
+                };
+                context.addSupplementalInfoRow(Arrays.asList(headers));
+            }
             final String securityDescription = String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim()));
             final List<String> row = createBlankRow();
-            row.set(FIELD_SECURITY_DESCRIPTION, securityDescription);
+            row.set(Constants.SI_FIELD_SECURITY_DESCRIPTION, securityDescription);
             addSupplementalInfoRow(context, row);
             return;
         }
@@ -47,18 +51,18 @@ public class SupplementalInfoState implements State {
         if (matcher.find()) {
             final int end = matcher.end();
             final List<String> lastRow = context.getLastSupplementalInfoRow();
-            if (lastRow.get(FIELD_SOURCE).equals("")) {
-                lastRow.set(FIELD_SOURCE, "Fed Source Total");
+            if (lastRow.get(Constants.SI_FIELD_SOURCE).equals("")) {
+                lastRow.set(Constants.SI_FIELD_SOURCE, "Fed Source Total");
                 matcher = patternPercent.matcher(text);
                 final String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";
-                lastRow.set(FIELD_PERCENTAGE, percent);
+                lastRow.set(Constants.SI_FIELD_PERCENTAGE, percent);
             } else {
                 final List<String> row = createBlankRow();
-                row.set(FIELD_SECURITY_DESCRIPTION, lastRow.get(FIELD_SECURITY_DESCRIPTION));
-                row.set(FIELD_SOURCE, "Fed Source Total");
+                row.set(Constants.SI_FIELD_SECURITY_DESCRIPTION, lastRow.get(Constants.SI_FIELD_SECURITY_DESCRIPTION));
+                row.set(Constants.SI_FIELD_SOURCE, "Fed Source Total");
                 matcher = patternPercent.matcher(text);
                 final String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";
-                row.set(FIELD_PERCENTAGE, percent);
+                row.set(Constants.SI_FIELD_PERCENTAGE, percent);
                 addSupplementalInfoRow(context, row);
             }
             return;
@@ -67,18 +71,18 @@ public class SupplementalInfoState implements State {
         if (matcher.find()) {
             int end = matcher.end();
             List<String> lastRow = context.getLastSupplementalInfoRow();
-            if (lastRow.get(FIELD_SOURCE).equals("")) {
-                lastRow.set(FIELD_SOURCE, "Fgn Source Inc Tot");
+            if (lastRow.get(Constants.SI_FIELD_SOURCE).equals("")) {
+                lastRow.set(Constants.SI_FIELD_SOURCE, "Fgn Source Inc Tot");
                 matcher = patternPercent.matcher(text);
                 String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";
-                lastRow.set(FIELD_PERCENTAGE, percent);
+                lastRow.set(Constants.SI_FIELD_PERCENTAGE, percent);
             } else {
                 final List<String> row = createBlankRow();
-                row.set(FIELD_SECURITY_DESCRIPTION, lastRow.get(FIELD_SECURITY_DESCRIPTION));
-                row.set(FIELD_SOURCE, "Fgn Source Inc Tot");
+                row.set(Constants.SI_FIELD_SECURITY_DESCRIPTION, lastRow.get(Constants.SI_FIELD_SECURITY_DESCRIPTION));
+                row.set(Constants.SI_FIELD_SOURCE, "Fgn Source Inc Tot");
                 matcher = patternPercent.matcher(text);
                 final String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";
-                row.set(FIELD_PERCENTAGE, percent);
+                row.set(Constants.SI_FIELD_PERCENTAGE, percent);
                 addSupplementalInfoRow(context, row);
             }
             matcher = patternFgnSourceIncQual.matcher(text);
@@ -86,11 +90,11 @@ public class SupplementalInfoState implements State {
                 end = matcher.end();
                 lastRow = context.getLastSupplementalInfoRow();
                 final List<String> row = createBlankRow();
-                row.set(FIELD_SECURITY_DESCRIPTION, lastRow.get(FIELD_SECURITY_DESCRIPTION));
-                row.set(FIELD_SOURCE, "Fgn Source Inc Qual");
+                row.set(Constants.SI_FIELD_SECURITY_DESCRIPTION, lastRow.get(Constants.SI_FIELD_SECURITY_DESCRIPTION));
+                row.set(Constants.SI_FIELD_SOURCE, "Fgn Source Inc Qual");
                 matcher = patternPercent.matcher(text);
                 final String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";
-                row.set(FIELD_PERCENTAGE, percent);
+                row.set(Constants.SI_FIELD_PERCENTAGE, percent);
                 addSupplementalInfoRow(context, row);
             }
             matcher = patternFgnSourceIncAdj.matcher(text);
@@ -98,11 +102,11 @@ public class SupplementalInfoState implements State {
                 end = matcher.end();
                 lastRow = context.getLastSupplementalInfoRow();
                 final List<String> row = createBlankRow();
-                row.set(FIELD_SECURITY_DESCRIPTION, lastRow.get(FIELD_SECURITY_DESCRIPTION));
-                row.set(FIELD_SOURCE, "Fgn Source Inc Adj");
+                row.set(Constants.SI_FIELD_SECURITY_DESCRIPTION, lastRow.get(Constants.SI_FIELD_SECURITY_DESCRIPTION));
+                row.set(Constants.SI_FIELD_SOURCE, "Fgn Source Inc Adj");
                 matcher = patternPercent.matcher(text);
                 final String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";
-                row.set(FIELD_PERCENTAGE, percent);
+                row.set(Constants.SI_FIELD_PERCENTAGE, percent);
                 addSupplementalInfoRow(context, row);
             }
             return;
@@ -112,11 +116,11 @@ public class SupplementalInfoState implements State {
             final String note = text.substring(0, 2);
             final int end = matcher.end();
             final List<String> row = createBlankRow();
-            row.set(FIELD_SECURITY_DESCRIPTION, context.getSecurityDescriptionForNote(note));
-            row.set(FIELD_SOURCE, "Fed Source Total");
+            row.set(Constants.SI_FIELD_SECURITY_DESCRIPTION, context.getSecurityDescriptionForNote(note));
+            row.set(Constants.SI_FIELD_SOURCE, "Fed Source Total");
             matcher = patternPercent.matcher(text);
             final String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";
-            row.set(FIELD_PERCENTAGE, percent);
+            row.set(Constants.SI_FIELD_PERCENTAGE, percent);
             addSupplementalInfoRow(context, row);
             return;
         }
@@ -124,7 +128,7 @@ public class SupplementalInfoState implements State {
 
     private static void addSupplementalInfoRow(final Context context, final List<String> row) {
         final int rowNum = context.getSupplementalInfoSize() + 1;
-        row.set(FIELD_AMOUNT, "=GETPIVOTDATA(\"Amount\"; $'ordinary-dividends'.$A$1; $A$1; A" + Integer.toString(rowNum) + ")*D" + Integer.toString(rowNum));
+        row.set(Constants.SI_FIELD_AMOUNT, "=GETPIVOTDATA(\"Amount\"; $'ordinary-dividends'.$A$1; $A$1; A" + Integer.toString(rowNum) + ")*D" + Integer.toString(rowNum));
         context.addSupplementalInfoRow(row);
     }
 
