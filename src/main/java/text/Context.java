@@ -23,28 +23,8 @@ public class Context {
         this.state = new SearchState();
     }
 
-    public void setState(final State newState) {
-        this.state = newState;
-    }
-
-    public void addDistributionDetailRow(final List<String> row) {
-        distributionDetailRows().add(row);
-    }
-
-    public void addForm1099DivRow(final List<String> row) {
-        form1099DivRows().add(row);
-    }
-
-    public void addSupplementalInfoRow(final List<String> row) {
-        supplementalInfoRows().add(row);
-    }
-
-    public List<String> getLastDistributionDetailRow() {
-        return distributionDetailRows().get(distributionDetailRows().size() - 1);
-    }
-
-    public List<String> getLastSupplementalInfoRow() {
-        return supplementalInfoRows().get(supplementalInfoRows().size() - 1);
+    public String[][] getDividendDetailFormulas() {
+        return getFormulas(distributionDetailRows());
     }
 
     public Set<String> getForeignTaxTransactionTypes() {
@@ -63,29 +43,8 @@ public class Context {
         return getFormulas(form1099DivRows());
     }
 
-    public String[][] getDividendDetailFormulas() {
-        return getFormulas(distributionDetailRows());
-    }
-
-    public String getSecurityDescriptionForNote(final String note) {
-        final String noteFormula = '\'' + note;
-        final List<List<String>> rows = distributionDetailRows();
-        String securityDescription = "";
-        for (List<String> row : rows) {
-            if (noteFormula.equals(row.get(Constants.DD_FIELD_NOTES))) {
-                securityDescription = row.get(Constants.DD_FIELD_SECURITY_DESCRIPTION);
-                break;
-            }
-        }
-        return securityDescription;
-    }
-
     public String[][] getSupplementalInfoFormulas() {
         return getFormulas(supplementalInfoRows());
-    }
-
-    public int getSupplementalInfoSize() {
-        return supplementalInfoRows().size();
     }
 
     public boolean hasForeignTaxPaid() {
@@ -98,28 +57,8 @@ public class Context {
         return false;
     }
 
-    public boolean hasLongTermCapitalGain() {
-        return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Long-term capital gain");
-    }
-
-    public boolean hasNoDistributionDetail() {
-        return distributionDetailRows().isEmpty();
-    }
-
-    public boolean hasNoForm1099DivBoxes() {
-        return form1099DivRows().isEmpty();
-    }
-
     public boolean hasNondividendDistribution() {
         return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Nondividend distribution");
-    }
-
-    public boolean hasNoSupplementalInfo() {
-        return supplementalInfoRows().isEmpty();
-    }
-
-    public boolean hasSection199aDividend() {
-        return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Section 199A dividend");
     }
 
     public boolean hasSupplementalInfo() {
@@ -130,16 +69,77 @@ public class Context {
         return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Tax-exempt dividend");
     }
 
-    public boolean hasUnrecapturedSection1250Gain() {
-        return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Unrecaptured section 1250 gain");
-    }
-
-    public void removeLastSupplementalInfoRow() {
-        supplementalInfoRows().remove(supplementalInfoRows().size() - 1);
+    public void setState(final State newState) {
+        this.state = newState;
     }
 
     public State state() {
         return this.state;
+    }
+
+    void addDistributionDetailRow(final List<String> row) {
+        distributionDetailRows().add(row);
+    }
+
+    void addForm1099DivRow(final List<String> row) {
+        form1099DivRows().add(row);
+    }
+
+    void addSupplementalInfoRow(final List<String> row) {
+        supplementalInfoRows().add(row);
+    }
+
+    List<String> getLastDistributionDetailRow() {
+        return distributionDetailRows().get(distributionDetailRows().size() - 1);
+    }
+
+    List<String> getLastSupplementalInfoRow() {
+        return supplementalInfoRows().get(supplementalInfoRows().size() - 1);
+    }
+
+    String getSecurityDescriptionForNote(final String note) {
+        final String noteFormula = '\'' + note;
+        final List<List<String>> rows = distributionDetailRows();
+        String securityDescription = "";
+        for (List<String> row : rows) {
+            if (noteFormula.equals(row.get(Constants.DD_FIELD_NOTES))) {
+                securityDescription = row.get(Constants.DD_FIELD_SECURITY_DESCRIPTION);
+                break;
+            }
+        }
+        return securityDescription;
+    }
+
+    int getSupplementalInfoSize() {
+        return supplementalInfoRows().size();
+    }
+
+    boolean hasLongTermCapitalGain() {
+        return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Long-term capital gain");
+    }
+
+    boolean hasNoDistributionDetail() {
+        return distributionDetailRows().isEmpty();
+    }
+
+    boolean hasNoForm1099DivRows() {
+        return form1099DivRows().isEmpty();
+    }
+
+    boolean hasNoSupplementalInfo() {
+        return supplementalInfoRows().isEmpty();
+    }
+
+    boolean hasSection199aDividend() {
+        return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Section 199A dividend");
+    }
+
+    boolean hasUnrecapturedSection1250Gain() {
+        return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Unrecaptured section 1250 gain");
+    }
+
+    void removeLastSupplementalInfoRow() {
+        supplementalInfoRows().remove(supplementalInfoRows().size() - 1);
     }
 
     private static String[][] getFormulas(final List<List<String>> rows) {

@@ -7,7 +7,7 @@ public class Form1099DivState implements State {
 
     @Override
     public void accept(final Context context, final String text) {
-        if (context.hasNoForm1099DivBoxes()) {
+        if (context.hasNoForm1099DivRows()) {
             List<String> row;
             row = createBlankRow();
             row.set(0, "'1a-");
