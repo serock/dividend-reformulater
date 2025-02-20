@@ -8,11 +8,9 @@ import java.util.Set;
 
 public class Context {
 
-    private static final String[] EMPTY_STRING_ARRAY = new String[] {};
-
-    private final List<List<String>> distributionDetailRows;
-    private final List<List<String>> form1099DivRows;
-    private final List<List<String>> supplementalInfoRows;
+    private final List<String[]> distributionDetailRows;
+    private final List<String[]> form1099DivRows;
+    private final List<String[]> supplementalInfoRows;
 
     private State state;
 
@@ -30,8 +28,8 @@ public class Context {
     public Set<String> getForeignTaxTransactionTypes() {
         final Set<String> transactionTypes = new HashSet<>();
         String transactionType;
-        for (List<String> row : distributionDetailRows()) {
-            transactionType = row.get(Constants.DD_FIELD_TRANSACTION_TYPE);
+        for (String[] row : distributionDetailRows()) {
+            transactionType = row[Constants.DD_FIELD_TRANSACTION_TYPE];
             if (transactionType.contains("Foreign tax")) {
                 transactionTypes.add(transactionType);
             }
@@ -48,9 +46,9 @@ public class Context {
     }
 
     public boolean hasForeignTaxPaid() {
-        final List<List<String>> rows = distributionDetailRows();
-        for (List<String> row : rows) {
-            if (row.get(Constants.DD_FIELD_TRANSACTION_TYPE).startsWith("Foreign tax")) {
+        final List<String[]> rows = distributionDetailRows();
+        for (String[] row : rows) {
+            if (row[Constants.DD_FIELD_TRANSACTION_TYPE].startsWith("Foreign tax")) {
                 return true;
             }
         }
@@ -77,33 +75,33 @@ public class Context {
         return this.state;
     }
 
-    void addDistributionDetailRow(final List<String> row) {
+    void addDistributionDetailRow(final String[] row) {
         distributionDetailRows().add(row);
     }
 
-    void addForm1099DivRow(final List<String> row) {
+    void addForm1099DivRow(final String[] row) {
         form1099DivRows().add(row);
     }
 
-    void addSupplementalInfoRow(final List<String> row) {
+    void addSupplementalInfoRow(final String[] row) {
         supplementalInfoRows().add(row);
     }
 
-    List<String> getLastDistributionDetailRow() {
+    String[] getLastDistributionDetailRow() {
         return distributionDetailRows().get(distributionDetailRows().size() - 1);
     }
 
-    List<String> getLastSupplementalInfoRow() {
+    String[] getLastSupplementalInfoRow() {
         return supplementalInfoRows().get(supplementalInfoRows().size() - 1);
     }
 
     String getSecurityDescriptionForNote(final String note) {
         final String noteFormula = '\'' + note;
-        final List<List<String>> rows = distributionDetailRows();
+        final List<String[]> rows = distributionDetailRows();
         String securityDescription = "";
-        for (List<String> row : rows) {
-            if (noteFormula.equals(row.get(Constants.DD_FIELD_NOTES))) {
-                securityDescription = row.get(Constants.DD_FIELD_SECURITY_DESCRIPTION);
+        for (String[] row : rows) {
+            if (noteFormula.equals(row[Constants.DD_FIELD_NOTES])) {
+                securityDescription = row[Constants.DD_FIELD_SECURITY_DESCRIPTION];
                 break;
             }
         }
@@ -142,34 +140,34 @@ public class Context {
         supplementalInfoRows().remove(supplementalInfoRows().size() - 1);
     }
 
-    private static String[][] getFormulas(final List<List<String>> rows) {
+    private static String[][] getFormulas(final List<String[]> rows) {
         final String[][] formulas = new String[rows.size()][];
         int rowIndex = 0;
-        for (List<String> row : rows) {
-            formulas[rowIndex++] = row.toArray(EMPTY_STRING_ARRAY);
+        for (String[] row : rows) {
+            formulas[rowIndex++] = row;
         }
         return formulas;
     }
 
     private boolean hasMatchingDividendDetail(final int field, final String value) {
-        final List<List<String>> rows = distributionDetailRows();
-        for (List<String> row : rows) {
-            if (row.get(field).equals(value)) {
+        final List<String[]> rows = distributionDetailRows();
+        for (String[] row : rows) {
+            if (row[field].equals(value)) {
                 return true;
             }
         }
         return false;
     }
 
-    private List<List<String>> distributionDetailRows() {
+    private List<String[]> distributionDetailRows() {
         return this.distributionDetailRows;
     }
 
-    private List<List<String>> form1099DivRows() {
+    private List<String[]> form1099DivRows() {
         return this.form1099DivRows;
     }
 
-    private List<List<String>> supplementalInfoRows() {
+    private List<String[]> supplementalInfoRows() {
         return this.supplementalInfoRows;
     }
 }

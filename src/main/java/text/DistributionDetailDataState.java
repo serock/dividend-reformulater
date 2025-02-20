@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 package text;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,8 +23,8 @@ public class DistributionDetailDataState implements State {
         Matcher matcher;
         matcher = patternStartWithNoteDateAmount.matcher(text);
         if (matcher.find()) {
-            final List<String> row = createBlankRow();
-            final List<String> lastRow = context.getLastDistributionDetailRow();
+            final String[] row = createBlankRow();
+            final String[] lastRow = context.getLastDistributionDetailRow();
             copyBase(lastRow, row);
             extractNoteDateAmount(matcher.group(), row);
             extractTransactionTypeAndNotes(text.substring(matcher.end()).trim(), row);
@@ -35,9 +33,9 @@ public class DistributionDetailDataState implements State {
         }
         matcher = patternDateAmount.matcher(text);
         if (matcher.find()) {
-            final List<String> row = createBlankRow();
+            final String[] row = createBlankRow();
             if (matcher.start() == 0 || isContinuation(text.substring(0, matcher.start()).trim())) {
-                final List<String> lastRow = context.getLastDistributionDetailRow();
+                final String[] lastRow = context.getLastDistributionDetailRow();
                 copyBase(lastRow, row);
             } else {
                 extractBase(text.substring(0, matcher.start()).trim(), row);
@@ -49,69 +47,69 @@ public class DistributionDetailDataState implements State {
         }
     }
 
-    private static List<String> createBlankRow() {
+    private static String[] createBlankRow() {
         final int capacity = 8;
-        final List<String> row = new ArrayList<>(capacity);
-        for (int i = capacity; i > 0; i--) {
-            row.add("");
+        final String[] row = new String[capacity];
+        for (int i = capacity - 1; i >= 0; i--) {
+            row[i] = "";
         }
         return row;
     }
 
-    private static void copyBase(final List<String> fromRow, final List<String> toRow) {
-        toRow.set(Constants.DD_FIELD_SECURITY_DESCRIPTION, fromRow.get(Constants.DD_FIELD_SECURITY_DESCRIPTION));
-        toRow.set(Constants.DD_FIELD_CUSIP, fromRow.get(Constants.DD_FIELD_CUSIP));
-        toRow.set(Constants.DD_FIELD_SYMBOL, fromRow.get(Constants.DD_FIELD_SYMBOL));
-        toRow.set(Constants.DD_FIELD_STATE, fromRow.get(Constants.DD_FIELD_STATE));
+    private static void copyBase(final String[] fromRow, final String[] toRow) {
+        toRow[Constants.DD_FIELD_SECURITY_DESCRIPTION] = fromRow[Constants.DD_FIELD_SECURITY_DESCRIPTION];
+        toRow[Constants.DD_FIELD_CUSIP] = fromRow[Constants.DD_FIELD_CUSIP];
+        toRow[Constants.DD_FIELD_SYMBOL] = fromRow[Constants.DD_FIELD_SYMBOL];
+        toRow[Constants.DD_FIELD_STATE] = fromRow[Constants.DD_FIELD_STATE];
     }
 
-    private static void extractBase(final String text, final List<String> row) {
+    private static void extractBase(final String text, final String[] row) {
         Matcher matcher = patternEndWithCusipSymbolState.matcher(text);
         if (matcher.find()) {
             final String[] fields = patternWhitespace.split(matcher.group());
-            row.set(Constants.DD_FIELD_SECURITY_DESCRIPTION, String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim())));
-            row.set(Constants.DD_FIELD_CUSIP, '\'' + fields[0]);
-            row.set(Constants.DD_FIELD_SYMBOL, fields[1]);
-            row.set(Constants.DD_FIELD_STATE, fields[2]);
+            row[Constants.DD_FIELD_SECURITY_DESCRIPTION] = String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim()));
+            row[Constants.DD_FIELD_CUSIP] = '\'' + fields[0];
+            row[Constants.DD_FIELD_SYMBOL] = fields[1];
+            row[Constants.DD_FIELD_STATE] = fields[2];
             return;
         }
         matcher = patternEndWithCusipSymbol.matcher(text);
         if (matcher.find()) {
             final String[] fields = patternWhitespace.split(matcher.group());
-            row.set(Constants.DD_FIELD_SECURITY_DESCRIPTION, String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim())));
-            row.set(Constants.DD_FIELD_CUSIP, '\'' + fields[0]);
-            row.set(Constants.DD_FIELD_SYMBOL, fields[1]);
+            row[Constants.DD_FIELD_SECURITY_DESCRIPTION] = String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim()));
+            row[Constants.DD_FIELD_CUSIP] ='\'' + fields[0];
+            row[Constants.DD_FIELD_SYMBOL] = fields[1];
             return;
         }
         matcher = patternEndWithCusip.matcher(text);
         if (matcher.find()) {
-            row.set(Constants.DD_FIELD_SECURITY_DESCRIPTION, String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim())));
-            row.set(Constants.DD_FIELD_CUSIP, '\'' + matcher.group());
+            row[Constants.DD_FIELD_SECURITY_DESCRIPTION] = String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim()));
+            row[Constants.DD_FIELD_CUSIP] = '\'' + matcher.group();
             return;
         }
     }
 
-    private static void extractDateAndAmount(final String text, final List<String> row) {
+    private static void extractDateAndAmount(final String text, final String[] row) {
         final String[] fields = patternWhitespace.split(text);
-        row.set(Constants.DD_FIELD_DATE, fields[0]);
-        row.set(Constants.DD_FIELD_AMOUNT, fields[1]);
+        row[Constants.DD_FIELD_DATE] = fields[0];
+        row[Constants.DD_FIELD_AMOUNT] = fields[1];
     }
 
-    private static void extractTransactionTypeAndNotes(final String text, final List<String> row) {
+    private static void extractTransactionTypeAndNotes(final String text, final String[] row) {
         final Matcher matcher = patternEndWithNote.matcher(text);
         if (matcher.find()) {
-            row.set(Constants.DD_FIELD_TRANSACTION_TYPE, text.substring(0, matcher.start()).trim());
-            row.set(Constants.DD_FIELD_NOTES, '\'' + text.substring(matcher.start()));
+            row[Constants.DD_FIELD_TRANSACTION_TYPE] = text.substring(0, matcher.start()).trim();
+            row[Constants.DD_FIELD_NOTES] = '\'' + text.substring(matcher.start());
         } else {
-            row.set(Constants.DD_FIELD_TRANSACTION_TYPE, text.trim());
+            row[Constants.DD_FIELD_TRANSACTION_TYPE] = text.trim();
         }
     }
 
-    private static void extractNoteDateAmount(String text, List<String> row) {
+    private static void extractNoteDateAmount(final String text, final String[] row) {
         final String[] fields = patternWhitespace.split(text);
-        row.set(Constants.DD_FIELD_NOTES, '\'' + fields[1]);
-        row.set(Constants.DD_FIELD_DATE, fields[2]);
-        row.set(Constants.DD_FIELD_AMOUNT, fields[3]);
+        row[Constants.DD_FIELD_NOTES] ='\'' + fields[1];
+        row[Constants.DD_FIELD_DATE] = fields[2];
+        row[Constants.DD_FIELD_AMOUNT] = fields[3];
     }
 
     private static boolean isContinuation(final String text) {

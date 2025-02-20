@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: MIT
 package text;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,11 +32,11 @@ public class SupplementalInfoState implements State {
                         "Percentage",
                         "Amount"
                 };
-                context.addSupplementalInfoRow(Arrays.asList(headers));
+                context.addSupplementalInfoRow(headers);
             }
             final String securityDescription = String.join(" ", patternWhitespace.split(text.substring(0, matcher.start()).trim()));
-            final List<String> row = createBlankRow();
-            row.set(Constants.SI_FIELD_SECURITY_DESCRIPTION, securityDescription);
+            final String[] row = createBlankRow();
+            row[Constants.SI_FIELD_SECURITY_DESCRIPTION] = securityDescription;
             addSupplementalInfoRow(context, row);
             return;
         }
@@ -50,19 +47,19 @@ public class SupplementalInfoState implements State {
         matcher = patternStartsWithFedSourceTotal.matcher(text);
         if (matcher.find()) {
             final int end = matcher.end();
-            final List<String> lastRow = context.getLastSupplementalInfoRow();
-            if (lastRow.get(Constants.SI_FIELD_SOURCE).isEmpty()) {
-                lastRow.set(Constants.SI_FIELD_SOURCE, "Fed Source Total");
+            final String[] lastRow = context.getLastSupplementalInfoRow();
+            if (lastRow[Constants.SI_FIELD_SOURCE].isEmpty()) {
+                lastRow[Constants.SI_FIELD_SOURCE] = "Fed Source Total";
                 matcher = patternPercent.matcher(text);
                 final String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";
-                lastRow.set(Constants.SI_FIELD_PERCENTAGE, percent);
+                lastRow[Constants.SI_FIELD_PERCENTAGE] = percent;
             } else {
-                final List<String> row = createBlankRow();
-                row.set(Constants.SI_FIELD_SECURITY_DESCRIPTION, lastRow.get(Constants.SI_FIELD_SECURITY_DESCRIPTION));
-                row.set(Constants.SI_FIELD_SOURCE, "Fed Source Total");
+                final String[] row = createBlankRow();
+                row[Constants.SI_FIELD_SECURITY_DESCRIPTION] = lastRow[Constants.SI_FIELD_SECURITY_DESCRIPTION];
+                row[Constants.SI_FIELD_SOURCE] = "Fed Source Total";
                 matcher = patternPercent.matcher(text);
                 final String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";
-                row.set(Constants.SI_FIELD_PERCENTAGE, percent);
+                row[Constants.SI_FIELD_PERCENTAGE] = percent;
                 addSupplementalInfoRow(context, row);
             }
             return;
@@ -70,43 +67,43 @@ public class SupplementalInfoState implements State {
         matcher = patternStartsWithFgnSourceIncTot.matcher(text);
         if (matcher.find()) {
             int end = matcher.end();
-            List<String> lastRow = context.getLastSupplementalInfoRow();
-            if (lastRow.get(Constants.SI_FIELD_SOURCE).isEmpty()) {
-                lastRow.set(Constants.SI_FIELD_SOURCE, "Fgn Source Inc Tot");
+            String[] lastRow = context.getLastSupplementalInfoRow();
+            if (lastRow[Constants.SI_FIELD_SOURCE].isEmpty()) {
+                lastRow[Constants.SI_FIELD_SOURCE] = "Fgn Source Inc Tot";
                 matcher = patternPercent.matcher(text);
                 String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";
-                lastRow.set(Constants.SI_FIELD_PERCENTAGE, percent);
+                lastRow[Constants.SI_FIELD_PERCENTAGE] = percent;
             } else {
-                final List<String> row = createBlankRow();
-                row.set(Constants.SI_FIELD_SECURITY_DESCRIPTION, lastRow.get(Constants.SI_FIELD_SECURITY_DESCRIPTION));
-                row.set(Constants.SI_FIELD_SOURCE, "Fgn Source Inc Tot");
+                final String[] row = createBlankRow();
+                row[Constants.SI_FIELD_SECURITY_DESCRIPTION] = lastRow[Constants.SI_FIELD_SECURITY_DESCRIPTION];
+                row[Constants.SI_FIELD_SOURCE] = "Fgn Source Inc Tot";
                 matcher = patternPercent.matcher(text);
                 final String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";
-                row.set(Constants.SI_FIELD_PERCENTAGE, percent);
+                row[Constants.SI_FIELD_PERCENTAGE] = percent;
                 addSupplementalInfoRow(context, row);
             }
             matcher = patternFgnSourceIncQual.matcher(text);
             if (matcher.find()) {
                 end = matcher.end();
                 lastRow = context.getLastSupplementalInfoRow();
-                final List<String> row = createBlankRow();
-                row.set(Constants.SI_FIELD_SECURITY_DESCRIPTION, lastRow.get(Constants.SI_FIELD_SECURITY_DESCRIPTION));
-                row.set(Constants.SI_FIELD_SOURCE, "Fgn Source Inc Qual");
+                final String[] row = createBlankRow();
+                row[Constants.SI_FIELD_SECURITY_DESCRIPTION] = lastRow[Constants.SI_FIELD_SECURITY_DESCRIPTION];
+                row[Constants.SI_FIELD_SOURCE] = "Fgn Source Inc Qual";
                 matcher = patternPercent.matcher(text);
                 final String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";
-                row.set(Constants.SI_FIELD_PERCENTAGE, percent);
+                row[Constants.SI_FIELD_PERCENTAGE] = percent;
                 addSupplementalInfoRow(context, row);
             }
             matcher = patternFgnSourceIncAdj.matcher(text);
             if (matcher.find()) {
                 end = matcher.end();
                 lastRow = context.getLastSupplementalInfoRow();
-                final List<String> row = createBlankRow();
-                row.set(Constants.SI_FIELD_SECURITY_DESCRIPTION, lastRow.get(Constants.SI_FIELD_SECURITY_DESCRIPTION));
-                row.set(Constants.SI_FIELD_SOURCE, "Fgn Source Inc Adj");
+                final String[] row = createBlankRow();
+                row[Constants.SI_FIELD_SECURITY_DESCRIPTION] = lastRow[Constants.SI_FIELD_SECURITY_DESCRIPTION];
+                row[Constants.SI_FIELD_SOURCE] = "Fgn Source Inc Adj";
                 matcher = patternPercent.matcher(text);
                 final String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";
-                row.set(Constants.SI_FIELD_PERCENTAGE, percent);
+                row[Constants.SI_FIELD_PERCENTAGE] = percent;
                 addSupplementalInfoRow(context, row);
             }
             return;
@@ -115,28 +112,28 @@ public class SupplementalInfoState implements State {
         if (matcher.find()) {
             final String note = text.substring(0, 2);
             final int end = matcher.end();
-            final List<String> row = createBlankRow();
-            row.set(Constants.SI_FIELD_SECURITY_DESCRIPTION, context.getSecurityDescriptionForNote(note));
-            row.set(Constants.SI_FIELD_SOURCE, "Fed Source Total");
+            final String[] row = createBlankRow();
+            row[Constants.SI_FIELD_SECURITY_DESCRIPTION] = context.getSecurityDescriptionForNote(note);
+            row[Constants.SI_FIELD_SOURCE] = "Fed Source Total";
             matcher = patternPercent.matcher(text);
             final String percent = matcher.find(end) ? cleanPercent(matcher.group()) : "";
-            row.set(Constants.SI_FIELD_PERCENTAGE, percent);
+            row[Constants.SI_FIELD_PERCENTAGE] = percent;
             addSupplementalInfoRow(context, row);
             return;
         }
     }
 
-    private static void addSupplementalInfoRow(final Context context, final List<String> row) {
+    private static void addSupplementalInfoRow(final Context context, final String[] row) {
         final int rowNum = context.getSupplementalInfoSize() + 1;
-        row.set(Constants.SI_FIELD_AMOUNT, "=GETPIVOTDATA(\"Amount\"; $'ordinary-dividends'.$A$1; $A$1; A" + Integer.toString(rowNum) + ")*D" + Integer.toString(rowNum));
+        row[Constants.SI_FIELD_AMOUNT] = "=GETPIVOTDATA(\"Amount\"; $'ordinary-dividends'.$A$1; $A$1; A" + Integer.toString(rowNum) + ")*D" + Integer.toString(rowNum);
         context.addSupplementalInfoRow(row);
     }
 
-    private static List<String> createBlankRow() {
+    private static String[] createBlankRow() {
         final int capacity = 5;
-        final List<String> row = new ArrayList<>(capacity);
-        for (int i = capacity; i > 0; i--) {
-            row.add("");
+        final String[] row = new String[capacity];
+        for (int i = capacity - 1; i >= 0; i--) {
+            row[i] = "";
         }
         return row;
     }

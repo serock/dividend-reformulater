@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 package text;
 
-import java.util.Arrays;
-
 public class DistributionDetailHeaderState implements State {
 
     @Override
@@ -23,7 +21,7 @@ public class DistributionDetailHeaderState implements State {
                         "Transaction type",
                         "Notes"
                 };
-                context.addDistributionDetailRow(Arrays.asList(headers));
+                context.addDistributionDetailRow(headers);
             }
             context.setState(new DistributionDetailDataState());
         }
