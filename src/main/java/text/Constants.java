@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 package text;
 
 public class Constants {
