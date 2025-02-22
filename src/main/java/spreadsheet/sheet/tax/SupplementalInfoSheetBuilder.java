@@ -81,13 +81,18 @@ public class SupplementalInfoSheetBuilder extends SheetBuilder {
     }
 
     private static TableSortField[] createSortFields() {
-        TableSortField[] sortFields = new TableSortField[2];
+        TableSortField[] sortFields = new TableSortField[3];
         sortFields[0] = new TableSortField();
         sortFields[0].Field = Constants.SI_FIELD_SECURITY_DESCRIPTION;
         sortFields[0].IsAscending = true;
+
         sortFields[1] = new TableSortField();
         sortFields[1].Field = Constants.SI_FIELD_SOURCE;
         sortFields[1].IsAscending = true;
+
+        sortFields[2] = new TableSortField();
+        sortFields[2].Field = Constants.SI_FIELD_STATE;
+        sortFields[2].IsAscending = true;
         return sortFields;
     }
 }

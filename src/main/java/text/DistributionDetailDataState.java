@@ -4,7 +4,7 @@ package text;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DistributionDetailDataState implements State {
+class DistributionDetailDataState implements State {
 
     private static final Pattern patternDateAmount = Pattern.compile("[0-9]{2}/[0-9]{2}/[0-9]{2}\\s+[-0-9,]+\\.[0-9]{2}");
     private static final Pattern patternStartWithNoteDateAmount = Pattern.compile("^Note:\\s+[0-9]{2}\\s+[0-9]{2}/[0-9]{2}/[0-9]{2}\\s+[-0-9,]+\\.[0-9]{2}");
@@ -17,13 +17,13 @@ public class DistributionDetailDataState implements State {
     @Override
     public void accept(final Context context, final String text) {
         if (text.startsWith("Page ")) {
-            context.setState(new SearchState());
+            context.transitionToSearchState();
             return;
         }
         Matcher matcher;
         matcher = patternStartWithNoteDateAmount.matcher(text);
         if (matcher.find()) {
-            final String[] row = createBlankRow();
+            final String[] row = createEmptyRow();
             final String[] lastRow = context.getLastDistributionDetailRow();
             copyBase(lastRow, row);
             extractNoteDateAmount(matcher.group(), row);
@@ -33,7 +33,7 @@ public class DistributionDetailDataState implements State {
         }
         matcher = patternDateAmount.matcher(text);
         if (matcher.find()) {
-            final String[] row = createBlankRow();
+            final String[] row = createEmptyRow();
             if (matcher.start() == 0 || isContinuation(text.substring(0, matcher.start()).trim())) {
                 final String[] lastRow = context.getLastDistributionDetailRow();
                 copyBase(lastRow, row);
@@ -47,20 +47,20 @@ public class DistributionDetailDataState implements State {
         }
     }
 
-    private static String[] createBlankRow() {
+    private static void copyBase(final String[] fromRow, final String[] toRow) {
+        toRow[Constants.DD_FIELD_SECURITY_DESCRIPTION] = fromRow[Constants.DD_FIELD_SECURITY_DESCRIPTION];
+        toRow[Constants.DD_FIELD_CUSIP] = fromRow[Constants.DD_FIELD_CUSIP];
+        toRow[Constants.DD_FIELD_SYMBOL] = fromRow[Constants.DD_FIELD_SYMBOL];
+        toRow[Constants.DD_FIELD_STATE] = fromRow[Constants.DD_FIELD_STATE];
+    }
+
+    private static String[] createEmptyRow() {
         final int capacity = 8;
         final String[] row = new String[capacity];
         for (int i = capacity - 1; i >= 0; i--) {
             row[i] = "";
         }
         return row;
-    }
-
-    private static void copyBase(final String[] fromRow, final String[] toRow) {
-        toRow[Constants.DD_FIELD_SECURITY_DESCRIPTION] = fromRow[Constants.DD_FIELD_SECURITY_DESCRIPTION];
-        toRow[Constants.DD_FIELD_CUSIP] = fromRow[Constants.DD_FIELD_CUSIP];
-        toRow[Constants.DD_FIELD_SYMBOL] = fromRow[Constants.DD_FIELD_SYMBOL];
-        toRow[Constants.DD_FIELD_STATE] = fromRow[Constants.DD_FIELD_STATE];
     }
 
     private static void extractBase(final String text, final String[] row) {

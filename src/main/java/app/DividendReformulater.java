@@ -16,7 +16,7 @@ import spreadsheet.sheet.tax.Form1099DivSheetBuilder;
 import spreadsheet.sheet.tax.NondividendDistributionsSheetBuilder;
 import spreadsheet.sheet.tax.OrdinaryDividendsSheetBuilder;
 import spreadsheet.sheet.tax.SupplementalInfoSheetBuilder;
-import spreadsheet.sheet.tax.IncomeSourcesSheetBuilder;
+import spreadsheet.sheet.tax.OrdinarySourcesSheetBuilder;
 import spreadsheet.sheet.tax.TaxExemptDividendsSheetBuilder;
 import text.Context;
 
@@ -97,7 +97,7 @@ public class DividendReformulater implements Consumer<String>, Runnable {
     }
 
     private static void buildSupplementalSummarySheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
-        final IncomeSourcesSheetBuilder builder = new IncomeSourcesSheetBuilder();
+        final OrdinarySourcesSheetBuilder builder = new OrdinarySourcesSheetBuilder();
         builder.setDocument(document);
         builder.build();
     }

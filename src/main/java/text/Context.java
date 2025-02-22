@@ -12,13 +12,19 @@ public class Context {
     private final List<String[]> form1099DivRows;
     private final List<String[]> supplementalInfoRows;
 
+    private final State distributionDetailHeaderState = new DistributionDetailHeaderState();
+    private final State distributionDetailDataState = new DistributionDetailDataState();
+    private final State form1099DivState = new Form1099DivState();
+    private final State searchState = new SearchState();
+    private final State supplementalInfoState = new SupplementalInfoState();
+
     private State state;
 
     public Context() {
         this.distributionDetailRows = new ArrayList<>();
         this.form1099DivRows = new ArrayList<>();
         this.supplementalInfoRows = new ArrayList<>();
-        this.state = new SearchState();
+        transitionToSearchState();
     }
 
     public String[][] getDividendDetailFormulas() {
@@ -65,10 +71,6 @@ public class Context {
 
     public boolean hasTaxExemptDividend() {
         return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Tax-exempt dividend");
-    }
-
-    public void setState(final State newState) {
-        this.state = newState;
     }
 
     public State state() {
@@ -140,6 +142,38 @@ public class Context {
         supplementalInfoRows().remove(supplementalInfoRows().size() - 1);
     }
 
+    void transitionToDistributionDetailDataState() {
+        setState(distributionDetailDataState());
+    }
+
+    void transitionToDistributionDetailHeaderState() {
+        setState(distributionDetailHeaderState());
+    }
+
+    void transitionToForm1099DivState() {
+        setState(form1099DivState());
+    }
+
+    void transitionToSearchState() {
+        setState(searchState());
+    }
+
+    void transitionToSupplementalInfoState() {
+        setState(supplementalInfoState());
+    }
+
+    private State distributionDetailDataState() {
+        return this.distributionDetailDataState;
+    }
+
+    private State distributionDetailHeaderState() {
+        return this.distributionDetailHeaderState;
+    }
+
+    private State form1099DivState() {
+        return this.form1099DivState;
+    }
+
     private static String[][] getFormulas(final List<String[]> rows) {
         final String[][] formulas = new String[rows.size()][];
         int rowIndex = 0;
@@ -167,7 +201,19 @@ public class Context {
         return this.form1099DivRows;
     }
 
+    private State searchState() {
+        return this.searchState;
+    }
+
+    private void setState(final State newState) {
+        this.state = newState;
+    }
+
     private List<String[]> supplementalInfoRows() {
         return this.supplementalInfoRows;
+    }
+
+    private State supplementalInfoState() {
+        return this.supplementalInfoState;
     }
 }

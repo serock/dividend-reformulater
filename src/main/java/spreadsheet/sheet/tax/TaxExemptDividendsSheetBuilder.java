@@ -26,7 +26,7 @@ public class TaxExemptDividendsSheetBuilder extends PivotTableSheetBuilder {
     @Override
     public void build() throws com.sun.star.uno.Exception {
 
-        final XSpreadsheet taxExemptDividendsSheet = SpreadsheetDocumentHelper.addSheet(document(), "tax-exempt-dividends");
+        final XSpreadsheet taxExemptDividendsSheet = SpreadsheetDocumentHelper.addSheet(document(), "tax-exempt");
         final CellAddress cellAddress = SheetHelper.getCellAddress(taxExemptDividendsSheet, 0, 0);
 
         pivotTableHelper().setTablesSupplier(taxExemptDividendsSheet);

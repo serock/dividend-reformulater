@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 package text;
 
-public class Form1099DivState implements State {
+class Form1099DivState implements State {
 
     @Override
     public void accept(final Context context, final String text) {
@@ -10,14 +10,14 @@ public class Form1099DivState implements State {
             row = new String[] {
                     "'1a-",
                     "Total ordinary dividends (includes lines 1b, 5, 2e)",
-                    "=GETPIVOTDATA(\"Amount\"; $'ordinary-dividends'.$A$1)"
+                    "=GETPIVOTDATA(\"Amount\"; $'ordinary'.$A$1)"
             };
             context.addForm1099DivRow(row);
 
             row = new String[] {
                     "'1b-",
                     "Qualified dividends",
-                    "=GETPIVOTDATA(\"Amount\"; $'ordinary-dividends'.$A$1; \"Transaction type\"; \"Qualified dividend\")"
+                    "=GETPIVOTDATA(\"Amount\"; $'ordinary'.$A$1; \"Transaction type\"; \"Qualified dividend\")"
             };
             context.addForm1099DivRow(row);
 
@@ -49,7 +49,7 @@ public class Form1099DivState implements State {
                 row = new String[] {
                         "'5-",
                         "Section 199A dividends",
-                        "=GETPIVOTDATA(\"Amount\"; $'ordinary-dividends'.$A$1; \"Transaction type\"; \"Section 199A dividend\")"
+                        "=GETPIVOTDATA(\"Amount\"; $'ordinary'.$A$1; \"Transaction type\"; \"Section 199A dividend\")"
                 };
                 context.addForm1099DivRow(row);
             }
@@ -65,7 +65,7 @@ public class Form1099DivState implements State {
                 row = new String[] {
                         "'12-",
                         "Exempt-interest dividends (includes line 13)",
-                        "=GETPIVOTDATA(\"Amount\"; $'tax-exempt-dividends'.$A$1)"
+                        "=GETPIVOTDATA(\"Amount\"; $'tax-exempt'.$A$1)"
                 };
                 context.addForm1099DivRow(row);
             }
