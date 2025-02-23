@@ -46,6 +46,18 @@ public class SheetHelper {
         return UnoRuntime.queryInterface(XCellAddressable.class, sheet.getCellByPosition(column, row)).getCellAddress();
     }
 
+    public boolean isColumnEmpty(final int column, final String header) {
+        final String[][] formulas = sheetFormulas();
+        String cell;
+        for (String[] row : formulas) {
+            cell = row[column];
+            if (!"".equals(cell) && !header.equals(cell)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void setHeaderProperties(final SortedMap<String, Object> properties) {
         this.headerProperties = properties;
     }

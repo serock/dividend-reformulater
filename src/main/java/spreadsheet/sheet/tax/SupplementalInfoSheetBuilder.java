@@ -47,6 +47,10 @@ public class SupplementalInfoSheetBuilder extends SheetBuilder {
 
     private void addStateColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
         final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
+        final boolean stateColumnIsEmpty = sheetHelper().isColumnEmpty(2, "State");
+        if (stateColumnIsEmpty) {
+            columnPropertiesItem.put("IsVisible", Boolean.FALSE);
+        }
         columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getTextFormat(document()));
         columnProperties.add(columnPropertiesItem);
     }
