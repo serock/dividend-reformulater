@@ -18,6 +18,7 @@ import spreadsheet.sheet.tax.OrdinaryDividendsSheetBuilder;
 import spreadsheet.sheet.tax.SupplementalInfoSheetBuilder;
 import spreadsheet.sheet.tax.OrdinarySourcesSheetBuilder;
 import spreadsheet.sheet.tax.TaxExemptDividendsSheetBuilder;
+import spreadsheet.sheet.tax.TaxExemptStatesSheetBuilder;
 import text.Context;
 
 public class DividendReformulater implements Consumer<String>, Runnable {
@@ -64,9 +65,17 @@ public class DividendReformulater implements Consumer<String>, Runnable {
         builder.build();
     }
 
-    private static void buildOrdinaryDividendsSheet(final XSpreadsheetDocument document) throws IllegalArgumentException, com.sun.star.uno.Exception {
-        final OrdinaryDividendsSheetBuilder builder = new OrdinaryDividendsSheetBuilder();
+    private void buildForeignTaxPaidSheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
+        final ForeignTaxPaidSheetBuilder builder = new ForeignTaxPaidSheetBuilder();
         builder.setDocument(document);
+        builder.setTransactionTypes(context().getForeignTaxTransactionTypes());
+        builder.build();
+    }
+
+    private void buildForm1099DivSheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
+        final Form1099DivSheetBuilder builder = new Form1099DivSheetBuilder();
+        builder.setDocument(document);
+        builder.setSheetFormulas(context().getForm1099DivFormulas());
         builder.build();
     }
 
@@ -76,16 +85,15 @@ public class DividendReformulater implements Consumer<String>, Runnable {
         builder.build();
     }
 
-    private static void buildTaxExemptDividendsSheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
-        final TaxExemptDividendsSheetBuilder builder = new TaxExemptDividendsSheetBuilder();
+    private static void buildOrdinaryDividendsSheet(final XSpreadsheetDocument document) throws IllegalArgumentException, com.sun.star.uno.Exception {
+        final OrdinaryDividendsSheetBuilder builder = new OrdinaryDividendsSheetBuilder();
         builder.setDocument(document);
         builder.build();
     }
 
-    private void buildForeignTaxPaidSheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
-        final ForeignTaxPaidSheetBuilder builder = new ForeignTaxPaidSheetBuilder();
+    private static void buildOrdinarySourcesSheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
+        final OrdinarySourcesSheetBuilder builder = new OrdinarySourcesSheetBuilder();
         builder.setDocument(document);
-        builder.setTransactionTypes(context().getForeignTaxTransactionTypes());
         builder.build();
     }
 
@@ -96,16 +104,15 @@ public class DividendReformulater implements Consumer<String>, Runnable {
         builder.build();
     }
 
-    private static void buildSupplementalSummarySheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
-        final OrdinarySourcesSheetBuilder builder = new OrdinarySourcesSheetBuilder();
+    private static void buildTaxExemptDividendsSheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
+        final TaxExemptDividendsSheetBuilder builder = new TaxExemptDividendsSheetBuilder();
         builder.setDocument(document);
         builder.build();
     }
 
-    private void buildForm1099DivSheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
-        final Form1099DivSheetBuilder builder = new Form1099DivSheetBuilder();
+    private static void buildTaxExemptStatesSheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
+        final TaxExemptStatesSheetBuilder builder = new TaxExemptStatesSheetBuilder();
         builder.setDocument(document);
-        builder.setSheetFormulas(context().getForm1099DivFormulas());
         builder.build();
     }
 
@@ -131,7 +138,10 @@ public class DividendReformulater implements Consumer<String>, Runnable {
                 }
                 if (context().hasSupplementalInfo()) {
                     buildSupplementalInfoSheet(document);
-                    buildSupplementalSummarySheet(document);
+                    buildOrdinarySourcesSheet(document);
+                }
+                if (context().hasTaxExemptDividend()) {
+                    buildTaxExemptStatesSheet(document);
                 }
                 buildForm1099DivSheet(document);
             }
