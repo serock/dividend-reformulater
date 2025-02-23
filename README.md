@@ -42,7 +42,7 @@ The following software should be installed before attempting to run the `dividen
 Test the `dividend-reformulater` app by running the app without any arguments:
 
 ```Shell
-java -jar dividend-reformulater-2024.0.0-SNAPSHOT.jar
+java -jar dividend-reformulater-2024.0.0.jar
 ```
 
 If the app was packaged properly for the system, the app displays the following message:
