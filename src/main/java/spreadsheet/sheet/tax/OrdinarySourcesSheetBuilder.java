@@ -34,6 +34,7 @@ public class OrdinarySourcesSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().setDataOrientation(Constants.SI_FIELD_AMOUNT);
         pivotTableHelper().setSumFunction(Constants.SI_FIELD_AMOUNT);
         pivotTableHelper().setFilterFields(tableFilterFields);
+        pivotTableHelper().setSortInfo(Constants.SI_FIELD_SOURCE, new String[] {"Fed Source Total", "Fgn Source Inc Tot", "Fgn Source Inc Qual", "Fgn Source Inc Adj"});
         pivotTableHelper().showTotalsColumn(false);
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("ordinary-by-source", cellAddress);

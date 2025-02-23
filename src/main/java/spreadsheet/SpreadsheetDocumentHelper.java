@@ -84,6 +84,11 @@ public class SpreadsheetDocumentHelper {
         return UnoRuntime.queryInterface(XSpreadsheet.class, sheets.getByName(sheetName));
     }
 
+    public static void freezeColumnsOfActiveSheet(final XSpreadsheetDocument document, final int columns) {
+        final int rows = 0;
+        UnoRuntime.queryInterface(XViewFreezable.class, getCurrentController(document)).freezeAtPosition(columns, rows);
+    }
+
     public static void freezeRowsOfActiveSheet(final XSpreadsheetDocument document, final int rows) {
         final int columns = 0;
         UnoRuntime.queryInterface(XViewFreezable.class, getCurrentController(document)).freezeAtPosition(columns, rows);

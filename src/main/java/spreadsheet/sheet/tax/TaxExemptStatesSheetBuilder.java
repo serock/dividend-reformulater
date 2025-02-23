@@ -39,6 +39,8 @@ public class TaxExemptStatesSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().insertPivotTable("tax-exempt-by-state", cellAddress);
 
         sheetHelper().updateSheet(taxExemptStatesSheet);
+        SpreadsheetDocumentHelper.setActiveSheet(document(), taxExemptStatesSheet);
+        SpreadsheetDocumentHelper.freezeColumnsOfActiveSheet(document(), 2);
     }
 
     private CellRangeAddress getSourceRange() throws WrappedTargetException, NoSuchElementException {
