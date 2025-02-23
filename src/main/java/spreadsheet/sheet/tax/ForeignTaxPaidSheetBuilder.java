@@ -32,7 +32,7 @@ public class ForeignTaxPaidSheetBuilder extends PivotTableSheetBuilder {
         final XSpreadsheet foreignTaxPaidSheet = SpreadsheetDocumentHelper.addSheet(document(), "foreign-tax-paid");
         final CellAddress cellAddress = SheetHelper.getCellAddress(foreignTaxPaidSheet, 0, 0);
 
-        pivotTableHelper().setTablesSupplier(foreignTaxPaidSheet);
+        pivotTableHelper().initialize(foreignTaxPaidSheet);
         pivotTableHelper().setSourceRange(getSourceRange());
         pivotTableHelper().setRowOrientation(Constants.DD_FIELD_SECURITY_DESCRIPTION);
         pivotTableHelper().setColumnOrientation(Constants.DD_FIELD_TRANSACTION_TYPE);

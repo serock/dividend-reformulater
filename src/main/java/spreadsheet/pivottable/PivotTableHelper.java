@@ -23,7 +23,6 @@ import com.sun.star.uno.UnoRuntime;
 
 public class PivotTableHelper {
 
-    private XDataPilotTablesSupplier dataPilotTablesSupplier;
     private XDataPilotTables dataPilotTables;
     private XDataPilotDescriptor dataPilotDescriptor;
 
@@ -31,9 +30,9 @@ public class PivotTableHelper {
         super();
     }
 
-    public void setTablesSupplier(final XSpreadsheet sheet) {
-        this.dataPilotTablesSupplier = UnoRuntime.queryInterface(XDataPilotTablesSupplier.class, sheet);
-        this.dataPilotTables = this.dataPilotTablesSupplier.getDataPilotTables();
+    public void initialize(final XSpreadsheet sheet) {
+        final XDataPilotTablesSupplier dataPilotTablesSupplier = UnoRuntime.queryInterface(XDataPilotTablesSupplier.class, sheet);
+        this.dataPilotTables = dataPilotTablesSupplier.getDataPilotTables();
         this.dataPilotDescriptor = dataPilotTables().createDataPilotDescriptor();
     }
 

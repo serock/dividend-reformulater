@@ -27,7 +27,7 @@ public class NondividendDistributionsSheetBuilder extends PivotTableSheetBuilder
         final XSpreadsheet nondividendDistributionsSheet = SpreadsheetDocumentHelper.addSheet(document(), "nondividend-distributions");
         final CellAddress cellAddress = SheetHelper.getCellAddress(nondividendDistributionsSheet, 0, 0);
 
-        pivotTableHelper().setTablesSupplier(nondividendDistributionsSheet);
+        pivotTableHelper().initialize(nondividendDistributionsSheet);
         pivotTableHelper().setSourceRange(getSourceRange());
         pivotTableHelper().setRowOrientation(Constants.DD_FIELD_SECURITY_DESCRIPTION);
         pivotTableHelper().setColumnOrientation(Constants.DD_FIELD_TRANSACTION_TYPE);

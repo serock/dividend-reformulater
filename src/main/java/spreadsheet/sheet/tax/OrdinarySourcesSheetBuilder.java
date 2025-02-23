@@ -28,7 +28,7 @@ public class OrdinarySourcesSheetBuilder extends PivotTableSheetBuilder {
         final XSpreadsheet ordinarySourcesSheet = SpreadsheetDocumentHelper.addSheet(document(), "ordinary-sources");
         final CellAddress cellAddress = SheetHelper.getCellAddress(ordinarySourcesSheet, 0, 0);
 
-        pivotTableHelper().setTablesSupplier(ordinarySourcesSheet);
+        pivotTableHelper().initialize(ordinarySourcesSheet);
         pivotTableHelper().setSourceRange(getSourceRange());
         pivotTableHelper().setRowOrientation(Constants.SI_FIELD_SECURITY_DESCRIPTION);
         pivotTableHelper().setColumnOrientation(Constants.SI_FIELD_SOURCE);
@@ -37,7 +37,7 @@ public class OrdinarySourcesSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().setFilterFields(tableFilterFields);
         pivotTableHelper().showTotalsColumn(false);
         pivotTableHelper().showFilterButton(false);
-        pivotTableHelper().insertPivotTable("supplemental-summary", cellAddress);
+        pivotTableHelper().insertPivotTable("ordinary-by-source", cellAddress);
 
         sheetHelper().updateSheet(ordinarySourcesSheet);
         SpreadsheetDocumentHelper.setActiveSheet(document(), ordinarySourcesSheet);

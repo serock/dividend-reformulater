@@ -29,7 +29,7 @@ public class TaxExemptDividendsSheetBuilder extends PivotTableSheetBuilder {
         final XSpreadsheet taxExemptDividendsSheet = SpreadsheetDocumentHelper.addSheet(document(), "tax-exempt");
         final CellAddress cellAddress = SheetHelper.getCellAddress(taxExemptDividendsSheet, 0, 0);
 
-        pivotTableHelper().setTablesSupplier(taxExemptDividendsSheet);
+        pivotTableHelper().initialize(taxExemptDividendsSheet);
         pivotTableHelper().setSourceRange(getSourceRange());
         pivotTableHelper().setRowOrientation(Constants.DD_FIELD_SECURITY_DESCRIPTION);
         pivotTableHelper().setColumnOrientation(Constants.DD_FIELD_TRANSACTION_TYPE);

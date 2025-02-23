@@ -29,7 +29,7 @@ public class OrdinaryDividendsSheetBuilder extends PivotTableSheetBuilder {
         final XSpreadsheet ordinaryDividendsSheet = SpreadsheetDocumentHelper.addSheet(document(), "ordinary");
         final CellAddress cellAddress = SheetHelper.getCellAddress(ordinaryDividendsSheet, 0, 0);
 
-        pivotTableHelper().setTablesSupplier(ordinaryDividendsSheet);
+        pivotTableHelper().initialize(ordinaryDividendsSheet);
         pivotTableHelper().setSourceRange(getSourceRange());
         pivotTableHelper().setRowOrientation(Constants.DD_FIELD_SECURITY_DESCRIPTION);
         pivotTableHelper().setColumnOrientation(Constants.DD_FIELD_TRANSACTION_TYPE);
