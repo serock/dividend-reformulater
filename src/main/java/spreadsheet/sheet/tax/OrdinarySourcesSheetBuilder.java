@@ -24,7 +24,7 @@ public class OrdinarySourcesSheetBuilder extends PivotTableSheetBuilder {
 
     @Override
     public void build() throws com.sun.star.uno.Exception {
-        final XSpreadsheet ordinarySourcesSheet = SpreadsheetDocumentHelper.addSheet(document(), "ordinary-sources");
+        final XSpreadsheet ordinarySourcesSheet = SpreadsheetDocumentHelper.addSheet(document(), "ordinary-by-source");
         final CellAddress cellAddress = SheetHelper.getCellAddress(ordinarySourcesSheet, 0, 0);
 
         pivotTableHelper().initialize(ordinarySourcesSheet);

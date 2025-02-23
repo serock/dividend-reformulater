@@ -25,7 +25,7 @@ public class TaxExemptStatesSheetBuilder extends PivotTableSheetBuilder {
 
     @Override
     public void build() throws Exception {
-        final XSpreadsheet taxExemptStatesSheet = SpreadsheetDocumentHelper.addSheet(document(), "tax-exempt-states");
+        final XSpreadsheet taxExemptStatesSheet = SpreadsheetDocumentHelper.addSheet(document(), "tax-exempt-by-state");
         final CellAddress cellAddress = SheetHelper.getCellAddress(taxExemptStatesSheet, 0, 0);
 
         pivotTableHelper().initialize(taxExemptStatesSheet);
