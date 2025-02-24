@@ -9,6 +9,7 @@ import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop2;
 import com.sun.star.frame.XModel;
+import com.sun.star.frame.theDesktop;
 import com.sun.star.i18n.NumberFormatIndex;
 import com.sun.star.io.IOException;
 import com.sun.star.lang.IllegalArgumentException;
@@ -29,12 +30,11 @@ public class SpreadsheetDocumentHelper {
 
     private final static Locale locale = new Locale();
 
-    private final XComponentContext componentContext;
     private final XDesktop2 desktop;
 
     public SpreadsheetDocumentHelper() throws BootstrapException {
-        this.componentContext = Bootstrap.bootstrap();
-        this.desktop = UnoRuntime.queryInterface(XDesktop2.class, this.componentContext.getValueByName("/singletons/com.sun.star.frame.theDesktop"));
+        final XComponentContext componentContext = Bootstrap.bootstrap();
+        this.desktop = theDesktop.get(componentContext);
     }
 
     public XSpreadsheetDocument createDocument() throws IllegalArgumentException, IOException {
