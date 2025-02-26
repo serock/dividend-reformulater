@@ -33,13 +33,11 @@ public class Context {
 
     public Set<String> getForeignTaxTransactionTypes() {
         final Set<String> transactionTypes = new HashSet<>();
-        String transactionType;
-        for (String[] row : distributionDetailRows()) {
-            transactionType = row[Constants.DD_FIELD_TRANSACTION_TYPE];
-            if (transactionType.contains("Foreign tax")) {
-                transactionTypes.add(transactionType);
-            }
-        }
+        distributionDetailRows().stream()
+            .filter(row -> row[Constants.DD_FIELD_TRANSACTION_TYPE].contains("Foreign tax"))
+            .map(row -> row[Constants.DD_FIELD_TRANSACTION_TYPE])
+            .distinct()
+            .forEach(tt -> transactionTypes.add(tt));
         return transactionTypes;
     }
 
@@ -52,13 +50,9 @@ public class Context {
     }
 
     public boolean hasForeignTaxPaid() {
-        final List<String[]> rows = distributionDetailRows();
-        for (String[] row : rows) {
-            if (row[Constants.DD_FIELD_TRANSACTION_TYPE].startsWith("Foreign tax")) {
-                return true;
-            }
-        }
-        return false;
+        return distributionDetailRows().stream()
+                .map(row -> row[Constants.DD_FIELD_TRANSACTION_TYPE])
+                .anyMatch(cell -> cell.startsWith("Foreign tax"));
     }
 
     public boolean hasNondividendDistribution() {
@@ -99,15 +93,11 @@ public class Context {
 
     String getSecurityDescriptionForNote(final String note) {
         final String noteFormula = '\'' + note;
-        final List<String[]> rows = distributionDetailRows();
-        String securityDescription = "";
-        for (String[] row : rows) {
-            if (noteFormula.equals(row[Constants.DD_FIELD_NOTES])) {
-                securityDescription = row[Constants.DD_FIELD_SECURITY_DESCRIPTION];
-                break;
-            }
-        }
-        return securityDescription;
+        return distributionDetailRows().stream()
+                .filter(row -> noteFormula.equals(row[Constants.DD_FIELD_NOTES]))
+                .map(row -> row[Constants.DD_FIELD_SECURITY_DESCRIPTION])
+                .findFirst()
+                .orElse("");
     }
 
     int getSupplementalInfoSize() {
@@ -184,13 +174,9 @@ public class Context {
     }
 
     private boolean hasMatchingDividendDetail(final int field, final String value) {
-        final List<String[]> rows = distributionDetailRows();
-        for (String[] row : rows) {
-            if (row[field].equals(value)) {
-                return true;
-            }
-        }
-        return false;
+        return distributionDetailRows().stream()
+                .map(row -> row[field])
+                .anyMatch(cell -> cell.equals(value));
     }
 
     private List<String[]> distributionDetailRows() {

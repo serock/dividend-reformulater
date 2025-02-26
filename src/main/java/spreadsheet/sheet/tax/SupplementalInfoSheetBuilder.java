@@ -47,7 +47,7 @@ public class SupplementalInfoSheetBuilder extends SheetBuilder {
 
     private void addStateColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
         final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
-        final boolean stateColumnIsEmpty = sheetHelper().isColumnEmpty(Constants.SI_FIELD_STATE, "State");
+        final boolean stateColumnIsEmpty = sheetHelper().isColumnEmpty(Constants.SI_FIELD_STATE);
         if (stateColumnIsEmpty) {
             columnPropertiesItem.put("IsVisible", Boolean.FALSE);
         }

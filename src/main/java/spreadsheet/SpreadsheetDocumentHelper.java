@@ -6,6 +6,7 @@ import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.comp.helper.BootstrapException;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop2;
 import com.sun.star.frame.XModel;
@@ -38,7 +39,7 @@ public class SpreadsheetDocumentHelper {
     }
 
     public XSpreadsheetDocument createDocument() throws IllegalArgumentException, IOException {
-        return UnoRuntime.queryInterface(XSpreadsheetDocument.class, this.desktop.loadComponentFromURL("private:factory/scalc", "_blank", 0, new PropertyValue[0]));
+        return UnoRuntime.queryInterface(XSpreadsheetDocument.class, this.desktop.loadComponentFromURL("private:factory/scalc", "_blank", FrameSearchFlag.CREATE, new PropertyValue[0]));
     }
 
     public static Integer getCurrencyNumberFormat(final XSpreadsheetDocument document) {

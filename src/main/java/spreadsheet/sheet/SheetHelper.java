@@ -4,6 +4,7 @@ package spreadsheet.sheet;
 import java.util.Collections;
 import java.util.List;
 import java.util.SortedMap;
+import java.util.stream.Stream;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyVetoException;
@@ -46,16 +47,11 @@ public class SheetHelper {
         return UnoRuntime.queryInterface(XCellAddressable.class, sheet.getCellByPosition(column, row)).getCellAddress();
     }
 
-    public boolean isColumnEmpty(final int column, final String header) {
-        final String[][] formulas = sheetFormulas();
-        String cell;
-        for (String[] row : formulas) {
-            cell = row[column];
-            if (!"".equals(cell) && !header.equals(cell)) {
-                return false;
-            }
-        }
-        return true;
+    public boolean isColumnEmpty(final int column) {
+        return Stream.of(sheetFormulas())
+                .skip(1)
+                .map(row -> row[column])
+                .allMatch(cell -> "".equals(cell));
     }
 
     public void setHeaderProperties(final SortedMap<String, Object> properties) {
@@ -102,8 +98,7 @@ public class SheetHelper {
     }
 
     private void setSheetName(final XSpreadsheet sheet) {
-        final XNamed xNamed = UnoRuntime.queryInterface(XNamed.class, sheet);
-        xNamed.setName(sheetName());
+        UnoRuntime.queryInterface(XNamed.class, sheet).setName(sheetName());
     }
 
     private void setHeaderProperties(final XSpreadsheet sheet) throws IndexOutOfBoundsException, IllegalArgumentException, PropertyVetoException, WrappedTargetException {
@@ -153,19 +148,15 @@ public class SheetHelper {
         XSortable sortable = UnoRuntime.queryInterface(XSortable.class, getUsedAreaCursor(sheet));
         PropertyValue[] sortDescriptor = sortable.createSortDescriptor();
         if (!headerProperties().isEmpty()) {
-            for (PropertyValue propertyValue : sortDescriptor) {
-                if ("ContainsHeader".equals(propertyValue.Name)) {
-                    propertyValue.Value = Boolean.TRUE;
-                    break;
-                }
-             }
+            Stream.of(sortDescriptor)
+                .filter(pv -> "ContainsHeader".equals(pv.Name))
+                .findFirst()
+                .get().Value = Boolean.TRUE;
         }
-        for (PropertyValue propertyValue : sortDescriptor) {
-            if ("SortFields".equals(propertyValue.Name)) {
-                propertyValue.Value = sortFields();
-                break;
-            }
-        }
+        Stream.of(sortDescriptor)
+            .filter(pv -> "SortFields".equals(pv.Name))
+            .findFirst()
+            .get().Value = sortFields();
         sortable.sort(sortDescriptor);
     }
 
