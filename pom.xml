@@ -15,6 +15,7 @@
     <scm>
         <developerConnection>scm:git:https://github.com/serock/${project.artifactId}.git</developerConnection>
         <url>https://github.com/serock/${project.artifactId}</url>
+        <tag>HEAD</tag>
     </scm>
     <issueManagement>
         <url>https://github.com/serock/${project.artifactId}/issues</url>
@@ -59,6 +60,12 @@
                     <descriptors>
                         <descriptor>src/assembly/assembly.xml</descriptor>
                     </descriptors>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
         </plugins>
