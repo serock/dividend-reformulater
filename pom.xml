@@ -13,6 +13,7 @@
         </license>
     </licenses>
     <scm>
+        <developerConnection>scm:git:https://github.com/serock/${project.artifactId}.git</developerConnection>
         <url>https://github.com/serock/${project.artifactId}</url>
     </scm>
     <issueManagement>
