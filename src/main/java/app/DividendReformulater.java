@@ -124,7 +124,7 @@ public class DividendReformulater implements Consumer<String>, Runnable {
             lines.forEachOrdered(this);
             final SpreadsheetDocumentHelper docHelper = new SpreadsheetDocumentHelper();
             final XSpreadsheetDocument document = docHelper.createDocument();
-            if (pdfHelper.isForm1099()) {
+            if (pdfHelper.isForm1099() && context().getDividendDetailFormulas().length > 0) {
                 buildDividendDetailSheet(document);
                 buildOrdinaryDividendsSheet(document);
                 if (context().hasNondividendDistribution()) {
