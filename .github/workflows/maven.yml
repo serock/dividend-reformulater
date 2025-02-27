@@ -1,5 +1,7 @@
 name: Maven assemblies
 on:
+  release:
+    types: [released]
   workflow_dispatch:
 jobs:
   build:
@@ -8,8 +10,6 @@ jobs:
     steps:
     - name: Check out source code
       uses: actions/checkout@v4
-      with:
-        ref: 'v2024.0.2'
     - name: Set up OpenJDK
       uses: actions/setup-java@v4
       with:
