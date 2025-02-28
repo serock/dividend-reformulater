@@ -55,6 +55,10 @@ public class Context {
                 .anyMatch(cell -> cell.startsWith("Foreign tax"));
     }
 
+    public boolean hasGainsDistribution() {
+        return hasLongTermCapitalGain() || hasUnrecapturedSection1250Gain();
+    }
+
     public boolean hasNondividendDistribution() {
         return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Nondividend distribution");
     }

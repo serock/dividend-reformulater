@@ -13,6 +13,7 @@ import spreadsheet.SpreadsheetDocumentHelper;
 import spreadsheet.sheet.tax.DividendDetailSheetBuilder;
 import spreadsheet.sheet.tax.ForeignTaxPaidSheetBuilder;
 import spreadsheet.sheet.tax.Form1099DivSheetBuilder;
+import spreadsheet.sheet.tax.GainsDistributionsSheetBuilder;
 import spreadsheet.sheet.tax.NondividendDistributionsSheetBuilder;
 import spreadsheet.sheet.tax.OrdinaryDividendsSheetBuilder;
 import spreadsheet.sheet.tax.SupplementalInfoSheetBuilder;
@@ -79,6 +80,12 @@ public class DividendReformulater implements Consumer<String>, Runnable {
         builder.build();
     }
 
+    private static void buildGainsDistributionsSheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
+        final GainsDistributionsSheetBuilder builder = new GainsDistributionsSheetBuilder();
+        builder.setDocument(document);
+        builder.build();
+    }
+
     private static void buildNondividendDistributionsSheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
         final NondividendDistributionsSheetBuilder builder = new NondividendDistributionsSheetBuilder();
         builder.setDocument(document);
@@ -127,6 +134,9 @@ public class DividendReformulater implements Consumer<String>, Runnable {
             if (pdfHelper.isForm1099() && context().getDividendDetailFormulas().length > 0) {
                 buildDividendDetailSheet(document);
                 buildOrdinaryDividendsSheet(document);
+                if (context().hasGainsDistribution()) {
+                    buildGainsDistributionsSheet(document);
+                }
                 if (context().hasNondividendDistribution()) {
                     buildNondividendDistributionsSheet(document);
                 }
