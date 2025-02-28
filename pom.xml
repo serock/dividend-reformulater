@@ -11,12 +11,13 @@
         </license>
     </licenses>
     <scm>
-        <developerConnection>scm:git:https://github.com/serock/${project.artifactId}.git</developerConnection>
-        <url>https://github.com/serock/${project.artifactId}</url>
+        <connection>scm:git:${project.scm.url}.git</connection>
+        <developerConnection>${project.scm.connection}</developerConnection>
         <tag>HEAD</tag>
+        <url>https://github.com/serock/${project.artifactId}</url>
     </scm>
     <issueManagement>
-        <url>https://github.com/serock/${project.artifactId}/issues</url>
+        <url>${project.scm.url}/issues</url>
     </issueManagement>
     <build>
         <plugins>
