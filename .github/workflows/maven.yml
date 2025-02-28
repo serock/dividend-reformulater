@@ -3,6 +3,8 @@ on:
   release:
     types: [released]
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   build:
     name: Maven build
@@ -10,12 +12,6 @@ jobs:
     steps:
     - name: Check out source code
       uses: actions/checkout@v4
-    - name: Set up OpenJDK
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'corretto'
-        java-version: '17'
-        cache: maven
     - name: Set up LibreOffice UNO runtime environment
       run: |
         sudo apt-get update
@@ -36,11 +32,17 @@ jobs:
       run: mvn --batch-mode --activate-profiles for-windows package
     - name: Create assembly for Windows
       run: mvn --batch-mode --activate-profiles for-windows assembly:single
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: assemblies
-        path: |
-          target/*.tar.gz
-          target/*.zip
-        compression-level: 0
+    - name: Generate sums for artifacts
+      run: |
+        for file in ./target/*.tar.gz ./target/*.zip ; do
+          [ -e "$file" ] || continue
+          sha256sum -b "$file" > "$file".sha256
+        done
+    - name: Upload artifacts to release
+      run: |
+        for file in ./target/*.tar.gz ./target/*.zip ./target/*.sha256 ; do
+          [ -e "$file" ] || continue
+          gh release upload "$GITHUB_REF_NAME" "$file"
+        done
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
