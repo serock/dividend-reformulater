@@ -71,6 +71,7 @@
     </build>
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
+        <maven.deploy.skip>true</maven.deploy.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.scm.id>github</project.scm.id>
     </properties>
