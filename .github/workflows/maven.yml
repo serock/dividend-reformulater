@@ -40,9 +40,11 @@ jobs:
         done
     - name: Upload artifacts to release
       run: |
-        for file in ./target/*.tar.gz ./target/*.zip ./target/*.sha256 ; do
-          [ -e "$file" ] || continue
-          gh release upload "$GITHUB_REF_NAME" "$file"
-        done
+        if [ "$GITHUB_REF_TYPE" = "tag" ] ; then
+          for file in ./target/*.tar.gz ./target/*.zip ./target/*.sha256 ; do
+            [ -e "$file" ] || continue
+            gh release upload "$GITHUB_REF_NAME" "$file"
+          done
+        fi
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
