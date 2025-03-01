@@ -14,7 +14,7 @@ The consolidated 1099 PDFs that may be compatible with the app have pages with a
 header and, optionally, pages with a **Mutual Fund and UIT Supplemental Information** header.
 Multiple brokerage firms use this format.
 
-Currently, the app can handle a consolidated 1099 PDF that has a Form 1099-DIV with non-zero data in only the following boxes:
+The app can handle a consolidated 1099 PDF that has a Form 1099-DIV with non-zero data in the following boxes only:
 
 * 1a - Total ordinary dividends
 * 1b - Qualified dividends
@@ -29,20 +29,27 @@ The `dividend-reformulater` app has been tested on 64-bit Linux and 64-bit Windo
 The app has not been tested with LibreOffice as Flatpak, Snap, AppImage, etc.
 
 ## Installation Instructions
-The `dividend-reformulater` app is a Java application that is typically installed by extracting files from a distributable archive, keeping the directory structure that is in the archive.
-Distributable archives are attached to releases published on Github.
-Distributable archives can also be created by end users; see [How to Build the App](/../../wiki/How-to-Build-the-App) in the Wiki.
+### Prerequisites
+Before attempting to run the `dividend-reformulator` app, install the following software:
 
-The following software should be installed before attempting to run the `dividend-reformulater` app:
+1. A build of OpenJDK 17 or higher, such as [Amazon Corretto 17](https://aws.amazon.com/corretto/)
+2. [LibreOffice](https://www.libreoffice.org/download/download-libreoffice/) (24.8.x is recommended)
 
-* A build of OpenJDK 17 or higher, such as [Amazon Corretto 17](https://aws.amazon.com/corretto/)
-* [LibreOffice](https://www.libreoffice.org/download/download-libreoffice/) (24.8.x is recommended)
+### Option 1: Install a Build of the App
+Builds of the app are available for Linux, MacOS, and Windows.
+
+1. From the [Releases](/../../releases) page, download the `.tar.gz` or `.zip` distributable archive and the `.sha256` file for your operating system.
+2. Verify the integrity of the downloaded archive (e.g., on Linux, run `sha256sum -c dividend-reformulater-2024.0.4-linux.tar.gz.sha256` from a terminal).
+3. Extract the the files from the `.tar.gz` or `.zip` archive, keeping the directory structure that is in the archive.
+
+### Option 2: Build the App
+See [How to Build the App](/../../wiki/How-to-Build-the-App) in the Wiki.
 
 ### Test the App
-Test the `dividend-reformulater` app by running the app without any arguments:
+Test the `dividend-reformulater` app by running the app without any arguments from a terminal. For example,
 
 ```Shell
-java -jar dividend-reformulater-2024.0.2.jar
+java -jar dividend-reformulater-2024.0.4.jar
 ```
 
 If the app was packaged properly for the system, the app displays the following message:
