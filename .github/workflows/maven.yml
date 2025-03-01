@@ -34,17 +34,21 @@ jobs:
       run: mvn --batch-mode --activate-profiles for-windows assembly:single
     - name: Generate sums for artifacts
       run: |
-        for file in ./target/*.tar.gz ./target/*.zip ; do
+        pushd target
+        for file in *.tar.gz *.zip ; do
           [ -e "$file" ] || continue
           sha256sum -b "$file" > "$file".sha256
         done
+        popd
     - name: Upload artifacts to release
       run: |
         if [ "$GITHUB_REF_TYPE" = "tag" ] ; then
-          for file in ./target/*.tar.gz ./target/*.zip ./target/*.sha256 ; do
+          pushd target
+          for file in *.tar.gz *.zip *.sha256 ; do
             [ -e "$file" ] || continue
             gh release upload "$GITHUB_REF_NAME" "$file"
           done
+          popd
         fi
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
