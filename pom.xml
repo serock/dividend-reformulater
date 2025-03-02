@@ -11,7 +11,7 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:${project.scm.url}.git</connection>
+        <connection>scm:git:ssh://git@github.com/serock/${project.artifactId}.git</connection>
         <developerConnection>${project.scm.connection}</developerConnection>
         <tag>HEAD</tag>
         <url>https://github.com/serock/${project.artifactId}</url>
