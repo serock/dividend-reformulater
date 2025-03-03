@@ -2,37 +2,42 @@
 Create a LibreOffice Calc spreadsheet using dividend data from a consolidated 1099 PDF tax form
 
 ## Overview
-The `dividend-reformulater` app might be useful to those investors who have a brokerage account and file federal and state income taxes in the United States.
 The app reformulates the dividend data from a consolidated 1099 PDF into a LibreOffice Calc spreadsheet with multiple sheets and pivot tables.
 The main goals of the app are to make it easier to:
 
 1. calculate the amount of dividend income from U.S. government securities,
 2. calculate the amount of dividend income from foreign sources, and
-3. understand how the values on Form 1099-DIV are calculated.
+3. understand how values, like *Total ordinary dividends*, on Form 1099-DIV are calculated.
 
+The `dividend-reformulater` app might be useful to those investors who have a brokerage account and file federal and state income taxes in the United States.
 The consolidated 1099 PDFs that may be compatible with the app have pages with a **Detail for Dividends and Distributions**
 header and, optionally, pages with a **Mutual Fund and UIT Supplemental Information** header.
 Multiple brokerage firms use this format.
 
 The app can handle a consolidated 1099 PDF that has a Form 1099-DIV with non-zero data in the following boxes only:
 
-* 1a - Total ordinary dividends
-* 1b - Qualified dividends
-* 2a - Total capital gain distributions
-* 2b - Unrecaptured Section 1250 gain
-* 3 - Nondividend distributions
-* 5 - Section 199A dividends
-* 7 - Foreign tax paid
-* 12 - Exempt-interest dividends
+* `1a` &ndash; Total ordinary dividends
+* `1b` &ndash; Qualified dividends
+* `2a` &ndash; Total capital gain distributions
+* `2b` &ndash; Unrecaptured Section 1250 gain
+* `3 ` &ndash; Nondividend distributions
+* `5 ` &ndash; Section 199A dividends
+* `7 ` &ndash; Foreign tax paid
+* `12` &ndash; Exempt-interest dividends
 
 The `dividend-reformulater` app has been tested on 64-bit Linux and 64-bit Windows systems.
 The app has not been tested with LibreOffice as Flatpak, Snap, AppImage, etc.
+
+## License
+The `dividend-reformulater` app is licensed under the [MIT License](/LICENSE).
 
 ## Installation Instructions
 ### Prerequisites
 Before attempting to run the `dividend-reformulator` app, install the following software:
 
-1. A build of OpenJDK 17 or higher, such as [Amazon Corretto 17](https://aws.amazon.com/corretto/)
+1. A build of OpenJDK 17 or higher, such as [Eclipse Temurin 17](https://adoptium.net/temurin/releases/?version=17) or [Amazon Corretto 17](https://aws.amazon.com/corretto/)
+   - A JDK download can be used to build and/or run the app.
+   - A JRE download is smaller and can be used to run the app, but not build it.
 2. [LibreOffice](https://www.libreoffice.org/download/download-libreoffice/) (24.8.x is recommended)
 
 ### Option 1: Install a Build of the App
