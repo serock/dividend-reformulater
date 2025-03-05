@@ -11,7 +11,7 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:ssh://git@github.com/serock/${project.artifactId}.git</connection>
+        <connection>scm:git:${project.scm.url}.git</connection>
         <developerConnection>${project.scm.connection}</developerConnection>
         <tag>HEAD</tag>
         <url>https://github.com/serock/${project.artifactId}</url>
@@ -21,6 +21,30 @@
     </issueManagement>
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>license-resources</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/META-INF</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include>LICENSE</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
