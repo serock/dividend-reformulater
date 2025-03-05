@@ -131,30 +131,36 @@ public class DividendReformulater implements Consumer<String>, Runnable {
             lines.forEachOrdered(this);
             final SpreadsheetDocumentHelper docHelper = new SpreadsheetDocumentHelper();
             final XSpreadsheetDocument document = docHelper.createDocument();
-            if (pdfHelper.isForm1099() && context().getDividendDetailFormulas().length > 0) {
-                buildDividendDetailSheet(document);
-                buildOrdinaryDividendsSheet(document);
-                if (context().hasGainsDistribution()) {
-                    buildGainsDistributionsSheet(document);
-                }
-                if (context().hasNondividendDistribution()) {
-                    buildNondividendDistributionsSheet(document);
-                }
-                if (context().hasTaxExemptDividend()) {
-                    buildTaxExemptDividendsSheet(document);
-                }
-                if (context().hasForeignTaxPaid()) {
-                    buildForeignTaxPaidSheet(document);
-                }
-                if (context().hasSupplementalInfo()) {
-                    buildSupplementalInfoSheet(document);
-                    buildOrdinarySourcesSheet(document);
-                }
-                if (context().hasTaxExemptDividend()) {
-                    buildTaxExemptStatesSheet(document);
-                }
-                buildForm1099DivSheet(document);
+            if (!pdfHelper.isForm1099()) {
+                System.err.println("Title of PDF is not \"1099\" ... quitting.");
+                return;
             }
+            if (context().getDividendDetailFormulas().length < 1) {
+                System.err.println("No dividend details found ... quitting.");
+                return;
+            }
+            buildDividendDetailSheet(document);
+            buildOrdinaryDividendsSheet(document);
+            if (context().hasGainsDistribution()) {
+                buildGainsDistributionsSheet(document);
+            }
+            if (context().hasNondividendDistribution()) {
+                buildNondividendDistributionsSheet(document);
+            }
+            if (context().hasTaxExemptDividend()) {
+                buildTaxExemptDividendsSheet(document);
+            }
+            if (context().hasForeignTaxPaid()) {
+                buildForeignTaxPaidSheet(document);
+            }
+            if (context().hasSupplementalInfo()) {
+                buildSupplementalInfoSheet(document);
+                buildOrdinarySourcesSheet(document);
+            }
+            if (context().hasTaxExemptDividend()) {
+                buildTaxExemptStatesSheet(document);
+            }
+            buildForm1099DivSheet(document);
         } catch (final Exception e) {
             e.printStackTrace();
         }
