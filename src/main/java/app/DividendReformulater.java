@@ -128,17 +128,18 @@ public class DividendReformulater implements Consumer<String>, Runnable {
         try {
             final PDFHelper pdfHelper = new PDFHelper();
             final Stream<String> lines = pdfHelper.getTextLines(this.taxPDFFile);
-            lines.forEachOrdered(this);
-            final SpreadsheetDocumentHelper docHelper = new SpreadsheetDocumentHelper();
-            final XSpreadsheetDocument document = docHelper.createDocument();
-            if (!pdfHelper.isForm1099()) {
-                System.err.println("Title of PDF is not \"1099\" ... quitting.");
+            final String title = "1099";
+            if (!pdfHelper.documentTitle().equals(title)) {
+                System.err.println("Title of PDF is not \"" + title + "\" ... quitting.");
                 return;
             }
+            lines.forEachOrdered(this);
             if (context().getDividendDetailFormulas().length < 1) {
                 System.err.println("No dividend details found ... quitting.");
                 return;
             }
+            final SpreadsheetDocumentHelper docHelper = new SpreadsheetDocumentHelper();
+            final XSpreadsheetDocument document = docHelper.createDocument();
             buildDividendDetailSheet(document);
             buildOrdinaryDividendsSheet(document);
             if (context().hasGainsDistribution()) {

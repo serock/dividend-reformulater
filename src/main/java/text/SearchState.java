@@ -5,6 +5,9 @@ class SearchState implements State {
 
     @Override
     public void accept(final Context context, final String text) {
+        if (text.isEmpty()) {
+            return;
+        }
         if (text.endsWith("Detail for Dividends and Distributions")) {
             context.transitionToDistributionDetailHeaderState();
         } else if (text.endsWith("Mutual Fund and UIT Supplemental Information") || text.contains("End Notes")) {

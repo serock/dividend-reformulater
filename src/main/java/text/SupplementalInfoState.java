@@ -18,6 +18,9 @@ class SupplementalInfoState implements State {
 
     @Override
     public void accept(final Context context, final String text) {
+        if (text.isEmpty()) {
+            return;
+        }
         if (text.startsWith("Page ")) {
             context.transitionToSearchState();
             return;
