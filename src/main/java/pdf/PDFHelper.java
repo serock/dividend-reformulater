@@ -11,22 +11,29 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 public class PDFHelper {
 
-    private boolean form1099;
+    private String documentTitle;
+    private boolean sortByPosition = true;
 
     public Stream<String> getTextLines(final File pdfFile) throws IOException {
         final PDFTextStripper pdfTextStripper = new PDFTextStripper();
         String text;
         try (final PDDocument doc = Loader.loadPDF(pdfFile)) {
-            if (doc.getDocumentInformation().getTitle().equals("1099")) {
-                this.form1099 = true;
-                pdfTextStripper.setSortByPosition(true);
-            }
+            this.documentTitle = doc.getDocumentInformation().getTitle();
+            pdfTextStripper.setSortByPosition(sortByPosition());
             text = pdfTextStripper.getText(doc);
         }
         return text.lines();
     }
 
-    public boolean isForm1099() {
-        return this.form1099;
+    public String documentTitle() {
+        return this.documentTitle;
+    }
+
+    public void setSortByPosition(boolean sort) {
+        this.sortByPosition = sort;
+    }
+
+    private boolean sortByPosition() {
+        return this.sortByPosition;
     }
 }
