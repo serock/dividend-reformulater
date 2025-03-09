@@ -32,13 +32,17 @@ public class DividendReformulater implements Consumer<String>, Runnable {
 
     public static void main(final String[] args) {
         checkClassPath();
-        if (args.length == 1) {
-            final DividendReformulater app = new DividendReformulater();
-            app.taxPDFFile = new File(args[0]);
-            app.run();
-        } else {
+        if (args.length != 1) {
             showUsage();
+            System.exit(1);
         }
+        final DividendReformulater app = new DividendReformulater();
+        app.taxPDFFile = new File(args[0]);
+        if (!app.taxPDFFile.canRead()) {
+            System.err.println("Error: Cannot read " + app.taxPDFFile.getAbsolutePath());
+            System.exit(2);
+        }
+        app.run();
         System.exit(0);
     }
 
@@ -47,7 +51,7 @@ public class DividendReformulater implements Consumer<String>, Runnable {
             Class.forName("com.sun.star.comp.helper.Bootstrap");
         } catch (final ClassNotFoundException e) {
             e.printStackTrace();
-            System.exit(0);
+            System.exit(1);
         }
     }
 
@@ -128,15 +132,10 @@ public class DividendReformulater implements Consumer<String>, Runnable {
         try {
             final PDFHelper pdfHelper = new PDFHelper();
             final Stream<String> lines = pdfHelper.getTextLines(this.taxPDFFile);
-            final String title = "1099";
-            if (!pdfHelper.documentTitle().equals(title)) {
-                System.err.println("Title of PDF is not \"" + title + "\" ... quitting.");
-                return;
-            }
             lines.forEachOrdered(this);
             if (context().getDividendDetailFormulas().length < 1) {
-                System.err.println("No dividend details found ... quitting.");
-                return;
+                System.err.println("Error: No dividend details found in file");
+                System.exit(2);
             }
             final SpreadsheetDocumentHelper docHelper = new SpreadsheetDocumentHelper();
             final XSpreadsheetDocument document = docHelper.createDocument();
