@@ -9,7 +9,6 @@ The main goals of the app are to make it easier to:
 2. calculate the amount of dividend income from foreign sources, and
 3. understand how values, like *Total ordinary dividends*, on Form 1099-DIV are calculated.
 
-The `dividend-reformulater` app might be useful to those investors who have a brokerage account and file federal and state income taxes in the United States.
 The consolidated 1099 PDFs that may be compatible with the app have pages with a **Detail for Dividends and Distributions**
 header and, optionally, pages with a **Mutual Fund and UIT Supplemental Information** header.
 Multiple brokerage firms use this format.
@@ -25,7 +24,7 @@ The app can handle a consolidated 1099 PDF that has a Form 1099-DIV with non-zer
 * `7 ` &ndash; Foreign tax paid
 * `12` &ndash; Exempt-interest dividends
 
-The `dividend-reformulater` app has been tested on 64-bit Linux and 64-bit Windows systems.
+The app has been tested on 64-bit Linux and 64-bit Windows systems.
 The app has not been tested with LibreOffice as Flatpak, Snap, AppImage, etc.
 
 ## License
@@ -33,7 +32,7 @@ The `dividend-reformulater` app is licensed under the [MIT License](/LICENSE).
 
 ## Installation Instructions
 ### Prerequisites
-Before attempting to run the `dividend-reformulator` app, install the following software:
+Before attempting to run the app, install the following software:
 
 1. A build of OpenJDK 17 or higher, such as [Eclipse Temurin 17](https://adoptium.net/temurin/releases/?version=17) or [Amazon Corretto 17](https://aws.amazon.com/corretto/)
    - A JDK download can be used to build and/or run the app.
@@ -51,7 +50,7 @@ Builds of the app are available for Linux, MacOS, and Windows.
 See [How to Build the App](/../../wiki/How-to-Build-the-App) in the Wiki.
 
 ### Test the App
-Test the `dividend-reformulater` app by running the app without any arguments from a terminal. For example,
+Test the app by running the app without any arguments from a terminal. For example,
 
 ```Shell
 java -jar dividend-reformulater-2024.0.5.jar
