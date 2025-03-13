@@ -5,7 +5,7 @@ class DistributionDetailHeaderState implements State {
 
     @Override
     public void accept(final Context context, final String text) {
-        if (text.startsWith("Page")) {
+        if (text.startsWith("\f")) {
             context.transitionToSearchState();
             return;
         }

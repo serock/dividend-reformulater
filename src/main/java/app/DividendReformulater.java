@@ -131,7 +131,8 @@ public class DividendReformulater implements Consumer<String>, Runnable {
     public void run() {
         try {
             final PDFHelper pdfHelper = new PDFHelper();
-            final Stream<String> lines = pdfHelper.getTextLines(this.taxPDFFile);
+            pdfHelper.extractText(this.taxPDFFile);
+            final Stream<String> lines = pdfHelper.getTextLines();
             lines.forEachOrdered(this);
             if (context().getDividendDetailFormulas().length < 1) {
                 System.err.println("Error: No dividend details found in file");

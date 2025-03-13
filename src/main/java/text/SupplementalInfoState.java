@@ -21,7 +21,7 @@ class SupplementalInfoState implements State {
         if (text.isEmpty()) {
             return;
         }
-        if (text.startsWith("Page ")) {
+        if (text.startsWith("\f")) {
             context.transitionToSearchState();
             return;
         }

@@ -3,7 +3,7 @@ Create a LibreOffice Calc spreadsheet using dividend data from a consolidated 10
 
 ## Overview
 The app reformulates the dividend data from a consolidated 1099 PDF into a LibreOffice Calc spreadsheet with multiple sheets and pivot tables.
-The main goals of the app are to make it easier to:
+The main goal of the app is to help with filing individual income tax returns by making it easier to:
 
 1. calculate the amount of dividend income from U.S. government securities,
 2. calculate the amount of dividend income from foreign sources, and
