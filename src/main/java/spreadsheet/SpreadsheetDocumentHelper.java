@@ -24,7 +24,9 @@ import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.sheet.XViewFreezable;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import com.sun.star.util.MalformedNumberFormatException;
 import com.sun.star.util.XNumberFormatTypes;
+import com.sun.star.util.XNumberFormats;
 import com.sun.star.util.XNumberFormatsSupplier;
 
 public class SpreadsheetDocumentHelper {
@@ -93,6 +95,12 @@ public class SpreadsheetDocumentHelper {
     public static void freezeRowsOfActiveSheet(final XSpreadsheetDocument document, final int rows) {
         final int columns = 0;
         UnoRuntime.queryInterface(XViewFreezable.class, getCurrentController(document)).freezeAtPosition(columns, rows);
+    }
+
+    public static int addNumberFormatCode(final XSpreadsheetDocument document, final String formatCode) throws MalformedNumberFormatException {
+        final XNumberFormatsSupplier numberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, document);
+        final XNumberFormats numberFormats = numberFormatsSupplier.getNumberFormats();
+        return numberFormats.addNew(formatCode, locale);
     }
 
     private static XController getCurrentController(final XSpreadsheetDocument document) {
