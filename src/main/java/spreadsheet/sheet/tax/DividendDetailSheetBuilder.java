@@ -25,65 +25,69 @@ public class DividendDetailSheetBuilder extends SheetBuilder {
     public void build() throws IllegalArgumentException, com.sun.star.uno.Exception {
         final XSpreadsheet dividendDetailSheet = SpreadsheetDocumentHelper.getSheet(document(), 0);
         final SortedMap<String, Object> headerProperties = createHeaderProperties();
-        final List<SortedMap<String, Object>> columnProperties = createColumnProperties();
+        final List<SortedMap<String, Object>> columnPropertiesCollection = createColumnPropertiesCollection();
         sheetHelper().setSheetName("dividend-detail");
         sheetHelper().setHeaderProperties(headerProperties);
-        sheetHelper().setColumnProperties(columnProperties);
+        sheetHelper().setColumnProperties(columnPropertiesCollection);
         sheetHelper().setSortFields(createSortFields());
         sheetHelper().updateSheet(dividendDetailSheet);
         SpreadsheetDocumentHelper.freezeRowsOfActiveSheet(document(), 1);
     }
 
-    private void addSecurityDescriptionColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
-        final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
-        columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getTextFormat(document()));
-        columnProperties.add(columnPropertiesItem);
+    private static void addNumberFormatColumnProperty(final SortedMap<String, Object> columnProperties, final Integer indexKey) {
+        columnProperties.put("NumberFormat", indexKey);
     }
 
-    private void addCusipColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
-        final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
-        columnPropertiesItem.put("IsVisible", Boolean.FALSE);
-        columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getTextFormat(document()));
-        columnProperties.add(columnPropertiesItem);
+    private void addSecurityDescriptionColumnProperties(final List<SortedMap<String, Object>> columnPropertiesCollection) {
+        final SortedMap<String, Object> columnProperties = new TreeMap<>();
+        addNumberFormatColumnProperty(columnProperties, SpreadsheetDocumentHelper.getTextFormat(document()));
+        columnPropertiesCollection.add(columnProperties);
     }
 
-    private void addSymbolColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
-        final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
-        columnPropertiesItem.put("IsVisible", Boolean.FALSE);
-        columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getTextFormat(document()));
-        columnProperties.add(columnPropertiesItem);
+    private void addCusipColumnProperties(final List<SortedMap<String, Object>> columnPropertiesCollection) {
+        final SortedMap<String, Object> columnProperties = new TreeMap<>();
+        columnProperties.put("IsVisible", Boolean.FALSE);
+        addNumberFormatColumnProperty(columnProperties, SpreadsheetDocumentHelper.getTextFormat(document()));
+        columnPropertiesCollection.add(columnProperties);
     }
 
-    private void addStateColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
-        final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
-        columnPropertiesItem.put("IsVisible", Boolean.FALSE);
-        columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getTextFormat(document()));
-        columnProperties.add(columnPropertiesItem);
+    private void addSymbolColumnProperties(final List<SortedMap<String, Object>> columnPropertiesCollection) {
+        final SortedMap<String, Object> columnProperties = new TreeMap<>();
+        columnProperties.put("IsVisible", Boolean.FALSE);
+        addNumberFormatColumnProperty(columnProperties, SpreadsheetDocumentHelper.getTextFormat(document()));
+        columnPropertiesCollection.add(columnProperties);
     }
 
-    private void addDateColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
-        final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
-        columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getDateNumberFormat(document()));
-        columnProperties.add(columnPropertiesItem);
+    private void addStateColumnProperties(final List<SortedMap<String, Object>> columnPropertiesCollection) {
+        final SortedMap<String, Object> columnProperties = new TreeMap<>();
+        columnProperties.put("IsVisible", Boolean.FALSE);
+        addNumberFormatColumnProperty(columnProperties, SpreadsheetDocumentHelper.getTextFormat(document()));
+        columnPropertiesCollection.add(columnProperties);
     }
 
-    private void addAmountColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
-        final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
-        columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getCurrencyNumberFormat(document()));
-        columnProperties.add(columnPropertiesItem);
+    private void addDateColumnProperties(final List<SortedMap<String, Object>> columnPropertiesCollection) {
+        final SortedMap<String, Object> columnProperties = new TreeMap<>();
+        addNumberFormatColumnProperty(columnProperties, SpreadsheetDocumentHelper.getDateNumberFormat(document()));
+        columnPropertiesCollection.add(columnProperties);
     }
 
-    private void addTransactionTypeColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
-        final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
-        columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getTextFormat(document()));
-        columnProperties.add(columnPropertiesItem);
+    private void addAmountColumnProperties(final List<SortedMap<String, Object>> columnPropertiesCollection) {
+        final SortedMap<String, Object> columnProperties = new TreeMap<>();
+        addNumberFormatColumnProperty(columnProperties, SpreadsheetDocumentHelper.getCurrencyNumberFormat(document()));
+        columnPropertiesCollection.add(columnProperties);
     }
 
-    private void addNotesColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
-        final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
-        columnPropertiesItem.put("IsVisible", Boolean.FALSE);
-        columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getTextFormat(document()));
-        columnProperties.add(columnPropertiesItem);
+    private void addTransactionTypeColumnProperties(final List<SortedMap<String, Object>> columnPropertiesCollection) {
+        final SortedMap<String, Object> columnProperties = new TreeMap<>();
+        addNumberFormatColumnProperty(columnProperties, SpreadsheetDocumentHelper.getTextFormat(document()));
+        columnPropertiesCollection.add(columnProperties);
+    }
+
+    private void addNotesColumnProperties(final List<SortedMap<String, Object>> columnPropertiesCollection) {
+        final SortedMap<String, Object> columnProperties = new TreeMap<>();
+        columnProperties.put("IsVisible", Boolean.FALSE);
+        addNumberFormatColumnProperty(columnProperties, SpreadsheetDocumentHelper.getTextFormat(document()));
+        columnPropertiesCollection.add(columnProperties);
     }
 
     private SortedMap<String, Object> createHeaderProperties() {
@@ -93,17 +97,17 @@ public class DividendDetailSheetBuilder extends SheetBuilder {
         return headerProperties;
     }
 
-    private List<SortedMap<String, Object>> createColumnProperties() {
-        final List<SortedMap<String, Object>> columnProperties = new ArrayList<>(8);
-        addSecurityDescriptionColumnProperties(columnProperties);
-        addCusipColumnProperties(columnProperties);
-        addSymbolColumnProperties(columnProperties);
-        addStateColumnProperties(columnProperties);
-        addDateColumnProperties(columnProperties);
-        addAmountColumnProperties(columnProperties);
-        addTransactionTypeColumnProperties(columnProperties);
-        addNotesColumnProperties(columnProperties);
-        return columnProperties;
+    private List<SortedMap<String, Object>> createColumnPropertiesCollection() {
+        final List<SortedMap<String, Object>> columnPropertiesCollection = new ArrayList<>(8);
+        addSecurityDescriptionColumnProperties(columnPropertiesCollection);
+        addCusipColumnProperties(columnPropertiesCollection);
+        addSymbolColumnProperties(columnPropertiesCollection);
+        addStateColumnProperties(columnPropertiesCollection);
+        addDateColumnProperties(columnPropertiesCollection);
+        addAmountColumnProperties(columnPropertiesCollection);
+        addTransactionTypeColumnProperties(columnPropertiesCollection);
+        addNotesColumnProperties(columnPropertiesCollection);
+        return columnPropertiesCollection;
     }
 
     private static TableSortField[] createSortFields() {

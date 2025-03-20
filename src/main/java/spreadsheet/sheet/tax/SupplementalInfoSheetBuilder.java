@@ -24,47 +24,51 @@ public class SupplementalInfoSheetBuilder extends SheetBuilder {
     public void build() throws com.sun.star.uno.Exception {
         final XSpreadsheet supplementalInfoSheet = SpreadsheetDocumentHelper.addSheet(document(), "supplemental-info");
         final SortedMap<String, Object> headerProperties = createHeaderProperties();
-        final List<SortedMap<String, Object>> columnProperties = createColumnProperties();
+        final List<SortedMap<String, Object>> columnPropertiesCollection = createColumnPropertiesCollection();
         sheetHelper().setHeaderProperties(headerProperties);
-        sheetHelper().setColumnProperties(columnProperties);
+        sheetHelper().setColumnProperties(columnPropertiesCollection);
         sheetHelper().setSortFields(createSortFields());
         sheetHelper().updateSheet(supplementalInfoSheet);
         SpreadsheetDocumentHelper.setActiveSheet(document(), supplementalInfoSheet);
         SpreadsheetDocumentHelper.freezeRowsOfActiveSheet(document(), 1);
     }
 
-    private void addSecurityDescriptionColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
-        final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
-        columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getTextFormat(document()));
-        columnProperties.add(columnPropertiesItem);
+    private static void addNumberFormatColumnProperty(final SortedMap<String, Object> columnProperties, final Integer indexKey) {
+        columnProperties.put("NumberFormat", indexKey);
     }
 
-    private void addSourceColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
-        final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
-        columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getTextFormat(document()));
-        columnProperties.add(columnPropertiesItem);
+    private void addSecurityDescriptionColumnProperties(final List<SortedMap<String, Object>> columnPropertiesCollection) {
+        final SortedMap<String, Object> columnProperties = new TreeMap<>();
+        addNumberFormatColumnProperty(columnProperties, SpreadsheetDocumentHelper.getTextFormat(document()));
+        columnPropertiesCollection.add(columnProperties);
     }
 
-    private void addStateColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
-        final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
+    private void addSourceColumnProperties(final List<SortedMap<String, Object>> columnPropertiesCollection) {
+        final SortedMap<String, Object> columnProperties = new TreeMap<>();
+        addNumberFormatColumnProperty(columnProperties, SpreadsheetDocumentHelper.getTextFormat(document()));
+        columnPropertiesCollection.add(columnProperties);
+    }
+
+    private void addStateColumnProperties(final List<SortedMap<String, Object>> columnPropertiesCollection) {
+        final SortedMap<String, Object> columnProperties = new TreeMap<>();
         final boolean stateColumnIsEmpty = sheetHelper().isColumnEmpty(Constants.SI_FIELD_STATE);
         if (stateColumnIsEmpty) {
-            columnPropertiesItem.put("IsVisible", Boolean.FALSE);
+            columnProperties.put("IsVisible", Boolean.FALSE);
         }
-        columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getTextFormat(document()));
-        columnProperties.add(columnPropertiesItem);
+        addNumberFormatColumnProperty(columnProperties, SpreadsheetDocumentHelper.getTextFormat(document()));
+        columnPropertiesCollection.add(columnProperties);
     }
 
-    private void addPercentageColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
-        final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
-        columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getPercentNumberFormat(document()));
-        columnProperties.add(columnPropertiesItem);
+    private void addPercentageColumnProperties(final List<SortedMap<String, Object>> columnPropertiesCollection) {
+        final SortedMap<String, Object> columnProperties = new TreeMap<>();
+        addNumberFormatColumnProperty(columnProperties, SpreadsheetDocumentHelper.getPercentNumberFormat(document()));
+        columnPropertiesCollection.add(columnProperties);
     }
 
-    private void addAmountColumnProperties(final List<SortedMap<String, Object>> columnProperties) {
-        final SortedMap<String, Object> columnPropertiesItem = new TreeMap<>();
-        columnPropertiesItem.put("NumberFormat", SpreadsheetDocumentHelper.getCurrencyNumberFormat(document()));
-        columnProperties.add(columnPropertiesItem);
+    private void addAmountColumnProperties(final List<SortedMap<String, Object>> columnPropertiesCollection) {
+        final SortedMap<String, Object> columnProperties = new TreeMap<>();
+        addNumberFormatColumnProperty(columnProperties, SpreadsheetDocumentHelper.getCurrencyNumberFormat(document()));
+        columnPropertiesCollection.add(columnProperties);
     }
 
     private SortedMap<String, Object> createHeaderProperties() {
@@ -74,14 +78,14 @@ public class SupplementalInfoSheetBuilder extends SheetBuilder {
         return headerProperties;
     }
 
-    private List<SortedMap<String, Object>> createColumnProperties() {
-        final List<SortedMap<String, Object>> columnProperties = new ArrayList<>(4);
-        addSecurityDescriptionColumnProperties(columnProperties);
-        addSourceColumnProperties(columnProperties);
-        addStateColumnProperties(columnProperties);
-        addPercentageColumnProperties(columnProperties);
-        addAmountColumnProperties(columnProperties);
-        return columnProperties;
+    private List<SortedMap<String, Object>> createColumnPropertiesCollection() {
+        final List<SortedMap<String, Object>> columnPropertiesCollection = new ArrayList<>(4);
+        addSecurityDescriptionColumnProperties(columnPropertiesCollection);
+        addSourceColumnProperties(columnPropertiesCollection);
+        addStateColumnProperties(columnPropertiesCollection);
+        addPercentageColumnProperties(columnPropertiesCollection);
+        addAmountColumnProperties(columnPropertiesCollection);
+        return columnPropertiesCollection;
     }
 
     private static TableSortField[] createSortFields() {
