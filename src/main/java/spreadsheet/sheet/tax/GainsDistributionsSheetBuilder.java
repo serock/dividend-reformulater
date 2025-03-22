@@ -38,7 +38,7 @@ public class GainsDistributionsSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("capital-gain-distributions", cellAddress);
 
-        sheetHelper().updateSheet(gainsDistributionsSheet);
+        sheetHelper().updateSheet(gainsDistributionsSheet, true);
         SpreadsheetDocumentHelper.setActiveSheet(document(), gainsDistributionsSheet);
         SpreadsheetDocumentHelper.freezeRowsOfActiveSheet(document(), 2);
     }

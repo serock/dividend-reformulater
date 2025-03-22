@@ -37,7 +37,7 @@ public class NondividendDistributionsSheetBuilder extends PivotTableSheetBuilder
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("nondividend-distributions", cellAddress);
 
-        sheetHelper().updateSheet(nondividendDistributionsSheet);
+        sheetHelper().updateSheet(nondividendDistributionsSheet, true);
     }
 
     private CellRangeAddress getSourceRange() throws WrappedTargetException, NoSuchElementException {

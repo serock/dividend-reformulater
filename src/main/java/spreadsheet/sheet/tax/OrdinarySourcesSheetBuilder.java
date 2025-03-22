@@ -39,7 +39,7 @@ public class OrdinarySourcesSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("ordinary-by-source", cellAddress);
 
-        sheetHelper().updateSheet(ordinarySourcesSheet);
+        sheetHelper().updateSheet(ordinarySourcesSheet, true);
         SpreadsheetDocumentHelper.setActiveSheet(document(), ordinarySourcesSheet);
         SpreadsheetDocumentHelper.freezeRowsOfActiveSheet(document(), 2);
     }

@@ -42,7 +42,7 @@ public class ForeignTaxPaidSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("foreign-tax-paid", cellAddress);
 
-        sheetHelper().updateSheet(foreignTaxPaidSheet);
+        sheetHelper().updateSheet(foreignTaxPaidSheet, true);
     }
 
     public void setTransactionTypes(final Set<String> types) {

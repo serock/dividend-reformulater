@@ -39,7 +39,7 @@ public class TaxExemptDividendsSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("tax-exempt-dividends", cellAddress);
 
-        sheetHelper().updateSheet(taxExemptDividendsSheet);
+        sheetHelper().updateSheet(taxExemptDividendsSheet, true);
     }
 
     private CellRangeAddress getSourceRange() throws WrappedTargetException, NoSuchElementException {

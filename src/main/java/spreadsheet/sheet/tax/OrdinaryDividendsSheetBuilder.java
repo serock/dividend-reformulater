@@ -39,7 +39,7 @@ public class OrdinaryDividendsSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("ordinary-dividends", cellAddress);
 
-        sheetHelper().updateSheet(ordinaryDividendsSheet);
+        sheetHelper().updateSheet(ordinaryDividendsSheet, true);
         SpreadsheetDocumentHelper.setActiveSheet(document(), ordinaryDividendsSheet);
         SpreadsheetDocumentHelper.freezeRowsOfActiveSheet(document(), 2);
     }

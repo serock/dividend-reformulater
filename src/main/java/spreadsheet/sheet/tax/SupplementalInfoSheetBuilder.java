@@ -28,7 +28,7 @@ public class SupplementalInfoSheetBuilder extends SheetBuilder {
         sheetHelper().setHeaderProperties(headerProperties);
         sheetHelper().setColumnProperties(columnPropertiesCollection);
         sheetHelper().setSortFields(createSortFields());
-        sheetHelper().updateSheet(supplementalInfoSheet);
+        sheetHelper().updateSheet(supplementalInfoSheet, true);
         SpreadsheetDocumentHelper.setActiveSheet(document(), supplementalInfoSheet);
         SpreadsheetDocumentHelper.freezeRowsOfActiveSheet(document(), 1);
     }

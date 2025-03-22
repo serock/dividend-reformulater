@@ -38,7 +38,7 @@ public class TaxExemptStatesSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("tax-exempt-by-state", cellAddress);
 
-        sheetHelper().updateSheet(taxExemptStatesSheet);
+        sheetHelper().updateSheet(taxExemptStatesSheet, true);
         SpreadsheetDocumentHelper.setActiveSheet(document(), taxExemptStatesSheet);
         SpreadsheetDocumentHelper.freezeColumnsOfActiveSheet(document(), 2);
     }

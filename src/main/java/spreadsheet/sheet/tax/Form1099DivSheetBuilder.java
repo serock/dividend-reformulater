@@ -17,7 +17,7 @@ public class Form1099DivSheetBuilder extends SheetBuilder {
     public void build() throws com.sun.star.uno.Exception {
         final XSpreadsheet form1099DivSheet = SpreadsheetDocumentHelper.addSheet(document(), "form-1099-div");
         sheetHelper().setColumnProperties(createColumnPropertiesCollection());
-        sheetHelper().updateSheet(form1099DivSheet);
+        sheetHelper().updateSheet(form1099DivSheet, true);
         SpreadsheetDocumentHelper.setActiveSheet(document(), form1099DivSheet);
     }
 
