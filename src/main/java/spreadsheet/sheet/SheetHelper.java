@@ -81,10 +81,14 @@ public class SheetHelper {
         if (sheetFormulas() != null) {
             setFormulas(sheet);
         }
+        if (!headerProperties().isEmpty()) {
+            setHeaderProperties(sheet);
+        }
         if (!columnProperties().isEmpty()) {
             setColumnProperties(sheet);
         }
         if (!headerProperties().isEmpty()) {
+            // do again for NumberFormat property
             setHeaderProperties(sheet);
         }
         if (optimalWidth) {
