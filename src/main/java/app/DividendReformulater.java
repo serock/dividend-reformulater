@@ -138,7 +138,7 @@ public class DividendReformulater implements Consumer<String>, Runnable {
                 System.err.println("Error: No dividend details found in file");
                 System.exit(2);
             }
-            final SpreadsheetDocumentHelper docHelper = new SpreadsheetDocumentHelper();
+            final SpreadsheetDocumentHelper docHelper = SpreadsheetDocumentHelper.getInstance();
             final XSpreadsheetDocument document = docHelper.createDocument();
             buildDividendDetailSheet(document);
             buildOrdinaryDividendsSheet(document);
