@@ -43,7 +43,7 @@ Before attempting to run the app, install the following software:
 Builds of the app are available for Linux, MacOS, and Windows.
 
 1. From the [Releases](/../../releases) page, download the `.tar.gz` or `.zip` distributable archive and the `.sha256` file for your operating system.
-2. Verify the integrity of the downloaded archive (e.g., on Linux, run `sha256sum -c dividend-reformulater-2024.0.6-linux.tar.gz.sha256` from a terminal).
+2. Verify the integrity of the downloaded archive (e.g., on Linux, run `sha256sum -c dividend-reformulater-2024.0.7-linux.tar.gz.sha256` from a terminal).
 3. Extract the the files from the `.tar.gz` or `.zip` archive, keeping the directory structure that is in the archive.
 
 ### Option 2: Build the App
@@ -53,7 +53,7 @@ See [How to Build the App](/../../wiki/How-to-Build-the-App) in the Wiki.
 Test the app by running the app without any arguments from a terminal. For example,
 
 ```Shell
-java -jar dividend-reformulater-2024.0.6.jar
+java -jar dividend-reformulater-2024.0.7.jar
 ```
 
 If the app was packaged properly for the system, the app displays the following message:
