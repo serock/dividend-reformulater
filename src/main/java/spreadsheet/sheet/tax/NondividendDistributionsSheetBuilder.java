@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 package spreadsheet.sheet.tax;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sheet.FilterOperator;
@@ -16,7 +19,7 @@ import text.Constants;
 
 public class NondividendDistributionsSheetBuilder extends PivotTableSheetBuilder {
 
-    private static final TableFilterField[] tableFilterFields = createFilterFields();
+    private static final TableFilterField[] filterFields = createFilterFields();
 
     public NondividendDistributionsSheetBuilder() {
         super();
@@ -33,7 +36,7 @@ public class NondividendDistributionsSheetBuilder extends PivotTableSheetBuilder
         pivotTableHelper().setColumnOrientation(Constants.DD_FIELD_TRANSACTION_TYPE);
         pivotTableHelper().setDataOrientation(Constants.DD_FIELD_AMOUNT);
         pivotTableHelper().setSumFunction(Constants.DD_FIELD_AMOUNT);
-        pivotTableHelper().setFilterFields(tableFilterFields);
+        pivotTableHelper().setFilterFields(filterFields);
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("nondividend-distributions", cellAddress);
 
@@ -46,16 +49,17 @@ public class NondividendDistributionsSheetBuilder extends PivotTableSheetBuilder
     }
 
     private static TableFilterField[] createFilterFields() {
-        final TableFilterField[] filterFields = new TableFilterField[1];
-        setNondividendFilter(filterFields);
-        return filterFields;
-    }
+        final List<TableFilterField> fields = new ArrayList<>(1);
 
-    private static void setNondividendFilter(final TableFilterField[] filterFields) {
-        filterFields[0] = new TableFilterField();
-        filterFields[0].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
-        filterFields[0].IsNumeric = false;
-        filterFields[0].StringValue = "Nondividend distribution";
-        filterFields[0].Operator = FilterOperator.EQUAL;
+        TableFilterField field;
+
+        field = new TableFilterField();
+        field.Field = Constants.DD_FIELD_TRANSACTION_TYPE;
+        field.IsNumeric = false;
+        field.StringValue = "Nondividend distribution";
+        field.Operator = FilterOperator.EQUAL;
+        fields.add(field);
+
+        return fields.toArray(new TableFilterField[0]);
     }
 }

@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 package spreadsheet.sheet.tax;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import com.sun.star.container.NoSuchElementException;
@@ -50,23 +52,21 @@ public class ForeignTaxPaidSheetBuilder extends PivotTableSheetBuilder {
     }
 
     private TableFilterField[] createFilterFields() {
-        final int size = transactionTypes().size();
-        final String[] types = transactionTypes().toArray(new String[size]);
-        final TableFilterField[] filterFields = new TableFilterField[size];
-        filterFields[0] = new TableFilterField();
-        filterFields[0].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
-        filterFields[0].IsNumeric = false;
-        filterFields[0].StringValue = types[0];
-        filterFields[0].Operator = FilterOperator.EQUAL;
-        for (int i = 1; i < size; i++) {
-            filterFields[i] = new TableFilterField();
-            filterFields[i].Connection = FilterConnection.OR;
-            filterFields[i].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
-            filterFields[i].IsNumeric = false;
-            filterFields[i].StringValue = types[i];
-            filterFields[i].Operator = FilterOperator.EQUAL;
+        final String[] types = transactionTypes().toArray(new String[0]);
+        final List<TableFilterField> fields = new ArrayList<>(types.length);
+
+        TableFilterField field;
+
+        for (String type : types) {
+            field = new TableFilterField();
+            field.Connection = FilterConnection.OR;
+            field.Field = Constants.DD_FIELD_TRANSACTION_TYPE;
+            field.IsNumeric = false;
+            field.StringValue = type;
+            field.Operator = FilterOperator.EQUAL;
+            fields.add(field);
         }
-        return filterFields;
+        return fields.toArray(new TableFilterField[0]);
     }
 
     private CellRangeAddress getSourceRange() throws WrappedTargetException, NoSuchElementException {

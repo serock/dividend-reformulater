@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 package spreadsheet.sheet.tax;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sheet.FilterOperator;
@@ -16,7 +19,7 @@ import text.Constants;
 
 public class OrdinarySourcesSheetBuilder extends PivotTableSheetBuilder {
 
-    private static final TableFilterField[] tableFilterFields = createFilterFields();
+    private static final TableFilterField[] filterFields = createFilterFields();
 
     public OrdinarySourcesSheetBuilder() {
         super();
@@ -33,7 +36,7 @@ public class OrdinarySourcesSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().setColumnOrientation(Constants.SI_FIELD_SOURCE);
         pivotTableHelper().setDataOrientation(Constants.SI_FIELD_AMOUNT);
         pivotTableHelper().setSumFunction(Constants.SI_FIELD_AMOUNT);
-        pivotTableHelper().setFilterFields(tableFilterFields);
+        pivotTableHelper().setFilterFields(filterFields);
         pivotTableHelper().setSortInfo(Constants.SI_FIELD_SOURCE, new String[] {"Fed Source Total", "Fgn Source Inc Tot", "Fgn Source Inc Qual", "Fgn Source Inc Adj"});
         pivotTableHelper().showTotalsColumn(false);
         pivotTableHelper().showFilterButton(false);
@@ -50,13 +53,16 @@ public class OrdinarySourcesSheetBuilder extends PivotTableSheetBuilder {
     }
 
     private static TableFilterField[] createFilterFields() {
-        final TableFilterField[] filterFields = new TableFilterField[1];
+        final List<TableFilterField> fields = new ArrayList<>(1);
 
-        filterFields[0] = new TableFilterField();
-        filterFields[0].Field = Constants.SI_FIELD_STATE;
-        filterFields[0].IsNumeric = false;
-        filterFields[0].Operator = FilterOperator.EMPTY;
+        TableFilterField field;
 
-        return filterFields;
+        field = new TableFilterField();
+        field.Field = Constants.SI_FIELD_SOURCE;
+        field.IsNumeric = false;
+        field.Operator = FilterOperator.NOT_EMPTY;
+        fields.add(field);
+
+        return fields.toArray(new TableFilterField[0]);
     }
 }

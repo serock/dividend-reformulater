@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 package spreadsheet.sheet.tax;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sheet.FilterOperator;
@@ -16,7 +19,7 @@ import text.Constants;
 
 public class TaxExemptStatesSheetBuilder extends PivotTableSheetBuilder {
 
-    private static final TableFilterField[] tableFilterFields = createFilterFields();
+    private static final TableFilterField[] filterFields = createFilterFields();
 
     public TaxExemptStatesSheetBuilder() {
         super();
@@ -33,7 +36,7 @@ public class TaxExemptStatesSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().setColumnOrientation(Constants.SI_FIELD_STATE);
         pivotTableHelper().setDataOrientation(Constants.SI_FIELD_AMOUNT);
         pivotTableHelper().setSumFunction(Constants.SI_FIELD_AMOUNT);
-        pivotTableHelper().setFilterFields(tableFilterFields);
+        pivotTableHelper().setFilterFields(filterFields);
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("tax-exempt-by-state", cellAddress);
 
@@ -48,13 +51,16 @@ public class TaxExemptStatesSheetBuilder extends PivotTableSheetBuilder {
     }
 
     private static TableFilterField[] createFilterFields() {
-        final TableFilterField[] filterFields = new TableFilterField[1];
+        final List<TableFilterField> fields = new ArrayList<>(1);
 
-        filterFields[0] = new TableFilterField();
-        filterFields[0].Field = Constants.SI_FIELD_SOURCE;
-        filterFields[0].IsNumeric = false;
-        filterFields[0].Operator = FilterOperator.EMPTY;
+        TableFilterField field;
 
-        return filterFields;
+        field = new TableFilterField();
+        field.Field = Constants.SI_FIELD_STATE;
+        field.IsNumeric = false;
+        field.Operator = FilterOperator.NOT_EMPTY;
+        fields.add(field);
+
+        return fields.toArray(new TableFilterField[0]);
     }
 }

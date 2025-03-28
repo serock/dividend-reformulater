@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 package spreadsheet.sheet.tax;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
@@ -18,7 +21,7 @@ import text.Constants;
 
 public class OrdinaryDividendsSheetBuilder extends PivotTableSheetBuilder {
 
-    private static final TableFilterField[] tableFilterFields = createFilterFields();
+    private static final TableFilterField[] filterFields = createFilterFields();
 
     public OrdinaryDividendsSheetBuilder() {
         super();
@@ -35,7 +38,7 @@ public class OrdinaryDividendsSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().setColumnOrientation(Constants.DD_FIELD_TRANSACTION_TYPE);
         pivotTableHelper().setDataOrientation(Constants.DD_FIELD_AMOUNT);
         pivotTableHelper().setSumFunction(Constants.DD_FIELD_AMOUNT);
-        pivotTableHelper().setFilterFields(tableFilterFields);
+        pivotTableHelper().setFilterFields(filterFields);
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("ordinary-dividends", cellAddress);
 
@@ -50,35 +53,25 @@ public class OrdinaryDividendsSheetBuilder extends PivotTableSheetBuilder {
     }
 
     private static TableFilterField[] createFilterFields() {
-        final TableFilterField[] filterFields = new TableFilterField[4];
+        final String[] types = new String[] {
+                "Nonqualified dividend",
+                "Qualified dividend",
+                "Section 199A dividend",
+                "Short-term capital gain"
+                };
+        final List<TableFilterField> fields = new ArrayList<>(types.length);
 
-        filterFields[0] = new TableFilterField();
-        filterFields[0].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
-        filterFields[0].IsNumeric = false;
-        filterFields[0].StringValue = "Qualified dividend";
-        filterFields[0].Operator = FilterOperator.EQUAL;
+        TableFilterField field;
 
-        filterFields[1] = new TableFilterField();
-        filterFields[1].Connection = FilterConnection.OR;
-        filterFields[1].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
-        filterFields[1].IsNumeric = false;
-        filterFields[1].StringValue = "Nonqualified dividend";
-        filterFields[1].Operator = FilterOperator.EQUAL;
-
-        filterFields[2] = new TableFilterField();
-        filterFields[2].Connection = FilterConnection.OR;
-        filterFields[2].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
-        filterFields[2].IsNumeric = false;
-        filterFields[2].StringValue = "Section 199A dividend";
-        filterFields[2].Operator = FilterOperator.EQUAL;
-
-        filterFields[3] = new TableFilterField();
-        filterFields[3].Connection = FilterConnection.OR;
-        filterFields[3].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
-        filterFields[3].IsNumeric = false;
-        filterFields[3].StringValue = "Short-term capital gain";
-        filterFields[3].Operator = FilterOperator.EQUAL;
-
-        return filterFields;
+        for (String type : types) {
+            field = new TableFilterField();
+            field.Connection = FilterConnection.OR;
+            field.Field = Constants.DD_FIELD_TRANSACTION_TYPE;
+            field.IsNumeric = false;
+            field.StringValue = type;
+            field.Operator = FilterOperator.EQUAL;
+            fields.add(field);
+        }
+        return fields.toArray(new TableFilterField[0]);
     }
 }

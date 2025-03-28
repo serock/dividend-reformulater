@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 package spreadsheet.sheet.tax;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sheet.FilterConnection;
@@ -17,7 +20,7 @@ import text.Constants;
 
 public class TaxExemptDividendsSheetBuilder extends PivotTableSheetBuilder {
 
-    private static final TableFilterField[] tableFilterFields = createFilterFields();
+    private static final TableFilterField[] filterFields = createFilterFields();
 
     public TaxExemptDividendsSheetBuilder() {
         super();
@@ -35,7 +38,7 @@ public class TaxExemptDividendsSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().setColumnOrientation(Constants.DD_FIELD_TRANSACTION_TYPE);
         pivotTableHelper().setDataOrientation(Constants.DD_FIELD_AMOUNT);
         pivotTableHelper().setSumFunction(Constants.DD_FIELD_AMOUNT);
-        pivotTableHelper().setFilterFields(tableFilterFields);
+        pivotTableHelper().setFilterFields(filterFields);
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("tax-exempt-dividends", cellAddress);
 
@@ -48,26 +51,23 @@ public class TaxExemptDividendsSheetBuilder extends PivotTableSheetBuilder {
     }
 
     private static TableFilterField[] createFilterFields() {
-        final TableFilterField[] filterFields = new TableFilterField[2];
-        setTaxExemptDividendFilter(filterFields);
-        setTaxExemptDividendAMTFilter(filterFields);
-        return filterFields;
-    }
+        final String[] types = new String[] {
+                "Tax-exempt dividend",
+                "Tax-exempt dividend AMT"
+                };
+        final List<TableFilterField> fields = new ArrayList<>(types.length);
 
-    private static void setTaxExemptDividendFilter(final TableFilterField[] filterFields) {
-        filterFields[0] = new TableFilterField();
-        filterFields[0].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
-        filterFields[0].IsNumeric = false;
-        filterFields[0].StringValue = "Tax-exempt dividend";
-        filterFields[0].Operator = FilterOperator.EQUAL;
-    }
+        TableFilterField field;
 
-    private static void setTaxExemptDividendAMTFilter(final TableFilterField[] filterFields) {
-        filterFields[1] = new TableFilterField();
-        filterFields[1].Connection = FilterConnection.OR;
-        filterFields[1].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
-        filterFields[1].IsNumeric = false;
-        filterFields[1].StringValue = "Tax-exempt dividend AMT";
-        filterFields[1].Operator = FilterOperator.EQUAL;
+        for (String type : types) {
+            field = new TableFilterField();
+            field.Connection = FilterConnection.OR;
+            field.Field = Constants.DD_FIELD_TRANSACTION_TYPE;
+            field.IsNumeric = false;
+            field.StringValue = type;
+            field.Operator = FilterOperator.EQUAL;
+            fields.add(field);
+        }
+        return fields.toArray(new TableFilterField[0]);
     }
 }

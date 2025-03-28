@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 package spreadsheet.sheet.tax;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sheet.FilterConnection;
@@ -17,7 +20,7 @@ import text.Constants;
 
 public class GainsDistributionsSheetBuilder extends PivotTableSheetBuilder {
 
-    private static final TableFilterField[] tableFilterFields = createFilterFields();
+    private static final TableFilterField[] filterFields = createFilterFields();
 
     public GainsDistributionsSheetBuilder() {
         super();
@@ -34,7 +37,7 @@ public class GainsDistributionsSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().setColumnOrientation(Constants.DD_FIELD_TRANSACTION_TYPE);
         pivotTableHelper().setDataOrientation(Constants.DD_FIELD_AMOUNT);
         pivotTableHelper().setSumFunction(Constants.DD_FIELD_AMOUNT);
-        pivotTableHelper().setFilterFields(tableFilterFields);
+        pivotTableHelper().setFilterFields(filterFields);
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("capital-gain-distributions", cellAddress);
 
@@ -49,21 +52,23 @@ public class GainsDistributionsSheetBuilder extends PivotTableSheetBuilder {
     }
 
     private static TableFilterField[] createFilterFields() {
-        final TableFilterField[] filterFields = new TableFilterField[2];
+        final String[] types = new String[] {
+                "Long-term capital gain",
+                "Unrecaptured section 1250 gain"
+                };
+        final List<TableFilterField> fields = new ArrayList<>(types.length);
 
-        filterFields[0] = new TableFilterField();
-        filterFields[0].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
-        filterFields[0].IsNumeric = false;
-        filterFields[0].StringValue = "Long-term capital gain";
-        filterFields[0].Operator = FilterOperator.EQUAL;
+        TableFilterField field;
 
-        filterFields[1] = new TableFilterField();
-        filterFields[1].Connection = FilterConnection.OR;
-        filterFields[1].Field = Constants.DD_FIELD_TRANSACTION_TYPE;
-        filterFields[1].IsNumeric = false;
-        filterFields[1].StringValue = "Unrecaptured section 1250 gain";
-        filterFields[1].Operator = FilterOperator.EQUAL;
-
-        return filterFields;
+        for (String type : types) {
+            field = new TableFilterField();
+            field.Connection = FilterConnection.OR;
+            field.Field = Constants.DD_FIELD_TRANSACTION_TYPE;
+            field.IsNumeric = false;
+            field.StringValue = type;
+            field.Operator = FilterOperator.EQUAL;
+            fields.add(field);
+        }
+        return fields.toArray(new TableFilterField[0]);
     }
 }
