@@ -23,10 +23,9 @@ public class DividendDetailSheetBuilder extends SheetBuilder {
 
     @Override
     public void build() throws IllegalArgumentException, com.sun.star.uno.Exception {
-        final XSpreadsheet dividendDetailSheet = SpreadsheetDocumentHelper.getSheet(document(), 0);
+        final XSpreadsheet dividendDetailSheet = SpreadsheetDocumentHelper.addSheet(document(), "dividend-detail");
         final SortedMap<String, Object> headerProperties = createHeaderProperties();
         final List<SortedMap<String, Object>> columnPropertiesCollection = createColumnPropertiesCollection();
-        sheetHelper().setSheetName("dividend-detail");
         sheetHelper().setHeaderProperties(headerProperties);
         sheetHelper().setColumnProperties(columnPropertiesCollection);
         sheetHelper().setSortFields(createSortFields());

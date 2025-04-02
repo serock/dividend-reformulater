@@ -140,8 +140,10 @@ public class DividendReformulater implements Consumer<String>, Runnable {
             }
             final SpreadsheetDocumentHelper docHelper = SpreadsheetDocumentHelper.getInstance();
             final XSpreadsheetDocument document = docHelper.createDocument();
+            final String[] defaultSheetNames = SpreadsheetDocumentHelper.getSheetNames(document);
             buildDividendDetailSheet(document);
             buildOrdinaryDividendsSheet(document);
+            SpreadsheetDocumentHelper.deleteSheets(document, defaultSheetNames);
             if (context().hasGainsDistribution()) {
                 buildGainsDistributionsSheet(document);
             }
