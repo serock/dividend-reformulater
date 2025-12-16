@@ -34,16 +34,16 @@ The `dividend-reformulater` app is licensed under the [MIT License](/LICENSE).
 ### Prerequisites
 Before attempting to run the app, install the following software:
 
-1. A build of OpenJDK 17 or higher, such as [Eclipse Temurin 17](https://adoptium.net/temurin/releases/?version=17) or [Amazon Corretto 17](https://aws.amazon.com/corretto/)
+1. A build of OpenJDK 21 or higher, such as [Eclipse Temurin 21](https://adoptium.net/temurin/releases/?version=21) or [Amazon Corretto 21](https://aws.amazon.com/corretto/)
    - A JDK download can be used to build and/or run the app.
    - A JRE download is smaller and can be used to run the app, but not build it.
-2. [LibreOffice](https://www.libreoffice.org/download/download-libreoffice/) (24.8.x is recommended)
+2. [LibreOffice](https://www.libreoffice.org/download/download-libreoffice/) (25.2.x is recommended)
 
 ### Option 1: Install a Build of the App
 Builds of the app are available for Linux, MacOS, and Windows.
 
 1. From the [Releases](/../../releases) page, download the `.tar.gz` or `.zip` distributable archive and the `.sha256` file for your operating system.
-2. Verify the integrity of the downloaded archive (e.g., on Linux, run `sha256sum -c dividend-reformulater-2024.0.8-linux.tar.gz.sha256` from a terminal).
+2. Verify the integrity of the downloaded archive (e.g., on Linux, run `sha256sum -c dividend-reformulater-2024.0.9-linux.tar.gz.sha256` from a terminal).
 3. Extract the the files from the `.tar.gz` or `.zip` archive, keeping the directory structure that is in the archive.
 
 ### Option 2: Build the App
@@ -53,7 +53,7 @@ See [How to Build the App](/../../wiki/How-to-Build-the-App) in the Wiki.
 Test the app by running the app without any arguments from a terminal. For example,
 
 ```Shell
-java -jar dividend-reformulater-2024.0.8.jar
+java -jar dividend-reformulater-2024.0.9.jar
 ```
 
 If the app was packaged properly for the system, the app displays the following message:
