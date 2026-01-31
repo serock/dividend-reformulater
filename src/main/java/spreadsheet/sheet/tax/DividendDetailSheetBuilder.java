@@ -30,6 +30,7 @@ public class DividendDetailSheetBuilder extends SheetBuilder {
         sheetHelper().setColumnProperties(columnPropertiesCollection);
         sheetHelper().setSortFields(createSortFields());
         sheetHelper().updateSheet(dividendDetailSheet, true);
+        SpreadsheetDocumentHelper.setActiveSheet(document(), dividendDetailSheet);
         SpreadsheetDocumentHelper.freezeRowsOfActiveSheet(document(), 1);
     }
 
