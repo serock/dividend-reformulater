@@ -90,6 +90,13 @@ public class DividendDetailSheetBuilder extends SheetBuilder {
         columnPropertiesCollection.add(columnProperties);
     }
 
+    private void addQuarterColumnProperties(final List<SortedMap<String, Object>> columnPropertiesCollection) {
+        final SortedMap<String, Object> columnProperties = new TreeMap<>();
+        columnProperties.put("IsVisible", Boolean.FALSE);
+        addNumberFormatColumnProperty(columnProperties, SpreadsheetDocumentHelper.getTextFormat(document()));
+        columnPropertiesCollection.add(columnProperties);
+    }
+
     private SortedMap<String, Object> createHeaderProperties() {
         final SortedMap<String, Object> headerProperties = new TreeMap<>();
         headerProperties.put("CharWeight", Float.valueOf(FontWeight.BOLD));
@@ -98,7 +105,7 @@ public class DividendDetailSheetBuilder extends SheetBuilder {
     }
 
     private List<SortedMap<String, Object>> createColumnPropertiesCollection() {
-        final List<SortedMap<String, Object>> columnPropertiesCollection = new ArrayList<>(8);
+        final List<SortedMap<String, Object>> columnPropertiesCollection = new ArrayList<>(9);
         addSecurityDescriptionColumnProperties(columnPropertiesCollection);
         addCusipColumnProperties(columnPropertiesCollection);
         addSymbolColumnProperties(columnPropertiesCollection);
@@ -107,6 +114,7 @@ public class DividendDetailSheetBuilder extends SheetBuilder {
         addAmountColumnProperties(columnPropertiesCollection);
         addTransactionTypeColumnProperties(columnPropertiesCollection);
         addNotesColumnProperties(columnPropertiesCollection);
+        addQuarterColumnProperties(columnPropertiesCollection);
         return columnPropertiesCollection;
     }
 

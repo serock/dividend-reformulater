@@ -63,6 +63,10 @@ public class Context {
         return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Nondividend distribution");
     }
 
+    public boolean hasQualifiedDividend() {
+        return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Qualified dividend");
+    }
+
     public boolean hasSupplementalInfo() {
         return !supplementalInfoRows().isEmpty();
     }

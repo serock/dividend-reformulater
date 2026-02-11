@@ -19,7 +19,8 @@ class DistributionDetailHeaderState implements State {
                         "Date",
                         "Amount",
                         "Transaction type",
-                        "Notes"
+                        "Notes",
+                        "Quarter"
                 };
                 context.addDistributionDetailRow(headers);
             }

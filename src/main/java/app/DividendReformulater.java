@@ -18,6 +18,7 @@ import spreadsheet.sheet.tax.NondividendDistributionsSheetBuilder;
 import spreadsheet.sheet.tax.OrdinaryDividendsSheetBuilder;
 import spreadsheet.sheet.tax.SupplementalInfoSheetBuilder;
 import spreadsheet.sheet.tax.OrdinarySourcesSheetBuilder;
+import spreadsheet.sheet.tax.QualifiedDividendsSheetBuilder;
 import spreadsheet.sheet.tax.TaxExemptDividendsSheetBuilder;
 import spreadsheet.sheet.tax.TaxExemptStatesSheetBuilder;
 import text.Context;
@@ -108,6 +109,12 @@ public class DividendReformulater implements Consumer<String>, Runnable {
         builder.build();
     }
 
+    private static void buildQualifiedDividendsSheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
+        final QualifiedDividendsSheetBuilder builder = new QualifiedDividendsSheetBuilder();
+        builder.setDocument(document);
+        builder.build();
+    }
+
     private void buildSupplementalInfoSheet(final XSpreadsheetDocument document) throws com.sun.star.uno.Exception {
         final SupplementalInfoSheetBuilder builder = new SupplementalInfoSheetBuilder();
         builder.setDocument(document);
@@ -162,6 +169,9 @@ public class DividendReformulater implements Consumer<String>, Runnable {
             }
             if (context().hasTaxExemptDividend()) {
                 buildTaxExemptStatesSheet(document);
+            }
+            if (context().hasQualifiedDividend()) {
+                buildQualifiedDividendsSheet(document);
             }
             buildForm1099DivSheet(document);
         } catch (final Exception e) {

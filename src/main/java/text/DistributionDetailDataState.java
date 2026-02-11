@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 package text;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +16,7 @@ class DistributionDetailDataState implements State {
     private static final Pattern patternEndWithCusip = Pattern.compile("[A-Z0-9]{7,9}$");
     private static final Pattern patternEndWithNote = Pattern.compile("[0-9]{2}$");
     private static final Pattern patternWhitespace = Pattern.compile("\\s+");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy");
 
     @Override
     public void accept(final Context context, final String text) {
@@ -50,6 +54,10 @@ class DistributionDetailDataState implements State {
         }
     }
 
+    private static DateTimeFormatter formatter() {
+        return formatter;
+    }
+
     private static void copyBase(final String[] fromRow, final String[] toRow) {
         toRow[Constants.DD_FIELD_SECURITY_DESCRIPTION] = fromRow[Constants.DD_FIELD_SECURITY_DESCRIPTION];
         toRow[Constants.DD_FIELD_CUSIP] = fromRow[Constants.DD_FIELD_CUSIP];
@@ -58,7 +66,7 @@ class DistributionDetailDataState implements State {
     }
 
     private static String[] createEmptyRow() {
-        final int capacity = 8;
+        final int capacity = 9;
         final String[] row = new String[capacity];
         for (int i = capacity - 1; i >= 0; i--) {
             row[i] = "";
@@ -96,6 +104,7 @@ class DistributionDetailDataState implements State {
         final String[] fields = patternWhitespace.split(text);
         row[Constants.DD_FIELD_DATE] = fields[0];
         row[Constants.DD_FIELD_AMOUNT] = fields[1];
+        row[Constants.DD_FIELD_QUARTER] = getQuarter(row[Constants.DD_FIELD_DATE]);
     }
 
     private static void extractTransactionTypeAndNotes(final String text, final String[] row) {
@@ -113,6 +122,17 @@ class DistributionDetailDataState implements State {
         row[Constants.DD_FIELD_NOTES] ='\'' + fields[1];
         row[Constants.DD_FIELD_DATE] = fields[2];
         row[Constants.DD_FIELD_AMOUNT] = fields[3];
+        row[Constants.DD_FIELD_QUARTER] = getQuarter(row[Constants.DD_FIELD_DATE]);
+    }
+
+    private static String getQuarter(final String dateText) {
+        final Month month = LocalDate.parse(dateText, formatter()).getMonth();
+        return switch (month) {
+            case Month.JANUARY, Month.FEBRUARY, Month.MARCH -> "1";
+            case Month.APRIL, Month.MAY -> "2";
+            case Month.JUNE, Month.JULY, Month.AUGUST -> "3";
+            default -> "4";
+        };
     }
 
     private static boolean isContinuation(final String text) {

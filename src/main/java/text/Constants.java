@@ -11,6 +11,7 @@ public class Constants {
     public static final int DD_FIELD_AMOUNT = 5;
     public static final int DD_FIELD_TRANSACTION_TYPE = 6;
     public static final int DD_FIELD_NOTES = 7;
+    public static final int DD_FIELD_QUARTER = 8;
 
     public static final int SI_FIELD_SECURITY_DESCRIPTION = 0;
     public static final int SI_FIELD_SOURCE = 1;
