@@ -67,6 +67,10 @@ public class Context {
         return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Qualified dividend");
     }
 
+    public boolean hasSection199aDividend() {
+        return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Section 199A dividend");
+    }
+
     public boolean hasSupplementalInfo() {
         return !supplementalInfoRows().isEmpty();
     }
@@ -126,10 +130,6 @@ public class Context {
 
     boolean hasNoSupplementalInfo() {
         return supplementalInfoRows().isEmpty();
-    }
-
-    boolean hasSection199aDividend() {
-        return hasMatchingDividendDetail(Constants.DD_FIELD_TRANSACTION_TYPE, "Section 199A dividend");
     }
 
     boolean hasUnrecapturedSection1250Gain() {

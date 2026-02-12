@@ -22,20 +22,20 @@ import spreadsheet.sheet.PivotTableSheetBuilder;
 import spreadsheet.sheet.SheetHelper;
 import text.Constants;
 
-public class QualifiedDividendsSheetBuilder extends PivotTableSheetBuilder {
+public class QBISheetBuilder extends PivotTableSheetBuilder {
 
     private static final TableFilterField[] filterFields = createFilterFields();
 
-    public QualifiedDividendsSheetBuilder() {
+    public QBISheetBuilder() {
         super();
     }
 
     @Override
     public void build() throws Exception {
-        final XSpreadsheet qualifiedDividendsSheet = SpreadsheetDocumentHelper.addSheet(document(), "qualified-by-quarter");
-        final CellAddress cellAddress = SheetHelper.getCellAddress(qualifiedDividendsSheet, 0, 0);
+        final XSpreadsheet qbiSheet = SpreadsheetDocumentHelper.addSheet(document(), "qbi-by-quarter");
+        final CellAddress cellAddress = SheetHelper.getCellAddress(qbiSheet, 0, 0);
 
-        pivotTableHelper().initialize(qualifiedDividendsSheet);
+        pivotTableHelper().initialize(qbiSheet);
         pivotTableHelper().setSourceRange(getSourceRange());
         pivotTableHelper().setRowOrientation(Constants.DD_FIELD_SECURITY_DESCRIPTION);
         pivotTableHelper().setColumnOrientation(Constants.DD_FIELD_QUARTER);
@@ -43,7 +43,7 @@ public class QualifiedDividendsSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().setSumFunction(Constants.DD_FIELD_AMOUNT);
         pivotTableHelper().setFilterFields(filterFields);
         pivotTableHelper().showFilterButton(false);
-        pivotTableHelper().insertPivotTable("qualified-dividends", cellAddress);
+        pivotTableHelper().insertPivotTable("qualified-business-income", cellAddress);
 
         final String[][] formulas = new String[][] {
             {
@@ -60,20 +60,20 @@ public class QualifiedDividendsSheetBuilder extends PivotTableSheetBuilder {
             }
         };
 
-        SheetHelper.setCellRangeFormulas(qualifiedDividendsSheet, "H1:K2", formulas);
+        SheetHelper.setCellRangeFormulas(qbiSheet, "H1:K2", formulas);
 
         SortedMap<String, Object> cellRangeProperties = new TreeMap<>();
         cellRangeProperties.put("CharWeight", Float.valueOf(FontWeight.BOLD));
         cellRangeProperties.put("NumberFormat", SpreadsheetDocumentHelper.getTextFormat(document()));
-        SheetHelper.setCellRangeProperties(qualifiedDividendsSheet, "H1:K1", cellRangeProperties);
+        SheetHelper.setCellRangeProperties(qbiSheet, "H1:K1", cellRangeProperties);
 
         cellRangeProperties = new TreeMap<>();
         cellRangeProperties.put("CharWeight", Float.valueOf(FontWeight.BOLD));
         cellRangeProperties.put("NumberFormat", SpreadsheetDocumentHelper.getCurrencyNumberFormat(document()));
-        SheetHelper.setCellRangeProperties(qualifiedDividendsSheet, "H2:K2", cellRangeProperties);
+        SheetHelper.setCellRangeProperties(qbiSheet, "H2:K2", cellRangeProperties);
 
-        sheetHelper().updateSheet(qualifiedDividendsSheet, true);
-        SpreadsheetDocumentHelper.setActiveSheet(document(), qualifiedDividendsSheet);
+        sheetHelper().updateSheet(qbiSheet, true);
+        SpreadsheetDocumentHelper.setActiveSheet(document(), qbiSheet);
         SpreadsheetDocumentHelper.freezeRowsOfActiveSheet(document(), 2);
     }
 
@@ -84,7 +84,7 @@ public class QualifiedDividendsSheetBuilder extends PivotTableSheetBuilder {
 
     private static TableFilterField[] createFilterFields() {
         final String[] types = new String[] {
-                "Qualified dividend"
+                "Section 199A dividend"
                 };
         final List<TableFilterField> fields = new ArrayList<>(types.length);
 
