@@ -3,7 +3,10 @@ package spreadsheet.sheet.tax;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
+import com.sun.star.awt.FontWeight;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sheet.FilterConnection;
@@ -41,6 +44,33 @@ public class QualifiedDividendsSheetBuilder extends PivotTableSheetBuilder {
         pivotTableHelper().setFilterFields(filterFields);
         pivotTableHelper().showFilterButton(false);
         pivotTableHelper().insertPivotTable("qualified-dividends", cellAddress);
+
+        final String[][] formulas = new String[][] {
+            {
+                "January — March",
+                "January — May",
+                "January — August",
+                "January — December"
+            },
+            {
+                "=GETPIVOTDATA(\"Amount\"; $A$1; \"Quarter\"; 1)",
+                "=H2+GETPIVOTDATA(\"Amount\"; $A$1; \"Quarter\"; 2)",
+                "=I2+GETPIVOTDATA(\"Amount\"; $A$1; \"Quarter\"; 3)",
+                "=GETPIVOTDATA(\"Amount\"; $A$1)"
+            }
+        };
+
+        SheetHelper.setCellRangeFormulas(qualifiedDividendsSheet, "H1:K2", formulas);
+
+        SortedMap<String, Object> cellRangeProperties = new TreeMap<>();
+        cellRangeProperties.put("CharWeight", Float.valueOf(FontWeight.BOLD));
+        cellRangeProperties.put("NumberFormat", SpreadsheetDocumentHelper.getTextFormat(document()));
+        SheetHelper.setCellRangeProperties(qualifiedDividendsSheet, "H1:K1", cellRangeProperties);
+
+        cellRangeProperties = new TreeMap<>();
+        cellRangeProperties.put("CharWeight", Float.valueOf(FontWeight.BOLD));
+        cellRangeProperties.put("NumberFormat", SpreadsheetDocumentHelper.getCurrencyNumberFormat(document()));
+        SheetHelper.setCellRangeProperties(qualifiedDividendsSheet, "H2:K2", cellRangeProperties);
 
         sheetHelper().updateSheet(qualifiedDividendsSheet, true);
         SpreadsheetDocumentHelper.setActiveSheet(document(), qualifiedDividendsSheet);
