@@ -53,10 +53,10 @@ public class QualifiedDividendsSheetBuilder extends PivotTableSheetBuilder {
                 "January — December"
             },
             {
-                "=GETPIVOTDATA(\"Amount\"; $A$1; \"Quarter\"; 1)",
-                "=H2+GETPIVOTDATA(\"Amount\"; $A$1; \"Quarter\"; 2)",
-                "=I2+GETPIVOTDATA(\"Amount\"; $A$1; \"Quarter\"; 3)",
-                "=GETPIVOTDATA(\"Amount\"; $A$1)"
+                "=GETPIVOTDATA($A$1; $A$1; $B$1; 1)",
+                "=H2+GETPIVOTDATA($A$1; $A$1; $B$1; 2)",
+                "=I2+GETPIVOTDATA($A$1; $A$1; $B$1; 3)",
+                "=GETPIVOTDATA($A$1; $A$1)"
             }
         };
 
