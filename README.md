@@ -6,7 +6,8 @@ The app reformulates the dividend data from a consolidated 1099 PDF into a Libre
 The main goal of the app is to help with filing individual income tax returns by making it easier to:
 
 1. calculate the amount of dividend income from U.S. government securities,
-2. calculate the amount of dividend income from foreign sources, and
+2. calculate the amount of dividend income from foreign sources,
+3. calculate amounts that are needed to compute the penalty for underpayment of estimated tax, and
 3. understand how values, like *Total ordinary dividends*, on Form 1099-DIV are calculated.
 
 The consolidated 1099 PDFs that may be compatible with the app have pages with a **Detail for Dividends and Distributions**
