@@ -48,7 +48,7 @@ jobs:
   release:
     name: Release
     permissions:
-      content: write
+      contents: write
     needs: build
     runs-on: ubuntu-latest
     steps:
